@@ -5,13 +5,26 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.toupety.mapgen.Level;
+import com.toupety.mapgen.Room;
 
 public class DrawnerFactory {
 
-	Map<String, ElementDrawner<?>> elements;
+	private static DrawnerFactory inst;
+	private Map<String, ElementDrawner<?>> elements;
 	
-	public DrawnerFactory() {
+	private DrawnerFactory() {
 		elements = new HashMap<>();
+	}
+	
+	public static DrawnerFactory instance() {
+		synchronized (DrawnerFactory.class) {
+			
+			if(inst == null) {
+				inst = new DrawnerFactory();
+			}
+			
+			return inst;
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -36,10 +49,18 @@ public class DrawnerFactory {
 				LevelScreenDrawner dranwer = new LevelScreenDrawner();
 				@Override
 				public void draw(T element) {
-					draw(element);
+					dranwer.draw((Level) element);
 				}
 			};
-		}
+		} else if(clazz.equals(Room.class)) {
+			ret = new ElementDrawner<T>() {
+				RoomScreenDrawner dranwer = new RoomScreenDrawner();
+				@Override
+				public void draw(T element) {
+					dranwer.draw((Room) element);
+				}
+			};
+		} 
 		
 		return ret;
 	}

@@ -1,5 +1,10 @@
 package com.toupety.mapgen;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -9,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
+import com.toupety.mapgen.algorithms.BoundedRoomDimmensionsAlgorithm;
+import com.toupety.mapgen.algorithms.RoomDimmenstionsAlgorithm;
 import com.toupety.mapgen.drawner.DrawnerFactory;
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -18,6 +25,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	private Level level = new Level(Constants.WIDTH, Constants.HEIGHT);
 	private CameraHolder camera;
 	private ShapeRenderer testRenderer;
+	private ExecutorService executor;
 	
 	@Override
 	public void create () {
@@ -27,17 +35,31 @@ public class MyGdxGame extends ApplicationAdapter {
 //		camera.getOrtho().zoom = 100;
 //		camera.getOrtho().update();
 		
-		new RoomGenerator(Constants.MAX_ROOM_WIDTH, 
-						  Constants.MAX_ROOM_HEIGHT, 
-						  Constants.MIN_ROOM_WIDTH, 
-						  Constants.MIN_ROOM_WIDTH,
-						  20, 
-						  100
-						  ).generate(level);
+		this.executor = Executors.newSingleThreadExecutor();
 		
 		this.testRenderer = new ShapeRenderer();
 		
 		Gdx.graphics.setWindowedMode(1024, 648);
+	}
+
+	private Map<String, Object> defaultArgs() {
+		/**
+		 * Constants.MAX_ROOM_WIDTH, 
+						  Constants.MAX_ROOM_HEIGHT, 
+						  Constants.MIN_ROOM_WIDTH, 
+						  Constants.MIN_ROOM_WIDTH,
+						  20, 
+						  1000
+		 */
+		Map<String, Object> map = new HashMap<>();
+		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ROOM_WIDTH, Constants.MAX_ROOM_WIDTH);
+		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ROOM_HEIGHT, Constants.MAX_ROOM_HEIGHT);
+		map.put(BoundedRoomDimmensionsAlgorithm.MIN_ROOM_WIDTH, Constants.MIN_ROOM_WIDTH);
+		map.put(BoundedRoomDimmensionsAlgorithm.MIN_ROOM_HEIGHT, Constants.MIN_ROOM_HEIGHT);
+		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ROOMS, 20);
+		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ITERATIONS, 1000);
+		
+		return map;
 	}
 
 	@Override
@@ -75,6 +97,10 @@ public class MyGdxGame extends ApplicationAdapter {
 			camera.getOrtho().zoom -= 400;
 			System.out.println(camera.getOrtho().zoom);
 		}
+		if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+			camera.getOrtho().zoom += 200;
+			System.out.println(camera.getOrtho().zoom);
+		}		
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			camera.getOrtho().translate(-Constants.DESLOC_SPEED, 0, 0);
 			System.out.println(camera.getOrtho().position.x);
@@ -91,6 +117,14 @@ public class MyGdxGame extends ApplicationAdapter {
 			camera.getOrtho().translate(0, Constants.DESLOC_SPEED, 0);
 			System.out.println(camera.getOrtho().position.y);
 		}
+		if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+			executor.execute(() -> {
+				RoomDimmenstionsAlgorithm algo = new BoundedRoomDimmensionsAlgorithm(defaultArgs());
+				level = new Level(Constants.WIDTH, Constants.HEIGHT);
+				new RoomGenerator(algo).generate(level);
+			});
+		}
+
 //		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 //			cam.rotate(-rotationSpeed, 0, 0, 1);
 //		}

@@ -8,11 +8,13 @@ public interface Constants {
 	int WIDTH  = 69;
 	int HEIGHT = 20;
 	
-	int MAX_ROOM_WIDTH  = 7;
-	int MAX_ROOM_HEIGHT = 7;
+	int MAX_ROOM_WIDTH  = 8;
+	int MAX_ROOM_HEIGHT = 8;
 	
-	int MIN_ROOM_WIDTH  = 3;
-	int MIN_ROOM_HEIGHT = 3;	
+	int MIN_ROOM_WIDTH  = 2;
+	int MIN_ROOM_HEIGHT = 2;	
+	
+	int MAX_MIN_ROOMS = 5;
 	
 	int MAX_ROOM_SIDES = 4;
 	

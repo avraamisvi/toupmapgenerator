@@ -8,13 +8,15 @@ public class RoomGenerator {
 	private int minRoomWidth;
 	private int maxRoomHeight;
 	private int maxRoomWidth;
-	private int maxRooms;	
+	private int maxRooms;
+	private int maxIterations;	
 	
-	public RoomGenerator(int maxRoomHeight, 
-						int maxRoomWidth, 
+	public RoomGenerator(int maxRoomWidth, 
+						int maxRoomHeight, 
+						int minRoomWidth,
+						int minRoomHeight,
 						int maxRooms,
-						int minRoomHeight, 
-						int minRoomWidth						
+						int maxIterations
 						) {
 		super();
 		this.maxRoomHeight = maxRoomHeight;
@@ -22,6 +24,7 @@ public class RoomGenerator {
 		this.minRoomHeight = minRoomHeight;
 		this.minRoomWidth = minRoomWidth;
 		this.maxRooms = maxRooms;
+		this.maxIterations = maxIterations;
 	}
 
 	public void generate(Level level) {
@@ -29,22 +32,27 @@ public class RoomGenerator {
 		
 		while(level.size() < maxRooms) {
 			
-			int h = Util.normalize(ran.nextInt(maxRoomHeight));
-			int w = Util.normalize(ran.nextInt(maxRoomWidth));
-			
-			if(level.size() == 0) {				
-				
-				int x = Util.normalize(ran.nextInt(level.getWidth() - w));
-				int y = Util.normalize(ran.nextInt(level.getHeight() - h));
-				
-				if(w > minRoomWidth && h > minRoomHeight) {
-					level.addRoom(new Room(h, w, x, y));
-				}
-				
-			} else {
-				level.addRoom(new Room(h, w, 0, 0));
+			if(maxIterations == 0) {
+				break;
 			}
 			
+			int h = ran.nextInt(maxRoomHeight);
+			int w = ran.nextInt(maxRoomWidth);
+			
+			if(level.size() > 0) {				
+				
+				int x = ran.nextInt(level.getWidth());
+				int y = ran.nextInt(level.getHeight());
+				
+//				if(w >= minRoomWidth && h >= minRoomHeight) {
+					level.addRoom(new Room(w, h, x, y));
+//				}
+				
+			} else {
+				level.addRoom(new Room(w, h, 0, 0));
+			}
+			
+			maxIterations--;
 		}
 	}
 }

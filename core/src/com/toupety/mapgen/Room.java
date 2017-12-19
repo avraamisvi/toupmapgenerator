@@ -16,7 +16,7 @@ public class Room {
 	private Rectangle bounds;
 	
 	private int side;
-	
+	//TODO rooms will have some kind of grid also containing all the 
 	private Room[] rooms;
 	
 	public static final int UP    = 0;
@@ -24,7 +24,7 @@ public class Room {
 	public static final int LEFT  = 2;
 	public static final int RIGHT = 3;
 	
-	public Room(int height, int width, int x, int y) {
+	public Room(int width, int height, int x, int y) {
 		this.rects = new ArrayList<>();
 		this.bounds = new Rectangle(x, y, width, height);
 		this.id = UUID.randomUUID().toString();

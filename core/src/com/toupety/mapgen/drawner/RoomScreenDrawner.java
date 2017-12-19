@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.toupety.mapgen.CameraHolder;
+import com.toupety.mapgen.Dimmensions;
 import com.toupety.mapgen.Room;
+import com.toupety.mapgen.Util;
 
 public class RoomScreenDrawner implements ElementDrawner<Room> {
 
@@ -19,8 +21,11 @@ public class RoomScreenDrawner implements ElementDrawner<Room> {
 	public void draw(Room element) {
 		renderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
 		renderer.begin(ShapeType.Line);
-		renderer.setColor(getColor(element));
-		renderer.rect(element.getX(), element.getY(), element.getWidth(), element.getHeight());
+		renderer.setColor(1,0,0,1);
+		
+		Dimmensions world = Util.convertDimmensions(element).toWorldDimmensions();
+		
+		renderer.rect(world.getX(), world.getY(), world.getW(), world.getH());
 		renderer.end();
 	}
 

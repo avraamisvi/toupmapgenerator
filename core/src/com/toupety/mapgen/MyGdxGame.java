@@ -27,7 +27,14 @@ public class MyGdxGame extends ApplicationAdapter {
 //		camera.getOrtho().zoom = 100;
 //		camera.getOrtho().update();
 		
-		new RoomGenerator(6400, 6400, 20, 1024, 1024).generate(level);
+		new RoomGenerator(Constants.MAX_ROOM_WIDTH, 
+						  Constants.MAX_ROOM_HEIGHT, 
+						  Constants.MAX_ROOM_WIDTH/2, 
+						  Constants.MAX_ROOM_WIDTH/2,
+						  20, 
+						  100
+						  ).generate(level);
+		
 		this.testRenderer = new ShapeRenderer();
 		
 		Gdx.graphics.setWindowedMode(1024, 648);
@@ -44,10 +51,10 @@ public class MyGdxGame extends ApplicationAdapter {
 //		batch.draw(img, 0, 0);
 //		batch.end();
 		
-		this.testRenderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
-		this.testRenderer.begin(ShapeType.Filled);
-		this.testRenderer.rect(0, 0, 64, 64);
-		this.testRenderer.end();
+//		this.testRenderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
+//		this.testRenderer.begin(ShapeType.Filled);
+//		this.testRenderer.rect(0, 0, 64, 64);
+//		this.testRenderer.end();
 		
 		DrawnerFactory
 		.instance()

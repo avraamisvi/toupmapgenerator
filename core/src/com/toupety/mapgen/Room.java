@@ -38,7 +38,7 @@ public class Room {
 	}
 
 	public int getHeight() {
-		return (int) bounds.getX();
+		return (int) bounds.getHeight();
 	}
 
 	public int getWidth() {

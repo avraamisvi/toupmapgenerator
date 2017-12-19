@@ -36,8 +36,21 @@ public class RoomGenerator {
 				break;
 			}
 			
+			//getRoomMaxMinDimessions no caso criar uma classe que ira pegar randomicamente os tamanhos para as salas, considerando o tipo de sala, 
+			//por exemplo corredores etc, acho q a proxima posicao da sala pode ser calculada por nodulos adjacendes das salas anteriores
+			//por exmeplo ao inves de x e y serem completamente randomicos, seria ineressante q as salas novas comecassem a partir das preexistentes 
+			//ou para cada sala criada criar corredores com certos comprimentos e altura
+			
 			int h = ran.nextInt(maxRoomHeight);
 			int w = ran.nextInt(maxRoomWidth);
+			
+			if(w < this.minRoomWidth) {
+				w = this.minRoomWidth;
+			}
+			
+			if(h < this.minRoomHeight) {
+				h = this.minRoomHeight;
+			}			
 			
 			if(level.size() > 0) {				
 				

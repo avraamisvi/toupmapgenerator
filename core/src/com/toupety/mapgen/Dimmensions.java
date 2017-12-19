@@ -31,7 +31,7 @@ public class Dimmensions {
 	
 	public Dimmensions toWorldDimmensions() {
 		
-		int lx = x * Constants.LEVEL_BLOCK_WIDTH;
+		int lx = (x * Constants.LEVEL_BLOCK_WIDTH);
 	    int ly = y * Constants.LEVEL_BLOCK_HEIGHT;
 	    int lw = w * Constants.LEVEL_BLOCK_WIDTH;
 	    int lh = h * Constants.LEVEL_BLOCK_HEIGHT;

@@ -12,6 +12,10 @@ public interface Util {
 		return (val%64) + val;
 	}
 	
+	static Dimmensions convertDimmensions(int x, int y, int w, int h) {
+		return new Dimmensions(x, y, w, h);
+	}
+	
 	static Dimmensions convertDimmensions(Room element) {
 		return new Dimmensions(element.getX(), element.getY(), element.getWidth(), element.getHeight());
 	}

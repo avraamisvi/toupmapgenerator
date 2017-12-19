@@ -85,8 +85,11 @@ public class LevelGrid {
 			int h = room.getHeight();
 			
 			GridElement cell = this;
+			GridElement line = this;
 			
-			for(int ly = 0; ly < w; ly++) {
+			//TODO CHANGE THIS CODE
+			
+			for(int ly = 0; ly < h; ly++) {
 				
 				for(int lx = 0; lx < w; lx++) {
 					
@@ -102,8 +105,9 @@ public class LevelGrid {
 					
 				}
 				
-				if(cell != null) {
-					cell = cell.down;
+				if(line != null) {
+					line = line.down;
+					cell = line;
 				} else {
 					break;
 				}
@@ -111,10 +115,15 @@ public class LevelGrid {
 			
 			//TODO optmize thread?
 			cell = this;
+			line = this;
 			
-			for(int ly = 0; ly < w; ly++) {
+			for(int ly = 0; ly < h; ly++) {
 				
 				for(int lx = 0; lx < w; lx++) {
+					
+					if(cell == null) {
+						break;
+					}
 					
 					if(!cell.isUsed()) {
 						cell.owner = room;
@@ -122,13 +131,11 @@ public class LevelGrid {
 					
 					cell = cell.right;
 					
-					if(cell == null) {
-						break;
-					}
 				}
 				
-				if(cell != null) {
-					cell = cell.down;
+				if(line != null) {
+					line = line.down;
+					cell = line;
 				} else {
 					break;
 				}

@@ -29,8 +29,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		
 		new RoomGenerator(Constants.MAX_ROOM_WIDTH, 
 						  Constants.MAX_ROOM_HEIGHT, 
-						  Constants.MAX_ROOM_WIDTH/2, 
-						  Constants.MAX_ROOM_WIDTH/2,
+						  Constants.MIN_ROOM_WIDTH, 
+						  Constants.MIN_ROOM_WIDTH,
 						  20, 
 						  100
 						  ).generate(level);

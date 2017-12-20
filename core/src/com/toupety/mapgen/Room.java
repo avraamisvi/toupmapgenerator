@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public class Room {
 	
@@ -18,6 +20,7 @@ public class Room {
 	private int side;
 	//TODO rooms will have some kind of grid also containing all the 
 	private Room[] rooms;
+	private List<Vector2> points;
 	
 	public static final int UP    = 0;
 	public static final int DOWN  = 1;
@@ -32,7 +35,7 @@ public class Room {
 		this.rooms = new Room[4];
 		this.side = -1;
 	}
-
+	
 	public String getId() {
 		return id;
 	}
@@ -166,5 +169,25 @@ public class Room {
 	
 	public int getSide() {
 		return side;
+	}
+	
+	public List<Vector2> getClosePoints() {
+		
+		if(this.points == null) {
+			this.points = new ArrayList<>();
+			
+			IntStream.range(this.getX(), this.getX()+this.getWidth())
+			.forEach(x -> {
+				this.points.add(new Vector2(x, this.getHeight() + this.getY()));
+			});
+			
+			IntStream.range(this.getY(), this.getY()+this.getHeight())
+			.forEach(y -> {
+				this.points.add(new Vector2(this.getX()+this.getWidth(), y));
+			});	
+			
+		}
+		
+		return this.points;
 	}
 }

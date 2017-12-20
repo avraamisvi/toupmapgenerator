@@ -28,7 +28,7 @@ public class LevelGrid {
 		return this.grid[x][y].isUsed();
 	}
 	
-	public boolean addRoom(Room room) {
+	public synchronized boolean addRoom(Room room) {
 		return this.grid[room.getX()][room.getY()].fit(room);
 	}
 	

@@ -1,11 +1,14 @@
 package com.toupety.mapgen.algorithms;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
+import com.badlogic.gdx.math.Vector2;
 import com.toupety.mapgen.Dimmensions;
 import com.toupety.mapgen.Level;
+import com.toupety.mapgen.Room;
 
 public class BoundedRoomDimmensionsAlgorithm implements RoomDimmenstionsAlgorithm {
 
@@ -41,11 +44,32 @@ public class BoundedRoomDimmensionsAlgorithm implements RoomDimmenstionsAlgorith
 		
 		if(maxIterations > 0 && level.size() < maxRooms) {
 		
-			int h = ran.nextInt(maxRoomHeight);
-			int w = ran.nextInt(maxRoomWidth);
+			Room last = level.getLast();
+
+			int h = 0;
+			int w = 0;
 		
-			int x = ran.nextInt(level.getWidth());
-			int y = ran.nextInt(level.getHeight());
+			int x = 0;
+			int y = 0;
+			
+			h = ran.nextInt(maxRoomHeight);
+			w = ran.nextInt(maxRoomWidth);
+			
+			if(last != null) {
+				
+				List<Vector2> points = last.getClosePoints();
+				Vector2 point = points.get(ran.nextInt(points.size()));
+				
+				x = (int) point.x;
+				y = (int) point.y;
+			} else {
+
+			
+				x = ran.nextInt(level.getWidth());
+				y = ran.nextInt(level.getHeight());
+			}
+			
+
 			
 			if(w < this.minRoomWidth) {
 				w = this.minRoomWidth;

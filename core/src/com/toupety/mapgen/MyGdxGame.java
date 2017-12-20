@@ -56,7 +56,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ROOM_HEIGHT, Constants.MAX_ROOM_HEIGHT);
 		map.put(BoundedRoomDimmensionsAlgorithm.MIN_ROOM_WIDTH, Constants.MIN_ROOM_WIDTH);
 		map.put(BoundedRoomDimmensionsAlgorithm.MIN_ROOM_HEIGHT, Constants.MIN_ROOM_HEIGHT);
-		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ROOMS, 20);
+		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ROOMS, 50);
 		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ITERATIONS, 1000);
 		
 		return map;

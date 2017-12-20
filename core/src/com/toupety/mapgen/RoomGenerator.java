@@ -28,7 +28,7 @@ public class RoomGenerator {
 				} else {
 					level.addRoom(new Room(dim.getW(), dim.getH(), 0, 0));
 				}
-				
+
 			} else {
 				break;
 			}

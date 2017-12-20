@@ -79,4 +79,11 @@ public class Level {
 		}
 		return rooms.get(ids.get(idx));
 	}
+	
+	public Room getLast() {
+		if(ids.size() > 0)
+			return rooms.get(ids.get(ids.size() - 1));
+		else
+			return null;
+	}
 }

@@ -72,11 +72,16 @@ public class Level {
 		return rooms.size();
 	}
 	
-	public Room getOne() {
+	public Room getAny() {
 		int idx = 0;
 		if(this.ids.size() > 0) {
 			idx = rand.nextInt(this.ids.size());
 		}
+		
+		if(this.ids.size() == 0) {
+			return null;
+		}
+		
 		return rooms.get(ids.get(idx));
 	}
 	

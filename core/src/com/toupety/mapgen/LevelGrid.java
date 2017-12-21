@@ -29,6 +29,15 @@ public class LevelGrid {
 	}
 	
 	public synchronized boolean addRoom(Room room) {
+		
+		if(this.grid[0].length <= room.getY()) {
+			return false;
+		}
+		
+		if(this.grid.length <= room.getX()) {
+			return false;
+		}		
+		
 		return this.grid[room.getX()][room.getY()].fit(room);
 	}
 	
@@ -63,6 +72,13 @@ public class LevelGrid {
 			this.grid[x][y].up = el;
 		}
 	}
+//	
+//	public int getColor(int x, int y) {//TODO remove this
+//		if(grid[x][y] != null && grid[x][y].owner != null)
+//			return grid[x][y].owner.colorid;
+//		else
+//			return 0;
+//	}
 	
 	class GridElement {
 		

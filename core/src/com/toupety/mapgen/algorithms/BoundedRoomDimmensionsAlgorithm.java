@@ -10,7 +10,7 @@ import com.toupety.mapgen.Dimmensions;
 import com.toupety.mapgen.Level;
 import com.toupety.mapgen.Room;
 
-public class BoundedRoomDimmensionsAlgorithm implements RoomDimmenstionsAlgorithm {
+public class BoundedRoomDimmensionsAlgorithm implements RoomDimmensionsAlgorithm {
 
 	public static final String MAX_ROOM_WIDTH = "MAX_ROOM_WIDTH";
 	public static final String MAX_ROOM_HEIGHT = "MAX_ROOM_HEIGHT";
@@ -44,7 +44,7 @@ public class BoundedRoomDimmensionsAlgorithm implements RoomDimmenstionsAlgorith
 		
 		if(maxIterations > 0 && level.size() < maxRooms) {
 		
-			Room last = level.getLast();
+			Room last = level.getAny();
 
 			int h = 0;
 			int w = 0;
@@ -62,14 +62,11 @@ public class BoundedRoomDimmensionsAlgorithm implements RoomDimmenstionsAlgorith
 				
 				x = (int) point.x;
 				y = (int) point.y;
+				
 			} else {
-
-			
 				x = ran.nextInt(level.getWidth());
 				y = ran.nextInt(level.getHeight());
 			}
-			
-
 			
 			if(w < this.minRoomWidth) {
 				w = this.minRoomWidth;
@@ -78,6 +75,18 @@ public class BoundedRoomDimmensionsAlgorithm implements RoomDimmenstionsAlgorith
 			if(h < this.minRoomHeight) {
 				h = this.minRoomHeight;
 			}			
+			
+			if(h == this.minRoomHeight) {
+				if(w == this.minRoomWidth) {
+					w = this.minRoomWidth * 2;
+				}
+			}
+			
+			if(w == this.minRoomWidth) {
+				if(h == this.minRoomHeight) {
+					h = this.minRoomHeight * 2;
+				}
+			}
 			
 			maxIterations--;
 			

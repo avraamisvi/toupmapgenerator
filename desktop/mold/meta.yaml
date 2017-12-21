@@ -8,6 +8,7 @@
 		"type": "GROUND"
 	}
 	".": {
-		"type": "SPACE"
+		"type": "SPACE",
+		"visible": false
 	}
 }

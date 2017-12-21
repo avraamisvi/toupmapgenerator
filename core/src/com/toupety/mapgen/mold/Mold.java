@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.toupety.mapgen.Constants;
+
 public class Mold {
 
 	private List<MoldBlock> blocks;
+	int width  = Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE; 
+	int height = Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE;
 	
 	public Mold(List<String> data) {
 		blocks = new ArrayList<>();
-		
-//		int max = Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE;
 		
 		String line;
 		for(int y = 0; y < data.size(); y++) {
@@ -24,5 +26,13 @@ public class Mold {
 	
 	public Stream<MoldBlock> stream() {
 		return blocks.stream();
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 }

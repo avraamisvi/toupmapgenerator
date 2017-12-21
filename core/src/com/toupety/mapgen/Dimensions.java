@@ -1,10 +1,10 @@
 package com.toupety.mapgen;
 
-public class Dimmensions {
+public class Dimensions {
 
 	private int x, y, w, h;
 
-	public Dimmensions(int x, int y, int w, int h) {
+	public Dimensions(int x, int y, int w, int h) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -29,13 +29,13 @@ public class Dimmensions {
 		return h;
 	}
 	
-	public Dimmensions toWorldDimmensions() {
+	public Dimensions toWorldDimmensions() {
 		
 		int lx = (Constants.WIDTH * Constants.LEVEL_BLOCK_WIDTH) - (x * Constants.LEVEL_BLOCK_WIDTH);
 	    int ly = y * Constants.LEVEL_BLOCK_HEIGHT;
 	    int lw = w * Constants.LEVEL_BLOCK_WIDTH;
 	    int lh = h * Constants.LEVEL_BLOCK_HEIGHT;
 		
-		return new Dimmensions(lx - lw, ly, lw, lh);
+		return new Dimensions(lx - lw, ly, lw, lh);
 	}
 }

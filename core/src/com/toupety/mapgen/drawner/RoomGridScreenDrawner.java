@@ -1,9 +1,7 @@
 package com.toupety.mapgen.drawner;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -12,63 +10,66 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.CameraHolder;
 import com.toupety.mapgen.Constants;
 import com.toupety.mapgen.Dimensions;
-import com.toupety.mapgen.Level;
-import com.toupety.mapgen.Room;
-import com.toupety.mapgen.Util;
+import com.toupety.mapgen.RoomGrid;
 
-public class RoomScreenDrawner implements ElementDrawner<Room> {
+public class RoomGridScreenDrawner implements ElementDrawner<RoomGrid> {
 
 	private ShapeRenderer renderer;
 	List<Color> colors;
-	HashMap<String, Integer> colorByRoom;
+//	HashMap<String, Integer> colorByRoom;
 //	int colorindex = 0;
 	RandomXS128 rand = new RandomXS128();
 	
-	RoomGridScreenDrawner gridDrawner;
-	
-	public RoomScreenDrawner() {
+	public RoomGridScreenDrawner() {
 		this.colors = new ArrayList<>();
-		this.colorByRoom = new HashMap<>();
+//		this.colorByRoom = new HashMap<>();
 		renderer = new ShapeRenderer();
-		IntStream
-		.range(1, Constants.MAX_ROOMS)
-		.forEach(c -> this.colors.add(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), 1)));
-		gridDrawner = new RoomGridScreenDrawner();
+//		IntStream
+//		.range(1, Constants.MAX_ROOMS)
+//		.forEach(c -> this.colors.add(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), 1)));
 	}
 	
 	@Override
-	public void draw(Room element) {
+	public void draw(RoomGrid grid) {
 		
 //		if(colorindex == colors.size()) {
 //			colorindex = 0;
 //		}
+
+		renderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
 		
-//		renderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
-//		renderer.begin(ShapeType.Line);
-//		renderer.setColor(getColor(element.getIndex()));
-//		
-//		Dimensions world = Util.convertDimmensions(element).toWorldDimmensions();
-//		
+		Dimensions dim = grid.getDimensions().toWorldDimmensions();
+		grid.forEach(rbl -> {
+			rbl.forEach(bl -> {
+				if(bl.getOwner().getValue() == 'x') {//TODO
+					renderer.begin(ShapeType.Filled);
+					renderer.setColor(1,1,1,1);
+					
+					renderer.rect(bl.getX() + dim.getX(), bl.getY() + dim.getY(), Constants.ROOM_BLOCK_SIZE, Constants.ROOM_BLOCK_SIZE);
+					
+					renderer.end();
+				}
+			});
+		});
+		
+//		Dimmensions world = Util.convertDimmensions(element).toWorldDimmensions();
 //		renderer.rect(world.getX(), world.getY(), world.getW(), world.getH());
-//		renderer.end();
 		
 //		colorindex++;
-		
-		gridDrawner.draw(element.getGrid());
 	}
 	
-	private Color getColor(Integer index) {
-		
-		Integer idx = colorByRoom.get(index.toString());
-		
-		if(idx == null) {
-			idx = rand.nextInt(colors.size());
-			colorByRoom.put(index.toString(), idx);
-		}
-		
-		return colors.get(idx);
-		
-	}
+//	private Color getColor(Integer index) {
+//		
+//		Integer idx = colorByRoom.get(index.toString());
+//		
+//		if(idx == null) {
+//			idx = rand.nextInt(colors.size());
+//			colorByRoom.put(index.toString(), idx);
+//		}
+//		
+//		return colors.get(idx);
+//		
+//	}
 
 //	private void drawnBlocks(Level level) {
 //		

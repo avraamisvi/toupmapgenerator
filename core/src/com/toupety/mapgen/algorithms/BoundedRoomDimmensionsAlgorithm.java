@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
-import com.toupety.mapgen.Dimmensions;
+import com.toupety.mapgen.Dimensions;
 import com.toupety.mapgen.Level;
 import com.toupety.mapgen.Room;
 
@@ -38,9 +38,9 @@ public class BoundedRoomDimmensionsAlgorithm implements RoomDimmensionsAlgorithm
 	}
 	
 	@Override
-	public Optional<Dimmensions> next(Level level) {
+	public Optional<Dimensions> next(Level level) {
 		
-		Dimmensions dim = null;
+		Dimensions dim = null;
 		
 		if(maxIterations > 0 && level.size() < maxRooms) {
 		
@@ -90,7 +90,7 @@ public class BoundedRoomDimmensionsAlgorithm implements RoomDimmensionsAlgorithm
 			
 			maxIterations--;
 			
-			dim = new Dimmensions(x, y, w, h);
+			dim = new Dimensions(x, y, w, h);
 		}
 		
 		return Optional.ofNullable(dim);

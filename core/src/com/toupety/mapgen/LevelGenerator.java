@@ -18,10 +18,10 @@ public class LevelGenerator {
 		
 		while(true) {
 
-			Optional<Dimmensions> op = algorithm.next(level);
+			Optional<Dimensions> op = algorithm.next(level);
 			
 			if(op.isPresent()) {
-				Dimmensions dim = op.get();
+				Dimensions dim = op.get();
 				if(level.size() > 0) {				
 					Room rom = new Room(dim.getW(), dim.getH(), dim.getX(), dim.getY());
 					rom.setIndex(level.size());

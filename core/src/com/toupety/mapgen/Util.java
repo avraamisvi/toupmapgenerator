@@ -12,15 +12,15 @@ public interface Util {
 		return (val%64) + val;
 	}
 	
-	static Dimmensions convertDimmensions(int x, int y, int w, int h) {
-		return new Dimmensions(x, y, w, h);
+	static Dimensions convertDimmensions(int x, int y, int w, int h) {
+		return new Dimensions(x, y, w, h);
 	}
 	
-	static Dimmensions convertDimmensions(Room element) {
-		return new Dimmensions(element.getX(), element.getY(), element.getWidth(), element.getHeight());
+	static Dimensions convertDimmensions(Room element) {
+		return new Dimensions(element.getX(), element.getY(), element.getWidth(), element.getHeight());
 	}
 	
-	static Dimmensions convertDimmensions(Level element) {
-		return new Dimmensions(0, 0, element.getWidth(), element.getHeight());
+	static Dimensions convertDimmensions(Level element) {
+		return new Dimensions(0, 0, element.getWidth(), element.getHeight());
 	}	
 }

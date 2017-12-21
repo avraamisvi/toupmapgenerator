@@ -3,38 +3,28 @@ package com.toupety.mapgen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.toupety.mapgen.mold.Mold;
 
 public class Room {
 	
-	private List<Block> blocks;
 	private String id;
-//	private List<Rectangle> rects;
 	private Rectangle bounds;
 	
 	private int side;
-	//TODO rooms will have some kind of grid also containing all the 
-//	private Room[] rooms;
 	private List<Vector2> points;
 	
-	int index = 0;//TODO sair disso
+	private int index = 0;//TODO sair disso
+	private RoomGrid grid;
 	
 	public Room(int width, int height, int x, int y) {
-//		this.rects = new ArrayList<>();
 		this.bounds = new Rectangle(x, y, width, height);
 		this.id = UUID.randomUUID().toString();
-		this.blocks = new ArrayList<>();
-//		this.rooms = new Room[4];
 		this.side = -1;
-	}
-	
-	private void createBlocks() {
-		
+		this.grid = new RoomGrid(new Dimensions(x, y, width, height));
 	}
 	
 	public String getId() {
@@ -65,10 +55,6 @@ public class Room {
 		this.bounds.setY(y);
 	}
 	
-	public void apply(Consumer<Block> c) {//esse algoritmo deve gerar plataformas e estruturas dentro das rooms, considerando os retangulos
-		blocks.forEach(c);
-	}
-
 	public void setDoor() {
 		//TODO
 	}
@@ -81,7 +67,7 @@ public class Room {
 		
 		if(this.points == null) {
 			this.points = new ArrayList<>();
-			
+		
 			IntStream.range(this.getX(), this.getX()+this.getWidth())
 			.forEach(x -> {
 				this.points.add(new Vector2(x, this.getHeight() + this.getY()));
@@ -103,5 +89,13 @@ public class Room {
 	
 	public void setIndex(int index) {
 		this.index = index;
+	}
+	
+	public void apply(Mold mold) {
+		this.grid.putNext(mold);
+	}
+	
+	public RoomGrid getGrid() {//TODO melhorar
+		return grid;
 	}
 }

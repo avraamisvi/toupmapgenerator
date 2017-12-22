@@ -56,9 +56,9 @@ public class Room {
 		this.bounds.setY(y);
 	}
 	
-	public void createDoor(int x, int y) {
-		//TODO
-	}
+//	public void createDoor(int x, int y, Direction dir) {
+//		this.grid.createDoor();
+//	}
 	
 	public int getSide() {
 		return side;

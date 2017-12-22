@@ -34,7 +34,8 @@ public class LevelGenerator {
 					doorGen.generate(level, result.getTarget());//TODO maybe should be the new room
 					
 				} else {
-					Room rom = new Room(dim.getW(), dim.getH(), 0, 0);
+					Dimensions dim2 = new Dimensions(0, 0, dim.getW(), dim.getH());
+					Room rom = new Room(dim2);
 					rom.setIndex(level.size());
 					level.addRoom(rom);
 				}

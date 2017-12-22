@@ -64,7 +64,8 @@ public class RoomGridScreenDrawner implements ElementDrawner<RoomBlocks> {
 		Dimensions dim = grid.getDimensions().toWorldDimmensions();
 		grid.forEach(bl -> {
 			
-			if(bl.getOwner() != null && bl.isDoor()) {
+			if(bl.isDoor()) {
+				System.out.println("door");
 				renderer.begin(ShapeType.Filled);
 				renderer.setColor(0,0,0,1);
 				

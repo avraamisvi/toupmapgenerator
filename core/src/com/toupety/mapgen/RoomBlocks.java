@@ -16,20 +16,20 @@ public class RoomBlocks {
 	private List<RoomBlock> path;
 	private List<RoomBlock> doors;
 	
-	private RoomWall top;
-	private RoomWall left;
-	private RoomWall right;
-	private RoomWall bottom;
+	private RoomWall topWall;
+	private RoomWall leftWall;
+	private RoomWall rightWall;
+	private RoomWall bottomWall;
 	
 	public RoomBlocks(Dimensions dim) {
-		
-		top = new RoomWall();
-		left = new RoomWall();
-		right = new RoomWall();
-		bottom = new RoomWall();		
-		
+				
 		this.w = dim.getW() * Constants.ROOM_BLOCK_SIZE;
 		this.h = dim.getH() * Constants.ROOM_BLOCK_SIZE;
+		
+		topWall = new RoomWall(-1, 0);
+		leftWall = new RoomWall(0,-1);
+		rightWall = new RoomWall(w-1,-1);
+		bottomWall = new RoomWall(-1,h-1);		
 		
 		this.dim = dim;
 		
@@ -53,24 +53,40 @@ public class RoomBlocks {
 		
 		//sides left
 		for(int y = 0; y < this.h; y++) {
-			left.add(this.grid[0][y]);
+			leftWall.add(this.grid[0][y]);
 		}
 		
 		//sides right
 		for(int y = 0; y < this.h; y++) {
-			right.add(this.grid[this.w-1][y]);
+			rightWall.add(this.grid[this.w-1][y]);
 		}
 		
 		//sides top
 		for(int x = 0; x < this.w; x++) {
-			top.add(this.grid[x][0]);
+			topWall.add(this.grid[x][0]);
 		}
 		
 		//sides bottom
 		for(int x = 0; x < this.w; x++) {
-			bottom.add(this.grid[x][this.h-1]);
+			bottomWall.add(this.grid[x][this.h-1]);
 		}		
 		
+	}
+	
+	public RoomWall getLeftWall() {
+		return leftWall;
+	}
+	
+	public RoomWall getRightWall() {
+		return rightWall;
+	}
+	
+	public RoomWall getTopWall() {
+		return topWall;
+	}
+	
+	public RoomWall getBottomWall() {
+		return bottomWall;
 	}
 	
 	public boolean isUsed(int x, int y) {
@@ -306,7 +322,7 @@ public class RoomBlocks {
 	}
 	
 	public class RoomDoor {
-		private List<RoomBlock> blocks;
+		private List<RoomBlock> blocks = new ArrayList<>();
 		
 		public void add(RoomBlock b) {
 			blocks.add(b);
@@ -318,6 +334,14 @@ public class RoomBlocks {
 		private List<RoomBlock> blocks = new ArrayList<>();
 		private List<RoomDoor> doors = new ArrayList<>();
 		
+		private int x = -1;
+		private int y = -1;
+		
+		public RoomWall(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+		
 		public void add(RoomBlock b) {
 			b.setWall(true);
 			blocks.add(b);
@@ -327,9 +351,16 @@ public class RoomBlocks {
 			RoomBlock start = null;
 			
 			for(RoomBlock b : blocks) {
-				if(b.getX() == x && b.getY() == y) {
-					start = b;
-					break;
+				if(x > -1) {
+					if(b.getX() == this.x && b.getY() == y) {
+						start = b;
+						break;
+					}
+				} else {
+					if(b.getX() == x && b.getY() == this.y) {
+						start = b;
+						break;
+					}					
 				}
 			}
 			

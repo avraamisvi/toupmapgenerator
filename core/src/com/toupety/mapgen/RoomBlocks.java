@@ -23,8 +23,9 @@ public class RoomBlocks {
 	
 	public RoomBlocks(Dimensions dim) {
 				
-		this.w = dim.getW() * Constants.ROOM_BLOCK_SIZE;
-		this.h = dim.getH() * Constants.ROOM_BLOCK_SIZE;
+		Dimensions worldDim = dim.toRoomWorldDimmensions();
+		this.w = worldDim.getW() / Constants.ROOM_BLOCK_SIZE;
+		this.h = worldDim.getH() / Constants.ROOM_BLOCK_SIZE;//TODO rever
 		
 		topWall = new RoomWall(-1, 0);
 		leftWall = new RoomWall(0,-1);
@@ -216,6 +217,10 @@ public class RoomBlocks {
 
 		void setDoor(boolean door) {
 			this.door = door;
+		}
+		
+		public boolean isWall() {
+			return wall;
 		}
 		
 		void setWall(boolean wall) {

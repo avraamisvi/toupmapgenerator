@@ -15,6 +15,8 @@ public class CameraHolder {
 		
 		cam = new OrthographicCamera(30, 30 * (h / w));
 		cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
+//		cam.setToOrtho(true);
+//		cam.rotate(180,0,1,0);//TODO hard coded
 		cam.update();
 	}
 	

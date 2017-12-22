@@ -58,101 +58,40 @@ public class RoomGridScreenDrawner implements ElementDrawner<RoomBlocks> {
 //			
 //			renderer.end();			
 //		}
-		
+		//TODO mover isso para os elementos como room, level etc com um metodo drawn
 		renderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
 //		Cont tot = new Cont();
-		Dimensions dim = grid.getDimensions().toWorldDimmensions();
+		Color color = new Color();
+
+		
+		Dimensions dim = grid.getDimensions().toRoomWorldDimmensions();
 		grid.forEach(bl -> {
+//			
+			int x =  (Constants.ROOM_BLOCK_SIZE * bl.getX()) + Constants.ROOM_BLOCK_SIZE;
+			
+			x = (dim.getW() - x) + dim.getX();
+			int y = (bl.getY() * Constants.ROOM_BLOCK_SIZE) + dim.getY();
+			
+			ShapeType shType = ShapeType.Filled;
+			boolean render = false;
 			
 			if(bl.isDoor()) {
-				System.out.println("door");
-				renderer.begin(ShapeType.Filled);
-				renderer.setColor(0,0,0,1);
-				
-				int x = (bl.getX() * Constants.ROOM_BLOCK_SIZE) + dim.getX() + dim.getW() - Constants.LEVEL_BLOCK_WIDTH;
-				int y = (bl.getY() * Constants.ROOM_BLOCK_SIZE) + dim.getY();
-				
-				renderer.rect(x, y, Constants.ROOM_BLOCK_SIZE, Constants.ROOM_BLOCK_SIZE);
-				
-				renderer.end();				
+				render = true;
+				color.set(0, 0, 0, 1);
 			} else if(bl.getOwner() != null && bl.getOwner().getValue() == 'x') {//TODO
-				renderer.begin(ShapeType.Filled);
-				renderer.setColor(1,1,1,1);
-				
-				int x = (bl.getX() * Constants.ROOM_BLOCK_SIZE) + dim.getX() + dim.getW() - Constants.LEVEL_BLOCK_WIDTH;
-				int y = (bl.getY() * Constants.ROOM_BLOCK_SIZE) + dim.getY();
-				
-				renderer.rect(x, y, Constants.ROOM_BLOCK_SIZE, Constants.ROOM_BLOCK_SIZE);
-				
-				renderer.end();
-//				tot.plus();
+				render = true;
+				color.set(1, 1, 1, 1);
 			} else if(bl.getOwner() != null && bl.getOwner().getValue() == '.') {//TODO mudar logica para pegar cor do metadado
-				renderer.begin(ShapeType.Filled);
-				renderer.setColor(0,0,0,1);
-				
-				int x = (bl.getX() * Constants.ROOM_BLOCK_SIZE) + dim.getX() + dim.getW() - Constants.LEVEL_BLOCK_WIDTH;
-				int y = (bl.getY() * Constants.ROOM_BLOCK_SIZE) + dim.getY();
-				
+				render = true;
+				color.set(0, 0, 0, 1);				
+			}			
+			
+			if(render) {
+				renderer.begin(shType);
+				renderer.setColor(color);
 				renderer.rect(x, y, Constants.ROOM_BLOCK_SIZE, Constants.ROOM_BLOCK_SIZE);
-				
 				renderer.end();				
 			}
 		});
-		
-		
-//		System.out.println("tot: " + tot.tot);
-//		Dimmensions world = Util.convertDimmensions(element).toWorldDimmensions();
-//		renderer.rect(world.getX(), world.getY(), world.getW(), world.getH());
-		
-//		colorindex++;
 	}
-	
-//	private Color getColor(Integer index) {
-//		
-//		Integer idx = colorByRoom.get(index.toString());
-//		
-//		if(idx == null) {
-//			idx = rand.nextInt(colors.size());
-//			colorByRoom.put(index.toString(), idx);
-//		}
-//		
-//		return colors.get(idx);
-//		
-//	}
-
-//	private void drawnBlocks(Level level) {
-//		
-//		renderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
-//
-//		for(int x = 0; x < level.getWidth(); x++) {
-//			for(int y = 0; y < level.getHeight(); y++) {
-//				
-//				float color = colors[level.getGrid().getColor(x, y)];
-//				
-//				Dimmensions dim = Util.convertDimmensions(x, y, 1, 1).toWorldDimmensions();
-//				
-//				if(level.getGrid().isUsed(x, y)) {
-//					
-//					renderer.begin(ShapeType.Filled);
-//					renderer.setColor(1,color,1,1);
-//					
-//						renderer.rect(dim.getX(),
-//									 dim.getY(), 
-//									 dim.getW(), 
-//									 dim.getH());
-//					renderer.end();
-//				} else {
-//					renderer.begin(ShapeType.Line);
-//					renderer.setColor(1,0,0,1);
-//						
-//						renderer.rect(dim.getX(),
-//								 dim.getY(), 
-//								 dim.getW(), 
-//								 dim.getH());
-//					
-//					renderer.end();					
-//				}
-//			}
-//		}
-//	}	
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.CameraHolder;
+import com.toupety.mapgen.Configuration;
 import com.toupety.mapgen.Constants;
 import com.toupety.mapgen.Dimensions;
 import com.toupety.mapgen.Level;
@@ -47,7 +48,12 @@ public class RoomScreenDrawner implements ElementDrawner<Room> {
 		renderer.begin(ShapeType.Filled);
 		renderer.setColor(getColor(element.getIndex()));
 		
-		Dimensions world = Util.convertDimmensions(element).toWorldDimmensions();
+		Dimensions world = null;
+		if(!Configuration.invert) {			
+			world = Util.convertDimmensions(element).toRoomWorldDimmensions();
+		} else {
+			world = Util.convertDimmensions(element).toInvertedRoomWorldDimmensions();
+		}
 		
 		renderer.rect(world.getX(), world.getY(), world.getW(), world.getH());
 		renderer.end();

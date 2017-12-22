@@ -65,6 +65,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 		handleInput();
+		
+//		camera.getOrtho().translate(1024/2,648/2,0);
 		camera.update();
 		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -101,6 +103,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.X)) {
 			camera.getOrtho().zoom += 200;
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+			Configuration.invert = !Configuration.invert;
 		}		
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			camera.getOrtho().translate(-Constants.DESLOC_SPEED, 0, 0);

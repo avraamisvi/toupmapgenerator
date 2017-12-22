@@ -42,7 +42,7 @@ public class LevelScreenDrawner implements ElementDrawner<Level> {
 		renderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);//.rotate(new Vector3(0, 1, 0), 45)
 		renderer.begin(ShapeType.Line);
 		renderer.setColor(1,1,1,1);
-		Dimensions world = Util.convertDimmensions(level).toWorldDimmensions();
+		Dimensions world = Util.convertDimmensions(level).toRoomWorldDimmensions();
 		renderer.rect(world.getX(), world.getY(), world.getW(), world.getH());
 		renderer.end();
 	}
@@ -61,7 +61,7 @@ public class LevelScreenDrawner implements ElementDrawner<Level> {
 				
 //				float color = colors[level.getGrid().getColor(x, y)];
 				
-				Dimensions dim = Util.convertDimmensions(x, y, 1, 1).toWorldDimmensions();
+				Dimensions dim = Util.convertDimmensions(x, y, 1, 1).toRoomWorldDimmensions();
 				
 //				if(level.getGrid().isUsed(x, y)) {
 //					

@@ -12,7 +12,7 @@ public class RoomGenerator {
 	
 	public void generate(Level level) {
 		System.out.println("test");
-		level.stream().forEach(r -> {
+		level.forEach(r -> {
 			r.apply(moldFactory.getAny());
 		});
 		

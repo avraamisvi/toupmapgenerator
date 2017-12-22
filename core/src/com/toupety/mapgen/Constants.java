@@ -2,6 +2,8 @@ package com.toupety.mapgen;
 
 public interface Constants {
 
+	int DOOR_BLOCKS_SIZE = 3;
+	
 	int LEVEL_BLOCK_WIDTH  = 960;
 	int LEVEL_BLOCK_HEIGHT = 960;
 	
@@ -16,7 +18,7 @@ public interface Constants {
 	int MIN_ROOM_WIDTH  = 2;
 	int MIN_ROOM_HEIGHT = 2;	
 	
-	int MAX_ROOMS = 60;
+	int MAX_ROOMS = 3;//
 	
 	int MAX_MIN_ROOMS = 5;
 	
@@ -24,4 +26,5 @@ public interface Constants {
 	
 	int DESLOC_SPEED = 500;
 	
+	int MAX_DOORS_PER_WALL = 1;
 }

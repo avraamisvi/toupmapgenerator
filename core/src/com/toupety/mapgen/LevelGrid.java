@@ -164,4 +164,8 @@ public class LevelGrid {
 			return owner != null;
 		}
 	}
+	
+	public Room getAt(int x, int y) {
+		return this.grid[x][y].owner;
+	}
 }

@@ -1,4 +1,6 @@
 {
-	"name"="teste1",
-	"elements": ["OIL", "GROUND", "SPACE"]
+	"name":"teste1",
+	"elements": ["OIL", "GROUND", "SPACE"],
+	"width": 15,
+	"heigth": 15
 }

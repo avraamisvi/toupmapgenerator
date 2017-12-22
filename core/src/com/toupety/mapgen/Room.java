@@ -17,14 +17,15 @@ public class Room {
 	private int side;
 	private List<Vector2> points;
 	
-	private int index = 0;//TODO sair disso
-	private RoomGrid grid;
+	private int index = 0;
+	private RoomBlocks grid;
+	private Dimensions dim;
 	
-	public Room(int width, int height, int x, int y) {
-		this.bounds = new Rectangle(x, y, width, height);
+	public Room(Dimensions dim) {
+		this.bounds = new Rectangle(dim.getX(), dim.getY(), dim.getW(), dim.getH());
 		this.id = UUID.randomUUID().toString();
 		this.side = -1;
-		this.grid = new RoomGrid(new Dimensions(x, y, width, height));
+		this.grid = new RoomBlocks(dim);
 	}
 	
 	public String getId() {
@@ -55,12 +56,16 @@ public class Room {
 		this.bounds.setY(y);
 	}
 	
-	public void setDoor() {
+	public void createDoor(int x, int y) {
 		//TODO
 	}
 	
 	public int getSide() {
 		return side;
+	}
+	
+	public Dimensions getDim() {
+		return dim;
 	}
 	
 	public List<Vector2> getClosePoints() {
@@ -92,10 +97,10 @@ public class Room {
 	}
 	
 	public void apply(Mold mold) {
-		this.grid.putNext(mold);
+		this.grid.put(mold);
 	}
 	
-	public RoomGrid getGrid() {//TODO melhorar
+	public RoomBlocks getGrid() {//TODO melhorar
 		return grid;
 	}
 }

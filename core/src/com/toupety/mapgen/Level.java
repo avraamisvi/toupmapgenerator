@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import com.badlogic.gdx.math.RandomXS128;
@@ -49,15 +50,20 @@ public class Level {
 	
 	public void addRoom(Room room) {
 		
-		if(grid.addRoom(room)) {			
-			this.ids.add(room.getId());
-			rooms.put(room.getId(), room);
+		synchronized (this) {
+			if(grid.addRoom(room)) {			
+				this.ids.add(room.getId());
+				rooms.put(room.getId(), room);
+			}
 		}
 		
 	}
 	
-	public Stream<Room> stream() {
-		return rooms.values().stream();
+	public void forEach(Consumer<Room> consumer) {
+//		return rooms.values().stream();
+		synchronized (this) {
+			rooms.values().forEach(consumer);
+		}
 	}
 	
 	public int getHeight() {
@@ -91,4 +97,17 @@ public class Level {
 		else
 			return null;
 	}
+	
+	public Room getAt(int x, int y) {
+		int idx = 0;
+		if(this.ids.size() > 0) {
+			idx = rand.nextInt(this.ids.size());
+		}
+		
+		if(this.ids.size() == 0) {
+			return null;
+		}
+		
+		return rooms.get(ids.get(idx));
+	}	
 }

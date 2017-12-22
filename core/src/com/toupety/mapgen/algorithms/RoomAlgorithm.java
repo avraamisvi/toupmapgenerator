@@ -5,8 +5,8 @@ import java.util.Optional;
 import com.toupety.mapgen.Dimensions;
 import com.toupety.mapgen.Level;
 
-public interface RoomDimmensionsAlgorithm {
+public interface RoomAlgorithm {
 
-	Optional<Dimensions> next(Level level);
+	Optional<RoomAlgorithmResult> next(Level level);
 	
 }

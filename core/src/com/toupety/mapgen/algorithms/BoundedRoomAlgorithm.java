@@ -10,7 +10,7 @@ import com.toupety.mapgen.Dimensions;
 import com.toupety.mapgen.Level;
 import com.toupety.mapgen.Room;
 
-public class BoundedRoomDimmensionsAlgorithm implements RoomDimmensionsAlgorithm {
+public class BoundedRoomAlgorithm implements RoomAlgorithm {
 
 	public static final String MAX_ROOM_WIDTH = "MAX_ROOM_WIDTH";
 	public static final String MAX_ROOM_HEIGHT = "MAX_ROOM_HEIGHT";
@@ -28,7 +28,7 @@ public class BoundedRoomDimmensionsAlgorithm implements RoomDimmensionsAlgorithm
 	
 	private Random ran = new Random();
 	
-	public BoundedRoomDimmensionsAlgorithm(Map<String, Object> config) {
+	public BoundedRoomAlgorithm(Map<String, Object> config) {
 		this.maxRoomWidth = Integer.parseInt(config.get(MAX_ROOM_WIDTH).toString());
 		this.maxRoomHeight = Integer.parseInt(config.get(MAX_ROOM_HEIGHT).toString());
 		this.minRoomWidth = Integer.parseInt(config.get(MIN_ROOM_WIDTH).toString());
@@ -38,9 +38,10 @@ public class BoundedRoomDimmensionsAlgorithm implements RoomDimmensionsAlgorithm
 	}
 	
 	@Override
-	public Optional<Dimensions> next(Level level) {
+	public Optional<RoomAlgorithmResult> next(Level level) {
 		
 		Dimensions dim = null;
+		RoomAlgorithmResult res = null;
 		
 		if(maxIterations > 0 && level.size() < maxRooms) {
 		
@@ -91,9 +92,10 @@ public class BoundedRoomDimmensionsAlgorithm implements RoomDimmensionsAlgorithm
 			maxIterations--;
 			
 			dim = new Dimensions(x, y, w, h);
+			res = new RoomAlgorithmResult(last, dim);
 		}
 		
-		return Optional.ofNullable(dim);
+		return Optional.ofNullable(res);
 	}
 
 }

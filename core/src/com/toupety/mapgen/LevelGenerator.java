@@ -2,14 +2,17 @@ package com.toupety.mapgen;
 
 import java.util.Optional;
 
-import com.toupety.mapgen.algorithms.RoomDimmensionsAlgorithm;
+import com.toupety.mapgen.algorithms.RoomAlgorithm;
+import com.toupety.mapgen.algorithms.RoomAlgorithmResult;
 
 public class LevelGenerator {
 	
-	private RoomDimmensionsAlgorithm algorithm;
+	private RoomAlgorithm algorithm;
+	private DoorGenerator doorGen;
 	
-	public LevelGenerator(RoomDimmensionsAlgorithm algorithm) {
+	public LevelGenerator(RoomAlgorithm algorithm) {
 		this.algorithm = algorithm;
+		this.doorGen = new DoorGenerator();
 	}
 
 	public void generate(Level level) {
@@ -18,14 +21,17 @@ public class LevelGenerator {
 		
 		while(true) {
 
-			Optional<Dimensions> op = algorithm.next(level);
+			Optional<RoomAlgorithmResult> op = algorithm.next(level);
 			
 			if(op.isPresent()) {
-				Dimensions dim = op.get();
+				RoomAlgorithmResult result = op.get();
+				Dimensions dim = result.getDim();
 				if(level.size() > 0) {				
-					Room rom = new Room(dim.getW(), dim.getH(), dim.getX(), dim.getY());
+					Room rom = new Room(dim);
 					rom.setIndex(level.size());
 					level.addRoom(rom);
+					
+					doorGen.generate(level, result.getTarget());//TODO maybe should be the new room
 					
 				} else {
 					Room rom = new Room(dim.getW(), dim.getH(), 0, 0);

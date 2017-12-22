@@ -32,7 +32,7 @@ public class LevelScreenDrawner implements ElementDrawner<Level> {
 				.getElementDrawner(Room.class);
 		
 		drawner.ifPresent(d -> {
-			level.stream().forEach(r -> {				
+			level.forEach(r -> {				
 				d.draw(r);
 			});			
 		});

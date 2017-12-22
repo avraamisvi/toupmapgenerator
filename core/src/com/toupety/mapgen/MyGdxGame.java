@@ -14,8 +14,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
-import com.toupety.mapgen.algorithms.BoundedRoomDimmensionsAlgorithm;
-import com.toupety.mapgen.algorithms.RoomDimmensionsAlgorithm;
+import com.toupety.mapgen.algorithms.BoundedRoomAlgorithm;
+import com.toupety.mapgen.algorithms.RoomAlgorithm;
 import com.toupety.mapgen.drawner.DrawnerFactory;
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -52,12 +52,12 @@ public class MyGdxGame extends ApplicationAdapter {
 						  1000
 		 */
 		Map<String, Object> map = new HashMap<>();
-		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ROOM_WIDTH, Constants.MAX_ROOM_WIDTH);
-		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ROOM_HEIGHT, Constants.MAX_ROOM_HEIGHT);
-		map.put(BoundedRoomDimmensionsAlgorithm.MIN_ROOM_WIDTH, Constants.MIN_ROOM_WIDTH);
-		map.put(BoundedRoomDimmensionsAlgorithm.MIN_ROOM_HEIGHT, Constants.MIN_ROOM_HEIGHT);
-		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ROOMS, 60);
-		map.put(BoundedRoomDimmensionsAlgorithm.MAX_ITERATIONS, 1000);
+		map.put(BoundedRoomAlgorithm.MAX_ROOM_WIDTH, Constants.MAX_ROOM_WIDTH);
+		map.put(BoundedRoomAlgorithm.MAX_ROOM_HEIGHT, Constants.MAX_ROOM_HEIGHT);
+		map.put(BoundedRoomAlgorithm.MIN_ROOM_WIDTH, Constants.MIN_ROOM_WIDTH);
+		map.put(BoundedRoomAlgorithm.MIN_ROOM_HEIGHT, Constants.MIN_ROOM_HEIGHT);
+		map.put(BoundedRoomAlgorithm.MAX_ROOMS, Constants.MAX_ROOMS);
+		map.put(BoundedRoomAlgorithm.MAX_ITERATIONS, 1000);
 		
 		return map;
 	}
@@ -116,7 +116,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
 			executor.execute(() -> {
-				RoomDimmensionsAlgorithm algo = new BoundedRoomDimmensionsAlgorithm(defaultArgs());
+				RoomAlgorithm algo = new BoundedRoomAlgorithm(defaultArgs());
 				level = new Level(Constants.WIDTH, Constants.HEIGHT);
 				new LevelGenerator(algo).generate(level);
 			});

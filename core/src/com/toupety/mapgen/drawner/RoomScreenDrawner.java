@@ -21,7 +21,7 @@ public class RoomScreenDrawner implements ElementDrawner<Room> {
 	private ShapeRenderer renderer;
 	List<Color> colors;
 	HashMap<String, Integer> colorByRoom;
-//	int colorindex = 0;
+	int colorindex = 0;
 	RandomXS128 rand = new RandomXS128();
 	
 	RoomGridScreenDrawner gridDrawner;
@@ -31,7 +31,7 @@ public class RoomScreenDrawner implements ElementDrawner<Room> {
 		this.colorByRoom = new HashMap<>();
 		renderer = new ShapeRenderer();
 		IntStream
-		.range(1, Constants.MAX_ROOMS)
+		.range(1, 60)//Constants.MAX_ROOMS
 		.forEach(c -> this.colors.add(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), 1)));
 		gridDrawner = new RoomGridScreenDrawner();
 	}
@@ -39,20 +39,20 @@ public class RoomScreenDrawner implements ElementDrawner<Room> {
 	@Override
 	public void draw(Room element) {
 		
-//		if(colorindex == colors.size()) {
-//			colorindex = 0;
-//		}
+		if(colorindex == colors.size()) {
+			colorindex = 0;
+		}
 		
-//		renderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
-//		renderer.begin(ShapeType.Line);
-//		renderer.setColor(getColor(element.getIndex()));
-//		
-//		Dimensions world = Util.convertDimmensions(element).toWorldDimmensions();
-//		
-//		renderer.rect(world.getX(), world.getY(), world.getW(), world.getH());
-//		renderer.end();
+		renderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
+		renderer.begin(ShapeType.Filled);
+		renderer.setColor(getColor(element.getIndex()));
 		
-//		colorindex++;
+		Dimensions world = Util.convertDimmensions(element).toWorldDimmensions();
+		
+		renderer.rect(world.getX(), world.getY(), world.getW(), world.getH());
+		renderer.end();
+		
+		colorindex++;
 		
 		gridDrawner.draw(element.getGrid());
 	}

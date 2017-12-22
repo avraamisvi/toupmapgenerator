@@ -12,12 +12,15 @@ public class Mold {
 	int width  = Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE; 
 	int height = Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE;
 	
-	public Mold(List<String> data) {
+	public Mold(MoldMeta meta) {
 		blocks = new ArrayList<>();
 		
+		width  = meta.getWidth(); 
+		height = meta.getHeigth();
+		
 		String line;
-		for(int y = 0; y < data.size(); y++) {
-			line = data.get(y);
+		for(int y = 0; y < meta.getData().size(); y++) {
+			line = meta.getData().get(y);
 			for(int x = 0; x < line.length(); x++) {
 				blocks.add(new MoldBlock(line.charAt(x), x, y));//TODO metadata for each block?
 			}

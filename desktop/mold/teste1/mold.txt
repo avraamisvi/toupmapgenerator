@@ -9,7 +9,7 @@ xx.........xxxx
 ...............
 ...............
 xxxx.......xxxx  
-xxxxoooooooxxxx
-xxxxoooooooxxxx
-xxxxoooooooxxxx
+xxxx.......xxxx
+xxxx.......xxxx
+xxxx.......xxxx
 xxxxxxxxxxxxxxx

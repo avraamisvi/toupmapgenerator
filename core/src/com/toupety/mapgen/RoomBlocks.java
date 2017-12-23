@@ -23,14 +23,18 @@ public class RoomBlocks {
 	
 	public RoomBlocks(Dimensions dim) {
 				
+		
+		//para definir a quantidade de blocos preciso calcular na quantidade de quadros que uma room ocupa
+		//os quadros das rooms sao contados de 960 em 960, mas os quadros internos da room sao de 64 em 64
+		//mas no nivel da room quadra quadro eh como 1 (levelblock), so que esse 1 contem 15 dos roomblocks internos
 		Dimensions worldDim = dim.toRoomWorldDimmensions();
 		this.w = worldDim.getW() / Constants.ROOM_BLOCK_SIZE;
-		this.h = worldDim.getH() / Constants.ROOM_BLOCK_SIZE;//TODO rever
+		this.h = worldDim.getH() / Constants.ROOM_BLOCK_SIZE;
 		
-		topWall = new RoomWall(-1, 0);
-		leftWall = new RoomWall(0,-1);
-		rightWall = new RoomWall(w-1,-1);
-		bottomWall = new RoomWall(-1,h-1);		
+		topWall = new RoomWall(-1, 0, Direction.RIGHT);
+		leftWall = new RoomWall(0,-1,  Direction.DOWN);
+		rightWall = new RoomWall(w-1,-1, Direction.DOWN);
+		bottomWall = new RoomWall(-1,h-1, Direction.RIGHT);		
 		
 		this.dim = dim;
 		
@@ -48,6 +52,10 @@ public class RoomBlocks {
 		}
 		
 		this.fillWalls();
+	}
+	
+	public Dimensions getDim() {
+		return dim;
 	}
 	
 	private void fillWalls() {
@@ -166,8 +174,7 @@ public class RoomBlocks {
 		
 		boolean path;
 		boolean door;
-		boolean wall;
-		
+		RoomWall wall;
 		
 		private MoldBlock owner;
 		
@@ -200,8 +207,16 @@ public class RoomBlocks {
 		}
 		
 		public int getY() {
-			return y;
+			return y + RoomBlocks.this.dim.getY();
 		}
+		
+		public int getWorldX() {
+			return x + RoomBlocks.this.dim.getX();
+		}
+		
+		public int getWorldY() {
+			return y + RoomBlocks.this.dim.getY();
+		}		
 		
 		public boolean isPath() {
 			return path;
@@ -220,10 +235,10 @@ public class RoomBlocks {
 		}
 		
 		public boolean isWall() {
-			return wall;
+			return this.wall != null;
 		}
 		
-		void setWall(boolean wall) {
+		void setWall(RoomWall wall) {
 			this.wall = wall;
 		}
 		
@@ -231,7 +246,7 @@ public class RoomBlocks {
 			int count = 0;
 			
 			RoomBlock b = this;
-			while(b != null && b.wall) {
+			while(b != null && b.wall != null) {
 				count++;
 				b = b.down;
 			}
@@ -243,7 +258,7 @@ public class RoomBlocks {
 			int count = 0;
 			
 			RoomBlock b = this;
-			while(b != null && b.wall) {
+			while(b != null && b.wall != null) {
 				count++;
 				b = b.up;
 			}
@@ -255,7 +270,7 @@ public class RoomBlocks {
 			int count = 0;
 			
 			RoomBlock b = this;
-			while(b != null && b.wall) {
+			while(b != null && b.wall != null) {
 				count++;
 				b = b.right;
 			}
@@ -267,7 +282,7 @@ public class RoomBlocks {
 			int count = 0;
 			
 			RoomBlock b = this;
-			while(b != null && b.wall) {
+			while(b != null && b.wall != null) {
 				count++;
 				b = b.left;
 			}
@@ -338,69 +353,75 @@ public class RoomBlocks {
 	public class RoomWall {
 		private List<RoomBlock> blocks = new ArrayList<>();
 		private List<RoomDoor> doors = new ArrayList<>();
+		private Direction dir;
 		
 		private int x = -1;
 		private int y = -1;
 		
-		public RoomWall(int x, int y) {
+		public RoomWall(int x, int y, Direction dir) {
 			this.x = x;
 			this.y = y;
+			this.dir = dir;
 		}
 		
 		public void add(RoomBlock b) {
-			b.setWall(true);
+			b.setWall(this);
 			blocks.add(b);
 		}
 		
-		public boolean createDoor(int x, int y, Direction dir) {
-			RoomBlock start = null;
+		/**
+		 * IF this wall contains the corresponding world point
+		 * @param x
+		 * @param y
+		 * @return 
+		 */
+		public boolean containsWorldPoint(int wx, int wy) {
+			int lx = RoomBlocks.this.dim.getX() - wx;
+			int ly = RoomBlocks.this.dim.getY() - wy;
+			boolean ret = false;
 			
-			for(RoomBlock b : blocks) {
-				if(x > -1) {
-					if(b.getX() == this.x && b.getY() == y) {
-						start = b;
-						break;
-					}
-				} else {
-					if(b.getX() == x && b.getY() == this.y) {
-						start = b;
-						break;
-					}					
-				}
+			if(RoomBlocks.this.grid.length > lx 
+				&& RoomBlocks.this.grid[0].length > ly)  {
+				ret = RoomBlocks.this.grid[lx][ly].wall == this;
 			}
 			
-			if(start!= null) {
-				
-				int count = countValid(start, dir);		
-					
-				if(count >= Constants.DOOR_BLOCKS_SIZE + 2) {
-					start.makeDoor(dir);
-				}
-			}
-			
-			return false;
+			return ret;
 		}
 		
-		private int countValid(RoomBlock b, Direction dir) {
-			int count = 0;
+		public void forEach(Consumer<RoomBlock> c) {
+			this.blocks.forEach(c);
+		}
+		
+		public void createDoorFor(int s, int e, List<RoomBlock> blocks) {
+			RoomDoor door = new RoomDoor();
 			
-			switch (dir) {
-			case DOWN:
-				count = b.countNextDown();
-				break;
-			case LEFT:
-				count = b.countNextLeft();
-				break;
-			case RIGHT:
-				count = b.countNextRight();
-				break;
-			case UP:
-				count = b.countNextUp();
-				break;
+			for(int i = s; i <= e; i++) {
+				door.add(blocks.get(i));
 			}
 			
-			return count;
+			this.doors.add(door);
 		}
+		
+//		private int countValid(RoomBlock b, Direction dir) {
+//			int count = 0;
+//			
+//			switch (dir) {
+//			case DOWN:
+//				count = b.countNextDown();
+//				break;
+//			case LEFT:
+//				count = b.countNextLeft();
+//				break;
+//			case RIGHT:
+//				count = b.countNextRight();
+//				break;
+//			case UP:
+//				count = b.countNextUp();
+//				break;
+//			}
+//			
+//			return count;
+//		}
 	}	
 }
 	

@@ -2,6 +2,9 @@ package com.toupety.mapgen;
 
 public interface Constants {
 
+	int MIN_DOOR_BLOCK_LENGTH = 5;
+	int DOOR_LENGTH = 3;//in RoomBlocks
+	
 	int DOOR_BLOCKS_SIZE = 3;
 	
 	int LEVEL_BLOCK_WIDTH  = 960;

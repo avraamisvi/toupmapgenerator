@@ -1,29 +1,62 @@
 package com.toupety.mapgen;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+
+import com.badlogic.gdx.math.RandomXS128;
+import com.toupety.mapgen.RoomBlocks.RoomBlock;
+import com.toupety.mapgen.RoomBlocks.RoomDoor;
 import com.toupety.mapgen.RoomBlocks.RoomWall;
 
 public class DoorGenerator {
 
+	RandomXS128 rand = new RandomXS128();
+	
 	public void generate(Level level, Room newRoom) {
 		//pega todas as salas adjacentes e tenta criar portas
 		
-		int x = newRoom.getX() + newRoom.getWidth();
-		int y = newRoom.getY() + newRoom.getHeight()/2;
+		//test right
 		
-		Room target = level.getAt(x, y);
+		newRoom.forEachLeft(room -> {
+			
+		});
 		
-		int size = target.getY() - newRoom.getY();
+		
+//		int x = newRoom.getX() + newRoom.getWidth();
+//		int y = newRoom.getY() + newRoom.getHeight()/2;
+//		
+//		Room target = level.getAt(x, y);
+//		
+//		int size = target.getY() - newRoom.getY();
 		
 //		target.createDoor(x,y, Direction.DOWN);
 		
-		RoomBlocks grid = target.getGrid();
-		RoomWall wall = grid.getRightWall();
-		
-		wall.createDoor(5, 3, Direction.DOWN);
-		
-		System.out.println("x");
+//		RoomBlocks grid = target.getGrid();
+//		RoomWall wall = grid.getRightWall();
+//		
+//		wall.createDoor(5, 3, Direction.DOWN);
+//		
+//		System.out.println("x");
 	}
 	
+	private void findBlocks(RoomWall source, RoomWall target, int xFactor, int yFactor) {
+		
+		List<RoomBlock> blocks = new ArrayList<>();
+		
+		source.forEach(bl -> {
+			if(target.containsWorldPoint(bl.getX() + xFactor, bl.getY() + yFactor)) {
+				blocks.add(bl);
+			}
+		});
+		
+		if(blocks.size() >= Constants.MIN_DOOR_BLOCK_LENGTH) {
+			int end = rand.nextInt(blocks.size() - Constants.DOOR_LENGTH);//ints(1, blocks.size() - Constants.DOOR_LENGTH);
+			target.createDoorFor(1, end, blocks);
+		}
+	}
 	
 	/**
 	 * 

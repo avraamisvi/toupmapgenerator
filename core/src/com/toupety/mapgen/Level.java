@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Consumer;
@@ -98,16 +99,12 @@ public class Level {
 			return null;
 	}
 	
-	public Room getAt(int x, int y) {
-		int idx = 0;
-		if(this.ids.size() > 0) {
-			idx = rand.nextInt(this.ids.size());
+	public Optional<Room> getAt(int wx, int wy) {
+		//TODO otimizar, fazer as salas saberem quem esta ao seu lado, tipo, left, right, top, down, etc isso ira facilitar a criacao das portas 
+		synchronized (this) {
+			return rooms.values().stream().filter( r -> {
+				return r.containsWorldPoint(wx, wy);
+			}).findFirst();
 		}
-		
-		if(this.ids.size() == 0) {
-			return null;
-		}
-		
-		return rooms.get(ids.get(idx));
 	}	
 }

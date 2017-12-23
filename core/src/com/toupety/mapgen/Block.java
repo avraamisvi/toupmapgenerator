@@ -2,6 +2,7 @@ package com.toupety.mapgen;
 
 import com.toupety.mapgen.mold.MoldBlock;
 
+@Deprecated
 public class Block {
 	
 	private MoldBlock value;

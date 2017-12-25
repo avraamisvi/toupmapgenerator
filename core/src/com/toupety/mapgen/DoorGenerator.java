@@ -2,9 +2,6 @@ package com.toupety.mapgen;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.IntStream;
 
 import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.RoomBlocks.RoomBlock;
@@ -15,46 +12,163 @@ public class DoorGenerator {
 
 	RandomXS128 rand = new RandomXS128();
 	
-	public void generate(Level level, Room newRoom) {
+	public void generate(Level level, Room source) {
 		//pega todas as salas adjacentes e tenta criar portas
 		
 		//test right
 		
-		newRoom.forEachLeft(room -> {
+		System.out.println("right");
+		source.forEachRight(target -> {
+			if(!source.getGrid().getRightWall().containsDoorFor(target.getGrid().getLeftWall())) {
 			
-		});
-		
-		
-//		int x = newRoom.getX() + newRoom.getWidth();
-//		int y = newRoom.getY() + newRoom.getHeight()/2;
-//		
-//		Room target = level.getAt(x, y);
-//		
-//		int size = target.getY() - newRoom.getY();
-		
-//		target.createDoor(x,y, Direction.DOWN);
-		
-//		RoomBlocks grid = target.getGrid();
-//		RoomWall wall = grid.getRightWall();
-//		
-//		wall.createDoor(5, 3, Direction.DOWN);
-//		
-//		System.out.println("x");
-	}
-	
-	private void findBlocks(RoomWall source, RoomWall target, int xFactor, int yFactor) {
-		
-		List<RoomBlock> blocks = new ArrayList<>();
-		
-		source.forEach(bl -> {
-			if(target.containsWorldPoint(bl.getX() + xFactor, bl.getY() + yFactor)) {
-				blocks.add(bl);
+				int srcx = source.getX() * Configuration.getLevelGridElementWidth() + 1;
+				int srcy = source.getY() * Configuration.getLevelGridElementWidth();
+			
+				List<BlockTupple> blocks = findBlocks(source.getGrid().getRightWall(), target.getGrid().getLeftWall(), srcx, srcy);
+				
+				if(blocks.size() >= GeneratorConstants.MIN_DOOR_BLOCK_LENGTH) {
+					int start = rand.nextInt((blocks.size() - 1) - GeneratorConstants.DOOR_BLOCKS_SIZE);//ints(1, blocks.size() - Constants.DOOR_LENGTH);
+					blocks.sort((b1, b2) -> b1.source.y - b2.source.y);
+					
+					//FIXME esse codigo abaixo gera bugs horriveis SOLID ZERO!
+					
+					RoomDoor doorTarget = target.getGrid().getLeftWall().createDoorFor(source.getGrid().getRightWall());//TODO ta um lixo esse algoritmo repensar
+					RoomDoor doorSource = source.getGrid().getRightWall().createDoorFor(target.getGrid().getLeftWall());//TODO ta um lixo esse algoritmo repensar
+					
+					for(int i = 0; i < GeneratorConstants.DOOR_BLOCKS_SIZE; i++) {
+						RoomBlock blockTarg   =   blocks.get(i+start).target;
+						RoomBlock blockSource =   blocks.get(i+start).source;
+						
+						doorTarget.add(blockTarg);
+						doorSource.add(blockSource);
+					}
+					
+				}
 			}
 		});
 		
-		if(blocks.size() >= Constants.MIN_DOOR_BLOCK_LENGTH) {
-			int end = rand.nextInt(blocks.size() - Constants.DOOR_LENGTH);//ints(1, blocks.size() - Constants.DOOR_LENGTH);
-			target.createDoorFor(1, end, blocks);
+		System.out.println("left");
+		source.forEachLeft(target -> {
+			
+			if(!source.getGrid().getLeftWall().containsDoorFor(target.getGrid().getRightWall())) {
+			
+				int srcx = source.getX() * Configuration.getLevelGridElementWidth() - 1;
+				int srcy = source.getY() * Configuration.getLevelGridElementWidth();
+			
+				List<BlockTupple> blocks = findBlocks(source.getGrid().getLeftWall(), target.getGrid().getRightWall(), srcx, srcy);
+				
+				if(blocks.size() >= GeneratorConstants.MIN_DOOR_BLOCK_LENGTH) {
+					int start = rand.nextInt((blocks.size() - 1) - GeneratorConstants.DOOR_BLOCKS_SIZE);//ints(1, blocks.size() - Constants.DOOR_LENGTH);
+					blocks.sort((b1, b2) -> b1.source.y - b2.source.y);
+					
+					//FIXME esse codigo abaixo gera bugs horriveis SOLID ZERO!
+					
+					RoomDoor doorTarget = target.getGrid().getRightWall().createDoorFor(source.getGrid().getLeftWall());//TODO ta um lixo esse algoritmo repensar
+					RoomDoor doorSource = source.getGrid().getLeftWall().createDoorFor(target.getGrid().getRightWall());//TODO ta um lixo esse algoritmo repensar
+					
+					for(int i = 0; i < GeneratorConstants.DOOR_BLOCKS_SIZE; i++) {
+						RoomBlock blockTarg   =   blocks.get(i+start).target;
+						RoomBlock blockSource =   blocks.get(i+start).source;
+						
+						doorTarget.add(blockTarg);
+						doorSource.add(blockSource);
+					}
+					
+				}
+			}
+		});		
+		
+		System.out.println("top");
+		source.forEachTop(target -> {
+			
+			if(!source.getGrid().getTopWall().containsDoorFor(target.getGrid().getBottomWall())) {
+			
+				int srcx = source.getX() * Configuration.getLevelGridElementWidth();
+				int srcy = source.getY() * Configuration.getLevelGridElementWidth() - 1;
+			
+				List<BlockTupple> blocks = findBlocks(source.getGrid().getTopWall(), target.getGrid().getBottomWall(), srcx, srcy);
+				
+				if(blocks.size() >= GeneratorConstants.MIN_DOOR_BLOCK_LENGTH) {
+					int start = rand.nextInt((blocks.size() - 1) - GeneratorConstants.DOOR_BLOCKS_SIZE);
+					blocks.sort((b1, b2) -> b1.source.x - b2.source.x);
+					
+					//FIXME esse codigo abaixo gera bugs horriveis SOLID ZERO!
+					
+					RoomDoor doorTarget = target.getGrid().getBottomWall().createDoorFor(source.getGrid().getTopWall());//TODO ta um lixo esse algoritmo repensar
+					RoomDoor doorSource = source.getGrid().getTopWall().createDoorFor(target.getGrid().getBottomWall());//TODO ta um lixo esse algoritmo repensar
+					
+					for(int i = 0; i < GeneratorConstants.DOOR_BLOCKS_SIZE; i++) {
+						RoomBlock blockTarg   =   blocks.get(i+start).target;
+						RoomBlock blockSource =   blocks.get(i+start).source;
+						
+						doorTarget.add(blockTarg);
+						doorSource.add(blockSource);
+					}
+					
+				}
+			}
+		});	
+		
+		System.out.println("bottom");
+		source.forEachBottom(target -> {
+			
+			if(!source.getGrid().getBottomWall().containsDoorFor(target.getGrid().getTopWall())) {
+			
+				int srcx = source.getX() * Configuration.getLevelGridElementWidth();
+				int srcy = source.getY() * Configuration.getLevelGridElementWidth() + 1;
+			
+				List<BlockTupple> blocks = findBlocks(source.getGrid().getBottomWall(), target.getGrid().getTopWall(), srcx, srcy);
+				
+				if(blocks.size() >= GeneratorConstants.MIN_DOOR_BLOCK_LENGTH) {
+					int start = rand.nextInt((blocks.size() - 1) - GeneratorConstants.DOOR_BLOCKS_SIZE);
+					blocks.sort((b1, b2) -> b1.source.x - b2.source.x);
+					
+					//FIXME esse codigo abaixo gera bugs horriveis SOLID ZERO!
+					
+					RoomDoor doorTarget = target.getGrid().getTopWall().createDoorFor(source.getGrid().getBottomWall());//TODO ta um lixo esse algoritmo repensar
+					RoomDoor doorSource = source.getGrid().getBottomWall().createDoorFor(target.getGrid().getTopWall());//TODO ta um lixo esse algoritmo repensar
+					
+					for(int i = 0; i < GeneratorConstants.DOOR_BLOCKS_SIZE; i++) {
+						RoomBlock blockTarg   =   blocks.get(i+start).target;
+						RoomBlock blockSource =   blocks.get(i+start).source;
+						
+						doorTarget.add(blockTarg);
+						doorSource.add(blockSource);
+					}
+					
+				}
+			}
+		});			
+
+	}
+	
+	private List<BlockTupple> findBlocks(RoomWall source, RoomWall target, int srcx, int srcy) {//, int tgx, int tgy
+		
+		List<BlockTupple> lists = new ArrayList<>();
+		
+		source.forEach(bl -> {
+			if(!bl.isCorner() && !bl.isDoor()) {
+				RoomBlock tbl = target.containsWorldPoint(bl.getX() + srcx, bl.getY() + srcy);
+				if(tbl != null && !tbl.isCorner() && !tbl.isDoor()) {
+					lists.add(new BlockTupple(bl, tbl));
+				}
+			}
+		});
+		
+		if(lists.isEmpty()) {
+			System.out.println("empty");
+		}
+		
+		return lists;
+	}
+	
+	class BlockTupple {
+		RoomBlock source;
+		RoomBlock target;
+		public BlockTupple(RoomBlock source, RoomBlock target) {
+			super();
+			this.source = source;
+			this.target = target;
 		}
 	}
 	
@@ -94,14 +208,4 @@ Ao criar numa sala a outra recebe uma porta tbm
 	 * 
 	 * 
 	 */
-	
-//	Direction getDirection(Room source, Room target) {
-//		Direction ret;
-//		
-//		if(source.getWidth()) {
-//			
-//		}
-//		
-//		return ret;
-//	}
 }

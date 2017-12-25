@@ -9,10 +9,12 @@ public class LevelGenerator {
 	
 	private RoomAlgorithm algorithm;
 	private DoorGenerator doorGen;
+	private RoomPathGenerator pathGen;
 	
 	public LevelGenerator(RoomAlgorithm algorithm) {
 		this.algorithm = algorithm;
 		this.doorGen = new DoorGenerator();
+		pathGen = new RoomPathGenerator();
 	}
 
 	public void generate(Level level) {
@@ -27,17 +29,18 @@ public class LevelGenerator {
 				RoomAlgorithmResult result = op.get();
 				Dimensions dim = result.getDim();
 				if(level.size() > 0) {				
-					Room rom = new Room(dim);
-					rom.setIndex(level.size());
-					level.addRoom(rom);
+					Room room = new Room(dim);
+					room.setIndex(level.size());
+					level.addRoom(room);
 					
-					doorGen.generate(level, result.getTarget());//TODO maybe should be the new room
+//					doorGen.generate(level, result.getTarget());//TODO maybe should be the new room
+//					doorGen.generate(level, room);
 					
 				} else {
 					Dimensions dim2 = new Dimensions(0, 0, dim.getW(), dim.getH());
-					Room rom = new Room(dim2);
-					rom.setIndex(level.size());
-					level.addRoom(rom);
+					Room room = new Room(dim2);
+					room.setIndex(level.size());
+					level.addRoom(room);
 				}
 
 			} else {
@@ -49,5 +52,9 @@ public class LevelGenerator {
 				colorid = 0;
 			}
 		}
+		
+		level.getGrid().configureAdjacentRooms();
+		level.forEach(room -> doorGen.generate(level, room));
+		pathGen.generate(level);
 	}
 }

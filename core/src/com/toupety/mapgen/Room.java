@@ -23,7 +23,7 @@ public class Room {
 	private int index = 0;
 	private RoomBlocks grid;
 	private Dimensions dim;
-	private Rectangle worldBounds;//TODO rever
+//	private Rectangle worldBounds;//TODO rever
 	
 	private Set<Room> roomsLeft;
 	private Set<Room> roomsRight;
@@ -33,12 +33,13 @@ public class Room {
 	public Room(Dimensions dim) {
 		this.bounds = new Rectangle(dim.getX(), dim.getY(), dim.getW(), dim.getH());
 		
-		int worldMultiplier = (Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE);//15
+//		int worldMultiplier = (Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE);//15
 		
-		this.worldBounds = new Rectangle(dim.getX(), dim.getY(), dim.getW() * worldMultiplier, dim.getH() * worldMultiplier);
+//		this.worldBounds = new Rectangle(dim.getX(), dim.getY(), dim.getW() * worldMultiplier, dim.getH() * worldMultiplier);
 		this.id = UUID.randomUUID().toString();
 		this.side = -1;
 		this.grid = new RoomBlocks(dim);
+		this.dim = dim;
 		
 		this.roomsLeft = new HashSet<>();
 		this.roomsRight = new HashSet<>();
@@ -126,11 +127,17 @@ public class Room {
 			IntStream.range(this.getX(), this.getX()+this.getWidth())
 			.forEach(x -> {
 				this.points.add(new Vector2(x, this.getHeight() + this.getY()));
+				
+				if(this.getY() > 0)
+					this.points.add(new Vector2(x, this.getY() - 1));
 			});
 			
 			IntStream.range(this.getY(), this.getY()+this.getHeight())
 			.forEach(y -> {
 				this.points.add(new Vector2(this.getX()+this.getWidth(), y));
+				
+				if(this.getX() > 0)
+					this.points.add(new Vector2(this.getX() - 1, y));
 			});	
 			
 		}
@@ -154,15 +161,15 @@ public class Room {
 		return grid;
 	}
 
-	//TODO World Points sao o tamanho da room vezes 15 ou seja, a quantidade de quadros por bloco que a room ocupa,
-	//pq no nivel da room cada quadro corresponde a 960
-	/**
-	 * Verifies if it contains the wx, and wy, but considering it as world points, for example
-	 * @param wx
-	 * @param wy
-	 */
-	public boolean containsWorldPoint(int wx, int wy) {
-		// TODO Auto-generated method stub
-		return this.worldBounds.contains(wx, wy);
-	}
+//	//TODO World Points sao o tamanho da room vezes 15 ou seja, a quantidade de quadros por bloco que a room ocupa,
+//	//pq no nivel da room cada quadro corresponde a 960
+//	/**
+//	 * Verifies if it contains the wx, and wy, but considering it as world points, for example
+//	 * @param wx
+//	 * @param wy
+//	 */
+//	public boolean containsWorldPoint(int wx, int wy) {
+//		// TODO Auto-generated method stub
+//		return this.worldBounds.contains(wx, wy);
+//	}
 }

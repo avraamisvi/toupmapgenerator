@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.CameraHolder;
 import com.toupety.mapgen.Configuration;
-import com.toupety.mapgen.Constants;
+import com.toupety.mapgen.GeneratorConstants;
 import com.toupety.mapgen.Dimensions;
 import com.toupety.mapgen.Level;
 import com.toupety.mapgen.Room;

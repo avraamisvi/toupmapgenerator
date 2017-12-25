@@ -45,7 +45,7 @@ public class BoundedRoomAlgorithm implements RoomAlgorithm {
 		
 		if(maxIterations > 0 && level.size() < maxRooms) {
 		
-			Room last = level.getAny();
+			Room any = level.getAny();
 
 			int h = 0;
 			int w = 0;
@@ -56,9 +56,9 @@ public class BoundedRoomAlgorithm implements RoomAlgorithm {
 			h = ran.nextInt(maxRoomHeight);
 			w = ran.nextInt(maxRoomWidth);
 			
-			if(last != null) {
+			if(any != null) {
 				
-				List<Vector2> points = last.getClosePoints();
+				List<Vector2> points = any.getClosePoints();
 				Vector2 point = points.get(ran.nextInt(points.size()));
 				
 				x = (int) point.x;
@@ -92,7 +92,7 @@ public class BoundedRoomAlgorithm implements RoomAlgorithm {
 			maxIterations--;
 			
 			dim = new Dimensions(x, y, w, h);
-			res = new RoomAlgorithmResult(last, dim);
+			res = new RoomAlgorithmResult(any, dim);
 		}
 		
 		return Optional.ofNullable(res);

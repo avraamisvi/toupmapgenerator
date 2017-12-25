@@ -22,7 +22,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	
 	private SpriteBatch batch;
 //	private Texture img;
-	private Level level = new Level(Constants.WIDTH, Constants.HEIGHT);
+	private Level level = new Level(GeneratorConstants.WIDTH, GeneratorConstants.HEIGHT);
 	private CameraHolder camera;
 	private ShapeRenderer testRenderer;
 	private ExecutorService executor;
@@ -52,11 +52,11 @@ public class MyGdxGame extends ApplicationAdapter {
 						  1000
 		 */
 		Map<String, Object> map = new HashMap<>();
-		map.put(BoundedRoomAlgorithm.MAX_ROOM_WIDTH, Constants.MAX_ROOM_WIDTH);
-		map.put(BoundedRoomAlgorithm.MAX_ROOM_HEIGHT, Constants.MAX_ROOM_HEIGHT);
-		map.put(BoundedRoomAlgorithm.MIN_ROOM_WIDTH, Constants.MIN_ROOM_WIDTH);
-		map.put(BoundedRoomAlgorithm.MIN_ROOM_HEIGHT, Constants.MIN_ROOM_HEIGHT);
-		map.put(BoundedRoomAlgorithm.MAX_ROOMS, Constants.MAX_ROOMS);
+		map.put(BoundedRoomAlgorithm.MAX_ROOM_WIDTH, GeneratorConstants.MAX_ROOM_WIDTH);
+		map.put(BoundedRoomAlgorithm.MAX_ROOM_HEIGHT, GeneratorConstants.MAX_ROOM_HEIGHT);
+		map.put(BoundedRoomAlgorithm.MIN_ROOM_WIDTH, GeneratorConstants.MIN_ROOM_WIDTH);
+		map.put(BoundedRoomAlgorithm.MIN_ROOM_HEIGHT, GeneratorConstants.MIN_ROOM_HEIGHT);
+		map.put(BoundedRoomAlgorithm.MAX_ROOMS, GeneratorConstants.MAX_ROOMS);
 		map.put(BoundedRoomAlgorithm.MAX_ITERATIONS, 1000);
 		
 		return map;
@@ -86,7 +86,14 @@ public class MyGdxGame extends ApplicationAdapter {
 		.ifPresent(d -> d.draw(level));
 	}
 	
+	int deslocSpeed = GeneratorConstants.DESLOC_SPEED;
 	private void handleInput() {
+		if (Gdx.input.isKeyPressed(Input.Keys.PLUS)) {
+			deslocSpeed += 500;
+		}		
+		if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
+			deslocSpeed += GeneratorConstants.DESLOC_SPEED;
+		}				
 		if (Gdx.input.isKeyPressed(Input.Keys.C)) {//TODO
 //			camera.getOrtho().zoom = 1;
 			camera.getOrtho().position.x = 0;
@@ -108,21 +115,21 @@ public class MyGdxGame extends ApplicationAdapter {
 			Configuration.invert = !Configuration.invert;
 		}		
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			camera.getOrtho().translate(-Constants.DESLOC_SPEED, 0, 0);
+			camera.getOrtho().translate(-deslocSpeed, 0, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			camera.getOrtho().translate(Constants.DESLOC_SPEED, 0, 0);
+			camera.getOrtho().translate(deslocSpeed, 0, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			camera.getOrtho().translate(0, -Constants.DESLOC_SPEED, 0);
+			camera.getOrtho().translate(0, -GeneratorConstants.DESLOC_SPEED, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			camera.getOrtho().translate(0, Constants.DESLOC_SPEED, 0);
+			camera.getOrtho().translate(0, GeneratorConstants.DESLOC_SPEED, 0);
 		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
 			executor.execute(() -> {
 				RoomAlgorithm algo = new BoundedRoomAlgorithm(defaultArgs());
-				level = new Level(Constants.WIDTH, Constants.HEIGHT);
+				level = new Level(GeneratorConstants.WIDTH, GeneratorConstants.HEIGHT);
 				new LevelGenerator(algo).generate(level);
 			});
 		}

@@ -30,11 +30,11 @@ public class LevelGrid {
 	
 	public synchronized boolean addRoom(Room room) {
 		
-		if(this.grid[0].length <= room.getY()) {
+		if(this.grid[0].length <= (room.getY() + room.getHeight())) {
 			return false;
 		}
 		
-		if(this.grid.length <= room.getX()) {
+		if(this.grid.length <= (room.getX() + room.getWidth())) {
 			return false;
 		}		
 		
@@ -72,13 +72,45 @@ public class LevelGrid {
 			this.grid[x][y].up = el;
 		}
 	}
-//	
-//	public int getColor(int x, int y) {//TODO remove this
-//		if(grid[x][y] != null && grid[x][y].owner != null)
-//			return grid[x][y].owner.colorid;
-//		else
-//			return 0;
-//	}
+
+	public void configureAdjacentRooms() {
+		for(int ly = 0; ly < h; ly++) {
+			for(int lx = 0; lx < w; lx++) {
+				
+				if(this.grid[lx][ly].roomOwner == null)
+					continue;
+				
+				if(this.grid[lx][ly].up != null && this.grid[lx][ly].up.roomOwner != null ) {
+					if(this.grid[lx][ly].up.roomOwner != this.grid[lx][ly].roomOwner ) { //TOP
+						this.grid[lx][ly].roomOwner.addTop(this.grid[lx][ly].up.roomOwner);
+					}
+				}
+				
+				if(this.grid[lx][ly].down != null && this.grid[lx][ly].down.roomOwner != null ) {
+					if(this.grid[lx][ly].down.roomOwner != this.grid[lx][ly].roomOwner ) { //TOP
+						try {
+							this.grid[lx][ly].roomOwner.addBottom(this.grid[lx][ly].down.roomOwner);
+						} catch (Exception e) {
+							System.out.println("this.grid[lx][ly].roomOwner: " + this.grid[lx][ly].roomOwner);
+						}
+					}
+				}				
+				
+				if(this.grid[lx][ly].left != null && this.grid[lx][ly].left.roomOwner != null ) {
+					if(this.grid[lx][ly].left.roomOwner != this.grid[lx][ly].roomOwner ) { //TOP
+						this.grid[lx][ly].roomOwner.addLeft(this.grid[lx][ly].left.roomOwner);
+					}
+				}
+				
+				if(this.grid[lx][ly].right != null && this.grid[lx][ly].right.roomOwner != null ) {
+					if(this.grid[lx][ly].right.roomOwner != this.grid[lx][ly].roomOwner ) { //TOP
+						this.grid[lx][ly].roomOwner.addRight(this.grid[lx][ly].right.roomOwner);
+					}
+				}				
+				
+			}
+		}
+	}
 	
 	class LevelBlock {
 		
@@ -146,7 +178,6 @@ public class LevelGrid {
 					}
 					
 					cell = cell.right;
-					this.checkNextRoom(room, lx, ly);
 				}
 				
 				if(line != null) {
@@ -160,6 +191,7 @@ public class LevelGrid {
 			return true;
 		}
 		
+		@Deprecated
 		public void checkNextRoom(Room target, int x, int y) {//TODO melhorar
 
 			LevelBlock el = null; 

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.toupety.mapgen.Constants;
+import com.toupety.mapgen.GeneratorConstants;
 
 public class Mold {
 
 	private List<MoldBlock> blocks;
-	int width  = Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE; 
-	int height = Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE;
+	int width  = GeneratorConstants.LEVEL_BLOCK_WIDTH / GeneratorConstants.ROOM_BLOCK_SIZE; 
+	int height = GeneratorConstants.LEVEL_BLOCK_WIDTH / GeneratorConstants.ROOM_BLOCK_SIZE;
 	
 	public Mold(MoldMeta meta) {
 		blocks = new ArrayList<>();

@@ -31,20 +31,20 @@ public class Dimensions {
 	//FIX corrigir isso para aceitar dimensoes para blocos menores das salas
 	public Dimensions toRoomWorldDimmensions() {
 		
-		int lx = (Constants.WIDTH * Constants.LEVEL_BLOCK_WIDTH) - (x * Constants.LEVEL_BLOCK_WIDTH);
-	    int ly = y * Constants.LEVEL_BLOCK_HEIGHT;
-	    int lw = w * Constants.LEVEL_BLOCK_WIDTH;
-	    int lh = h * Constants.LEVEL_BLOCK_HEIGHT;
+		int lx = (GeneratorConstants.WIDTH * GeneratorConstants.LEVEL_BLOCK_WIDTH) - (x * GeneratorConstants.LEVEL_BLOCK_WIDTH);
+	    int ly = y * GeneratorConstants.LEVEL_BLOCK_HEIGHT;
+	    int lw = w * GeneratorConstants.LEVEL_BLOCK_WIDTH;
+	    int lh = h * GeneratorConstants.LEVEL_BLOCK_HEIGHT;
 		
 		return new Dimensions(lx - lw, ly, lw, lh);
 	}
 	
 	public Dimensions toInvertedRoomWorldDimmensions() {
 		
-		int lx = x * Constants.LEVEL_BLOCK_WIDTH;
-	    int ly = y * Constants.LEVEL_BLOCK_HEIGHT;
-	    int lw = w * Constants.LEVEL_BLOCK_WIDTH;
-	    int lh = h * Constants.LEVEL_BLOCK_HEIGHT;
+		int lx = x * GeneratorConstants.LEVEL_BLOCK_WIDTH;
+	    int ly = y * GeneratorConstants.LEVEL_BLOCK_HEIGHT;
+	    int lw = w * GeneratorConstants.LEVEL_BLOCK_WIDTH;
+	    int lh = h * GeneratorConstants.LEVEL_BLOCK_HEIGHT;
 		
 		return new Dimensions(lx, ly, lw, lh);
 	}	

@@ -1,8 +1,12 @@
 package com.toupety.mapgen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import com.toupety.mapgen.mold.Mold;
 import com.toupety.mapgen.mold.MoldBlock;
@@ -13,6 +17,7 @@ public class RoomBlocks {
 	private int w, h;
 	private Dimensions dim;
 	
+	private List<RoomLocalPath> paths;
 	private List<RoomBlock> path;
 	private List<RoomBlock> doors;
 	
@@ -23,20 +28,21 @@ public class RoomBlocks {
 	
 	public RoomBlocks(Dimensions dim) {
 				
+		this.paths = new ArrayList<>();
 		
 		//para definir a quantidade de blocos preciso calcular na quantidade de quadros que uma room ocupa
 		//os quadros das rooms sao contados de 960 em 960, mas os quadros internos da room sao de 64 em 64
 		//mas no nivel da room quadra quadro eh como 1 (levelblock), so que esse 1 contem 15 dos roomblocks internos
 		Dimensions worldDim = dim.toRoomWorldDimmensions();
-		this.w = worldDim.getW() / Constants.ROOM_BLOCK_SIZE;
-		this.h = worldDim.getH() / Constants.ROOM_BLOCK_SIZE;
+		this.w = worldDim.getW() / GeneratorConstants.ROOM_BLOCK_SIZE;
+		this.h = worldDim.getH() / GeneratorConstants.ROOM_BLOCK_SIZE;
 		
-		topWall = new RoomWall(-1, 0, Direction.RIGHT);
-		leftWall = new RoomWall(0,-1,  Direction.DOWN);
-		rightWall = new RoomWall(w-1,-1, Direction.DOWN);
-		bottomWall = new RoomWall(-1,h-1, Direction.RIGHT);		
+		topWall = new RoomWall(-1, 0, Position.TOP);
+		leftWall = new RoomWall(0,-1,  Position.LEFT);
+		rightWall = new RoomWall(w-1,-1, Position.RIGHT);
+		bottomWall = new RoomWall(-1,h-1, Position.BOTTOM);		
 		
-		this.dim = dim;
+		this.dim = dim;//FIXME rever a necessidade desse dim
 		
 		this.grid = new RoomBlock[w][h];
 		
@@ -52,6 +58,18 @@ public class RoomBlocks {
 		}
 		
 		this.fillWalls();
+	}
+	
+	public RoomLocalPath createPath(Direction dir) {
+		return new RoomLocalPath(dir);
+	}
+	
+	public int getW() {
+		return w;
+	}
+	
+	public int getH() {
+		return h;
 	}
 	
 	public Dimensions getDim() {
@@ -172,9 +190,9 @@ public class RoomBlocks {
 		RoomBlock left;
 		RoomBlock right;
 		
-		boolean path;
+		RoomLocalPath path;
 		boolean door;
-		RoomWall wall;
+		List<RoomWall> walls = new ArrayList<>();
 		
 		private MoldBlock owner;
 		
@@ -207,7 +225,7 @@ public class RoomBlocks {
 		}
 		
 		public int getY() {
-			return y + RoomBlocks.this.dim.getY();
+			return y;
 		}
 		
 		public int getWorldX() {
@@ -219,15 +237,23 @@ public class RoomBlocks {
 		}		
 		
 		public boolean isPath() {
-			return path;
+			return this.path != null;
 		}
 		
 		public boolean isDoor() {
 			return door;
 		}
 		
-		void setPath(boolean path) {
+		public boolean isCorner() {
+			return this.walls.size() > 1;
+		}
+		
+		void setPath(RoomLocalPath path) {
 			this.path = path;
+		}
+		
+		public RoomLocalPath getPath() {
+			return path;
 		}
 
 		void setDoor(boolean door) {
@@ -235,54 +261,59 @@ public class RoomBlocks {
 		}
 		
 		public boolean isWall() {
-			return this.wall != null;
+			return this.walls.size() > 0;
 		}
 		
 		void setWall(RoomWall wall) {
-			this.wall = wall;
+			this.walls.add(wall);
 		}
 		
+		public boolean isOwnered(RoomWall wall) {
+			return this.walls.stream().filter(w -> w.pos == wall.pos).findFirst().isPresent();
+		}
+		
+		@Deprecated
 		int countNextDown() {
 			int count = 0;
 			
 			RoomBlock b = this;
-			while(b != null && b.wall != null) {
+			while(b != null && b.isWall()) {
 				count++;
 				b = b.down;
 			}
 			
 			return count;
 		}
-		
+		@Deprecated
 		int countNextUp() {
 			int count = 0;
 			
 			RoomBlock b = this;
-			while(b != null && b.wall != null) {
+			while(b != null && b.isWall()) {
 				count++;
 				b = b.up;
 			}
 			
 			return count;
 		}		
-		
+		@Deprecated
 		int countNextRight() {
 			int count = 0;
 			
 			RoomBlock b = this;
-			while(b != null && b.wall != null) {
+			while(b != null && b.isWall()) {
 				count++;
 				b = b.right;
 			}
 			
 			return count;
 		}
-		
+		@Deprecated
 		int countNextLeft() {
 			int count = 0;
 			
 			RoomBlock b = this;
-			while(b != null && b.wall != null) {
+			while(b != null && b.isWall()) {
 				count++;
 				b = b.left;
 			}
@@ -290,10 +321,11 @@ public class RoomBlocks {
 			return count;
 		}		
 		
+		@Deprecated
 		RoomDoor makeDoor(Direction dir) {
 			RoomDoor door = new RoomDoor();			
 			RoomBlock b = this;
-			for(int i = 0; i < Constants.DOOR_BLOCKS_SIZE; i++) {
+			for(int i = 0; i < GeneratorConstants.DOOR_BLOCKS_SIZE; i++) {
 				
 				if(b == null)
 					break;
@@ -319,10 +351,29 @@ public class RoomBlocks {
 	}
 	
 	public class RoomLocalPath {
-		private List<RoomBlock> blocks;
+		private List<RoomBlock> blocks = new ArrayList<>();
+		private RoomDoor door;
+		private Direction dir;
+		
+		public RoomLocalPath(Direction dir) {
+			this.dir = dir;
+		}
+		
+		public void add(RoomBlock block) {
+			block.setPath(this);
+			this.blocks.add(block);
+		}
 		
 		public void spread() {
 			//gera caminhos alterantivos que nao tem o objetivo de chegar na porta
+		}
+		
+		public void setDoorOrigin(RoomDoor door) {
+			this.door = door; 
+		}
+		
+		public boolean isOwneredBy(RoomDoor door) {
+			return this.door == door;
 		}
 		
 		public boolean fit(Mold mold) {
@@ -348,80 +399,82 @@ public class RoomBlocks {
 			blocks.add(b);
 			b.setDoor(true);
 		}
+		
+		public void forEachBlock(Consumer<RoomBlock> c) {
+			if(blocks != null) {
+				blocks.forEach(c);
+			}
+		}
 	}
 	
 	public class RoomWall {
-		private List<RoomBlock> blocks = new ArrayList<>();
-		private List<RoomDoor> doors = new ArrayList<>();
+		
+		private String id = UUID.randomUUID().toString();
+		private Map<String, RoomBlock> blocks = new HashMap<>();
+		private Map<String, RoomDoor> doors = new HashMap<>();
 		private Direction dir;
+		private Position pos;
 		
 		private int x = -1;
 		private int y = -1;
 		
-		public RoomWall(int x, int y, Direction dir) {
+		public RoomWall(int x, int y, Position pos) {
 			this.x = x;
 			this.y = y;
-			this.dir = dir;
+			this.pos = pos;
 		}
 		
 		public void add(RoomBlock b) {
 			b.setWall(this);
-			blocks.add(b);
+			
+			int x = b.x;
+			int y = b.y;
+			
+			String key = getKeyFor(b.x, b.y);
+			
+			blocks.put(key, b);
 		}
 		
+		private String getKeyFor(int lx, int ly) {
+			
+			int pseudWorldRoomX = RoomBlocks.this.dim.getX() * Configuration.getLevelGridElementWidth();
+			int pseudWorldRoomY = RoomBlocks.this.dim.getY() * Configuration.getLevelGridElementWidth();
+			
+			lx = lx + pseudWorldRoomX;
+			ly = ly + pseudWorldRoomY;			
+			
+			return lx+","+ly;
+		}
+
 		/**
 		 * IF this wall contains the corresponding world point
 		 * @param x
 		 * @param y
 		 * @return 
 		 */
-		public boolean containsWorldPoint(int wx, int wy) {
-			int lx = RoomBlocks.this.dim.getX() - wx;
-			int ly = RoomBlocks.this.dim.getY() - wy;
-			boolean ret = false;
-			
-			if(RoomBlocks.this.grid.length > lx 
-				&& RoomBlocks.this.grid[0].length > ly)  {
-				ret = RoomBlocks.this.grid[lx][ly].wall == this;
-			}
-			
-			return ret;
+		public RoomBlock containsWorldPoint(int wx, int wy) {	
+			return this.blocks.get(wx+","+wy);
 		}
 		
 		public void forEach(Consumer<RoomBlock> c) {
-			this.blocks.forEach(c);
+			this.blocks.values().forEach(c);
 		}
 		
-		public void createDoorFor(int s, int e, List<RoomBlock> blocks) {
+		public RoomDoor createDoorFor(RoomWall destiny) {
 			RoomDoor door = new RoomDoor();
-			
-			for(int i = s; i <= e; i++) {
-				door.add(blocks.get(i));
-			}
-			
-			this.doors.add(door);
+			this.doors.put(destiny.id, door);
+			return door;
 		}
 		
-//		private int countValid(RoomBlock b, Direction dir) {
-//			int count = 0;
-//			
-//			switch (dir) {
-//			case DOWN:
-//				count = b.countNextDown();
-//				break;
-//			case LEFT:
-//				count = b.countNextLeft();
-//				break;
-//			case RIGHT:
-//				count = b.countNextRight();
-//				break;
-//			case UP:
-//				count = b.countNextUp();
-//				break;
-//			}
-//			
-//			return count;
-//		}
+		public boolean containsDoorFor(RoomWall destiny) {
+			return this.doors.containsKey(destiny.id);
+		}
+		
+		
+		public void forEachDoor(Consumer<RoomDoor> consumer) {
+			if(this.doors != null)
+				this.doors.values().forEach(consumer);
+		}
 	}	
 }
 	

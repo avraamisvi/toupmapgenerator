@@ -99,12 +99,12 @@ public class Level {
 			return null;
 	}
 	
-	public Optional<Room> getAt(int wx, int wy) {
-		//TODO otimizar, fazer as salas saberem quem esta ao seu lado, tipo, left, right, top, down, etc isso ira facilitar a criacao das portas 
-		synchronized (this) {
-			return rooms.values().stream().filter( r -> {
-				return r.containsWorldPoint(wx, wy);
-			}).findFirst();
-		}
-	}	
+//	public Optional<Room> getAt(int wx, int wy) {
+//		//TODO otimizar, fazer as salas saberem quem esta ao seu lado, tipo, left, right, top, down, etc isso ira facilitar a criacao das portas 
+//		synchronized (this) {
+//			return rooms.values().stream().filter( r -> {
+//				return r.containsWorldPoint(wx, wy);
+//			}).findFirst();
+//		}
+//	}	
 }

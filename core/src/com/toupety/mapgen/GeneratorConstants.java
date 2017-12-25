@@ -1,7 +1,9 @@
 package com.toupety.mapgen;
 
-public interface Constants {
+public interface GeneratorConstants {
 
+	int MAX_DOOR_PATH_SIZE = 15;
+	
 	int MIN_DOOR_BLOCK_LENGTH = 5;
 	int DOOR_LENGTH = 3;//in RoomBlocks
 	
@@ -15,19 +17,19 @@ public interface Constants {
 	int WIDTH  = 69;
 	int HEIGHT = 69;
 	
-	int MAX_ROOM_WIDTH  = 8;
-	int MAX_ROOM_HEIGHT = 8;
+	int MAX_ROOM_WIDTH  = 10;
+	int MAX_ROOM_HEIGHT = 10;
 	
 	int MIN_ROOM_WIDTH  = 2;
 	int MIN_ROOM_HEIGHT = 2;	
 	
-	int MAX_ROOMS = 3;//
+	int MAX_ROOMS = 60;//
 	
 	int MAX_MIN_ROOMS = 5;
 	
 	int MAX_ROOM_SIDES = 4;
 	
-	int DESLOC_SPEED = 500;
+	int DESLOC_SPEED = 1000;
 	
 	int MAX_DOORS_PER_WALL = 1;
 }

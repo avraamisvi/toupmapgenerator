@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.toupety.mapgen.CameraHolder;
-import com.toupety.mapgen.Constants;
+import com.toupety.mapgen.GeneratorConstants;
 import com.toupety.mapgen.Dimensions;
 import com.toupety.mapgen.Level;
 import com.toupety.mapgen.Room;

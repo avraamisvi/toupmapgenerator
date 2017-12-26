@@ -6,7 +6,11 @@
 	"maxWidth": 15,
 	"maxHeigth": 15,
 	"spread": {
-		"direction": "right_left",
+		"directions": ["right", "left", "down"],
+		"body": {
+			"down": "mold_open_down",
+			"left": "any",
+		},
 		"mold": {
 			"type": "external"
 			"mode": "any"

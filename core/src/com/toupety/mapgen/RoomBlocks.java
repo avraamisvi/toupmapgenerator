@@ -2,12 +2,14 @@ package com.toupety.mapgen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.mold.Mold;
 import com.toupety.mapgen.mold.MoldBlock;
 
@@ -25,6 +27,8 @@ public class RoomBlocks {
 	private RoomWall leftWall;
 	private RoomWall rightWall;
 	private RoomWall bottomWall;
+	
+	RandomXS128 random = new RandomXS128();
 	
 	public RoomBlocks(Dimensions dim) {
 				
@@ -62,6 +66,16 @@ public class RoomBlocks {
 	
 	public RoomLocalPath createPath(Direction dir) {
 		return new RoomLocalPath(dir);
+	}
+	
+	public int joinedDoors = 1;//considera 1 porta como sempre joined
+	
+	public void addJoinedDoorPath() {
+		this.joinedDoors++;
+	}
+	
+	public boolean isDoorsPathJoined() {
+		return this.doors.size() == joinedDoors;
 	}
 	
 	public int getW() {
@@ -372,6 +386,10 @@ public class RoomBlocks {
 			this.door = door; 
 		}
 		
+		public RoomDoor getDoorOrigin() {
+			return this.door;
+		}
+		
 		public boolean isOwneredBy(RoomDoor door) {
 			return this.door == door;
 		}
@@ -410,13 +428,18 @@ public class RoomBlocks {
 	public class RoomWall {
 		
 		private String id = UUID.randomUUID().toString();
-		private Map<String, RoomBlock> blocks = new HashMap<>();
+		private List<RoomBlock> blocksList = new ArrayList<>();
+		private Map<String, RoomBlock> blocks = new LinkedHashMap<>();
 		private Map<String, RoomDoor> doors = new HashMap<>();
 		private Direction dir;
 		private Position pos;
 		
 		private int x = -1;
 		private int y = -1;
+		
+		public RoomBlock getAny() {
+			return blocksList.get(random.nextInt(blocks.size()));
+		}
 		
 		public RoomWall(int x, int y, Position pos) {
 			this.x = x;
@@ -432,6 +455,7 @@ public class RoomBlocks {
 			
 			String key = getKeyFor(b.x, b.y);
 			
+			blocksList.add(b);
 			blocks.put(key, b);
 		}
 		

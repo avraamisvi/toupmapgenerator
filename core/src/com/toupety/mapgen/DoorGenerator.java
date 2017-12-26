@@ -17,7 +17,7 @@ public class DoorGenerator {
 		
 		//test right
 		
-		System.out.println("right");
+//		System.out.println("right");
 		source.forEachRight(target -> {
 			if(!source.getGrid().getRightWall().containsDoorFor(target.getGrid().getLeftWall())) {
 			
@@ -47,7 +47,7 @@ public class DoorGenerator {
 			}
 		});
 		
-		System.out.println("left");
+//		System.out.println("left");
 		source.forEachLeft(target -> {
 			
 			if(!source.getGrid().getLeftWall().containsDoorFor(target.getGrid().getRightWall())) {
@@ -78,7 +78,7 @@ public class DoorGenerator {
 			}
 		});		
 		
-		System.out.println("top");
+//		System.out.println("top");
 		source.forEachTop(target -> {
 			
 			if(!source.getGrid().getTopWall().containsDoorFor(target.getGrid().getBottomWall())) {
@@ -109,7 +109,7 @@ public class DoorGenerator {
 			}
 		});	
 		
-		System.out.println("bottom");
+//		System.out.println("bottom");
 		source.forEachBottom(target -> {
 			
 			if(!source.getGrid().getBottomWall().containsDoorFor(target.getGrid().getTopWall())) {
@@ -155,9 +155,9 @@ public class DoorGenerator {
 			}
 		});
 		
-		if(lists.isEmpty()) {
-			System.out.println("empty");
-		}
+//		if(lists.isEmpty()) {
+//			System.out.println("empty");
+//		}
 		
 		return lists;
 	}

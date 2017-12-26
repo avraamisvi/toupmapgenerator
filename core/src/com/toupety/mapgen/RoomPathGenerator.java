@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.RoomBlocks.RoomBlock;
 import com.toupety.mapgen.RoomBlocks.RoomLocalPath;
 
+@Deprecated
 public class RoomPathGenerator {
 
 	RandomXS128 rand = new RandomXS128();

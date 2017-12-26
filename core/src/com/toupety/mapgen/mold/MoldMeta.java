@@ -1,34 +1,22 @@
 package com.toupety.mapgen.mold;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MoldMeta {
 
-	private List<String> data;
-	private int width;
-	private int heigth;
+	public String name;
+	public List<String> elements;
+	public int maxWidth;
+	public int maxHeigth;
+	public Platform platform;
+	public List<String> open;
 	
-	public MoldMeta() {
-		super();
-//		this.data = data;
-//		this.width = Integer.parseInt(fields.get("width").toString());
-//		this.heigth = Integer.parseInt(fields.get("heigth").toString());
-	}
+	List<HashMap<String, Object>> collision;
 	
-	public void setData(List<String> data) {
-		this.data = data;
-	}
-	
-	public List<String> getData() {
-		return data;
-	}
-	public int getWidth() {
-		return width;
-	}
-	public int getHeigth() {
-		return heigth;
-	}
-	
-	
+	public static class Platform {
+		public int height;
+		public int width;
+	}	
 }

@@ -8,23 +8,30 @@ import com.toupety.mapgen.GeneratorConstants;
 
 public class Mold {
 
+	private MoldMeta meta;
 	private List<MoldBlock> blocks;
 	int width  = GeneratorConstants.LEVEL_BLOCK_WIDTH / GeneratorConstants.ROOM_BLOCK_SIZE; 
 	int height = GeneratorConstants.LEVEL_BLOCK_WIDTH / GeneratorConstants.ROOM_BLOCK_SIZE;
 	
-	public Mold(MoldMeta meta) {
+	public Mold(MoldMeta meta, List<String> lines) {
 		blocks = new ArrayList<>();
 		
-		width  = meta.getWidth(); 
-		height = meta.getHeigth();
+		width  = meta.maxWidth; 
+		height = meta.maxHeigth;
 		
 		String line;
-		for(int y = 0; y < meta.getData().size(); y++) {
-			line = meta.getData().get(y);
+		for(int y = 0; y < lines.size(); y++) {
+			line = lines.get(y);
 			for(int x = 0; x < line.length(); x++) {
 				blocks.add(new MoldBlock(line.charAt(x), x, y));//TODO metadata for each block?
 			}
 		}
+		
+		this.meta = meta;
+	}
+	
+	public MoldMeta getMeta() {
+		return meta;
 	}
 	
 	public Stream<MoldBlock> stream() {

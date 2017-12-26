@@ -153,9 +153,9 @@ public class Room {
 		this.index = index;
 	}
 	
-	public void apply(Mold mold) {
-		this.grid.put(mold);
-	}
+//	public void apply(Mold mold) {
+//		this.grid.put(mold);
+//	}
 	
 	public RoomBlocks getGrid() {//TODO melhorar
 		return grid;

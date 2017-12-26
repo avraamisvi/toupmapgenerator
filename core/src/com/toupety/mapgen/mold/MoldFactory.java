@@ -3,36 +3,71 @@ package com.toupety.mapgen.mold;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Json;
 
 public class MoldFactory {
 
+	private static MoldFactory instance;
 	List<Mold> molds = new ArrayList<>();
+	RandomXS128 rand = new RandomXS128();
 	
-	public MoldFactory() {
+	public static MoldFactory get() {
 		
-		List<String> lines;
+		if(instance == null)
+			instance = new MoldFactory();
+		
+		return instance;
+	}
+	
+	private MoldFactory() {
 		
 		try {
-			lines = Files.readAllLines(Paths.get("./mold", "teste1", "mold.txt"));
 			
-			Json json = new Json();
-			json.setIgnoreUnknownFields(true);
-			MoldMeta meta = json.fromJson(MoldMeta.class, new FileReader(Paths.get("./mold", "teste1", "info.yaml").toFile()));
-			meta.setData(lines);
+			List<Path> listDirs = Files.list(Paths.get("./mold")).filter(dir -> {
+				return dir.toFile().isDirectory();
+			}).collect(Collectors.toList());
 			
-			molds.add(new Mold(meta));
+			
+			listDirs.forEach(path -> {
+				try {//Paths.get("./mold", "teste1", "mold.txt")
+					List<String> lines = Files.readAllLines(path.resolve("mold.txt"));
+					
+					Json json = new Json();
+					json.setIgnoreUnknownFields(true);
+					MoldMeta meta = json.fromJson(MoldMeta.class, new FileReader(path.resolve("info.json").toFile()));
+					
+					molds.add(new Mold(meta, lines));
+				} catch(Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			});
+			
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public Mold getAny() {
-		return this.molds.get(0);
+		return this.molds.get(rand.nextInt(this.molds.size()));
 	}
+	
+	public Mold getAny(Predicate<Mold> filter) {
+		
+		List<Mold> filtered = this.molds.stream().filter(filter).collect(Collectors.toList());
+		
+		if(filtered.size() > 0)
+			return filtered.get(rand.nextInt(filtered.size()));
+		else 
+			return null;
+		
+	}	
 }

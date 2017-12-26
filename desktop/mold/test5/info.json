@@ -1,0 +1,11 @@
+{
+	"name":"teste5",
+	"elements": ["ground", "platforms"],
+	"maxWidth": 15,
+	"maxHeigth": 15,
+	"platform": {
+		"height": 2
+	}, 
+	"open": ["left", "right", "top"],
+	"collision": []
+}

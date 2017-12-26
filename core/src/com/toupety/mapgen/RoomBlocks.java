@@ -2,12 +2,13 @@ package com.toupety.mapgen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.mold.Mold;
@@ -19,9 +20,9 @@ public class RoomBlocks {
 	private int w, h;
 	private Dimensions dim;
 	
-	private List<RoomLocalPath> paths;
-	private List<RoomBlock> path;
-	private List<RoomBlock> doors;
+	private List<RoomLocalPath> paths = new ArrayList<>();
+	private List<RoomDoor> doors = new ArrayList<>();
+	public HashSet<String> joinedDoors = new HashSet<>();
 	
 	private RoomWall topWall;
 	private RoomWall leftWall;
@@ -64,18 +65,102 @@ public class RoomBlocks {
 		this.fillWalls();
 	}
 	
-	public RoomLocalPath createPath(Direction dir) {
-		return new RoomLocalPath(dir);
+	private void createRoomPathFrom(int lw, int lh, RoomBlock block, Direction dir) {
+		RoomLocalPath newPath = new RoomLocalPath(dir, lw, lh);
+		this.paths.add(newPath);
+		newPath.addFrom(block);
 	}
 	
-	public int joinedDoors = 1;//considera 1 porta como sempre joined
+	public void createPath() {
+		if(paths.size() == 0) {
+			this.getBottomWall().forEachDoor(door -> {
+				createPathBottom(door);
+			});
+			this.getTopWall().forEachDoor(door -> {
+				createPathTop(door);
+			});
+			this.getRightWall().forEachDoor(door -> {
+				createPathRight(door);
+			});
+			this.getLeftWall().forEachDoor(door -> {
+				createPathLeft(door);
+			});			
+		}
+		
+		int maxPaths = 1000;
+		while(!isDoorsPathJoined()) {
+			RoomLocalPath path = this.paths.get(random.nextInt(this.paths.size()));
+			RoomLocalPathElement any = new RoomLocalPathElement(null, -1, -1);
+			Direction dir = path.getAny(any);
+			
+			int lw = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
+			int lh = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
+			
+			if(any.block == null)
+				continue;
+			
+			RoomLocalPath newPath = new RoomLocalPath(dir, lw, lh);
+			this.paths.add(newPath);
+			newPath.addFrom(any.block);
+			
+			if(maxPaths <= 0)
+				break;
+			
+			maxPaths--;
+		}
+	}
 	
-	public void addJoinedDoorPath() {
-		this.joinedDoors++;
+	private void createPathBottom(RoomDoor door) {
+		int lw = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
+		int lh = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
+		
+		Optional<RoomBlock> bloc = door.blocks.stream().min((c1, c2) -> c1.x - c2.x);
+		
+		bloc.ifPresent(b -> {
+			createRoomPathFrom(lw, lh, b, Direction.UP);
+		});
+	}
+	
+	private void createPathTop(RoomDoor door) {
+		int lw = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
+		int lh = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
+		
+		Optional<RoomBlock> bloc = door.blocks.stream().min((c1, c2) -> c1.x - c2.x);
+		
+		bloc.ifPresent(b -> {
+			createRoomPathFrom(lw, lh, b, Direction.DOWN);
+		});
+	}
+	
+	private void createPathLeft(RoomDoor door) {
+		int lw = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
+		int lh = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
+		
+		Optional<RoomBlock> bloc = door.blocks.stream().min((c1, c2) -> c1.y - c2.y);
+		
+		bloc.ifPresent(b -> {
+			createRoomPathFrom(lw, lh, b, Direction.RIGHT);
+		});
+	}
+	
+	private void createPathRight(RoomDoor door) {
+		int lw = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
+		int lh = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
+		
+		Optional<RoomBlock> bloc = door.blocks.stream().min((c1, c2) -> c1.y - c2.y);
+		
+		bloc.ifPresent(b -> {
+			createRoomPathFrom(lw, lh, b, Direction.LEFT);
+		});
+	}
+	
+	public void addJoinedDoorPath(RoomDoor door1, RoomDoor door2) {
+		this.joinedDoors.add(door1.id);
+		this.joinedDoors.add(door2.id);
 	}
 	
 	public boolean isDoorsPathJoined() {
-		return this.doors.size() == joinedDoors;
+		return this.doors.size() == 1 || this.doors.size() <= joinedDoors.size();
 	}
 	
 	public int getW() {
@@ -285,97 +370,177 @@ public class RoomBlocks {
 		public boolean isOwnered(RoomWall wall) {
 			return this.walls.stream().filter(w -> w.pos == wall.pos).findFirst().isPresent();
 		}
+	}
+	
+	
+	public class RoomLocalPathElement {
 		
-		@Deprecated
-		int countNextDown() {
-			int count = 0;
-			
-			RoomBlock b = this;
-			while(b != null && b.isWall()) {
-				count++;
-				b = b.down;
-			}
-			
-			return count;
-		}
-		@Deprecated
-		int countNextUp() {
-			int count = 0;
-			
-			RoomBlock b = this;
-			while(b != null && b.isWall()) {
-				count++;
-				b = b.up;
-			}
-			
-			return count;
-		}		
-		@Deprecated
-		int countNextRight() {
-			int count = 0;
-			
-			RoomBlock b = this;
-			while(b != null && b.isWall()) {
-				count++;
-				b = b.right;
-			}
-			
-			return count;
-		}
-		@Deprecated
-		int countNextLeft() {
-			int count = 0;
-			
-			RoomBlock b = this;
-			while(b != null && b.isWall()) {
-				count++;
-				b = b.left;
-			}
-			
-			return count;
-		}		
+		public RoomBlock block;
+		public int x, y;
 		
-		@Deprecated
-		RoomDoor makeDoor(Direction dir) {
-			RoomDoor door = new RoomDoor();			
-			RoomBlock b = this;
-			for(int i = 0; i < GeneratorConstants.DOOR_BLOCKS_SIZE; i++) {
-				
-				if(b == null)
-					break;
-				door.add(b);
-				switch (dir) {
-				case DOWN:
-					b = b.down;
-					break;
-				case LEFT:
-					b = b.left;
-					break;
-				case RIGHT:
-					b = b.right;
-					break;
-				case UP:
-					b = b.up;
-					break;
-				}
-			}
-			
-			return door;
+		public RoomLocalPathElement(RoomBlock block, int x, int y) {
+			super();
+			this.block = block;
+			this.x = x;
+			this.y = y;
+		}
+		
+		void copyInto(RoomLocalPathElement path) {
+			path.block = block;
+			path.x = x;
+			path.y = y;
 		}
 	}
 	
 	public class RoomLocalPath {
-		private List<RoomBlock> blocks = new ArrayList<>();
+//		private List<RoomBlock> blocks = new ArrayList<>();
+		private RoomLocalPathElement[][] grid;
 		private RoomDoor door;
 		private Direction dir;
 		
-		public RoomLocalPath(Direction dir) {
+		public RoomLocalPath(Direction dir, int w, int h) {
 			this.dir = dir;
+			this.grid = new RoomLocalPathElement[w][h];
 		}
 		
-		public void add(RoomBlock block) {
-			block.setPath(this);
-			this.blocks.add(block);
+		void addNextLefts(int size, int y, RoomBlock current) {
+			for(int x = 0; x < size ; x++) {
+					add(current, x, y);
+					current = current.left;
+					if(current == null)
+						break;
+			}			
+		}
+		
+		void addNextRights(int size, int y, RoomBlock current) {
+			for(int x = 0; x < size ; x++) {
+					add(current, x, y);
+					current = current.right;
+					if(current == null)
+						break;
+			}			
+		}
+		
+		void addNextTops(int size, int x, RoomBlock current) {
+			for(int y = 0; y < size ; y++) {
+					add(current, x, y);
+					current = current.up;
+					if(current == null)
+						break;
+			}			
+		}		
+		
+		void addNextDowns(int size, int x, RoomBlock current) {
+			for(int y = 0; y < size ; y++) {
+					add(current, x, y);
+					current = current.down;
+					if(current == null)
+						break;
+			}			
+		}		
+		
+		public void addFrom(RoomBlock block) {
+			
+			if(block == null) {
+				return;
+			}
+			
+			RoomBlock current = block;
+			
+			if(dir == Direction.LEFT) {
+				for(int x = grid.length-1; x >=0 ; x--) {
+						addNextDowns(grid[0].length/2, x, current);
+						addNextTops(grid[0].length/2, x, current);
+						current = current.left;
+						if(current == null)
+							break;
+				}				
+			} else if(dir == Direction.UP) {
+				for(int y = grid[0].length-1; y >=0 ; y--) {
+					addNextLefts(grid.length/2, y, current);
+					addNextRights(grid.length/2, y, current);
+					current = current.up;
+					if(current == null)
+						break;
+				}				
+			} else if(dir == Direction.DOWN) {
+				for(int y = 0; y < grid[0].length; y++) {
+					addNextLefts(grid.length/2, y, current);
+					addNextRights(grid.length/2, y, current);
+					current = current.down;
+					if(current == null)
+						break;
+				}				
+			} else if(dir == Direction.RIGHT) {
+				for(int x = 0; x < grid.length; x++) {
+					addNextTops(grid[0].length/2, x, current);
+					addNextDowns(grid[0].length/2, x, current);
+					current = current.right;
+					if(current == null)
+						break;
+				}				
+			}
+			
+			
+		}
+		
+		public void add(RoomBlock block, int x, int y) {//BEM LIXO ESSE CODIGO
+			if(block == null)
+				return;
+			
+			if(!block.isWall() && !block.isDoor() && !block.isPath()) {
+				block.setPath(this);
+				this.grid[x][y] = new RoomLocalPathElement(block, x, y);
+			} else {
+				if(block.isPath()) {
+					if(block.getPath() != null) {
+						if(block.getPath().getDoorOrigin() != null) {
+							if(this.door != null) {
+								RoomBlocks.this.addJoinedDoorPath(this.door, block.getPath().getDoorOrigin());
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		public RoomLocalPathElement getAt(int x, int y) {
+			return this.grid[x][y];
+		}
+		
+		public int getWidth() {
+			return this.grid.length;
+		}
+		
+		public int getHeight() {
+			return this.grid[0].length;
+		}		
+		
+		public Direction getAny(RoomLocalPathElement path) {
+			Direction next = dir;//Direction.values()[random.nextInt(Direction.values().length)];
+			RoomLocalPathElement ele = null;
+			
+			switch (next) {
+			case LEFT:
+				ele = this.grid[0][random.nextInt(this.getHeight())];
+				break;
+			case RIGHT:
+				ele = this.grid[this.getWidth()-1][random.nextInt(this.getHeight())];
+				break;
+			case UP:
+				ele = this.grid[random.nextInt(this.getWidth())][0];
+				break;
+			case DOWN:
+				ele = this.grid[random.nextInt(this.getWidth())][this.getHeight() - 1];
+				break;				
+			default:
+				break;
+			}
+			
+			if(ele != null)
+				ele.copyInto(path);
+			
+			return next;
 		}
 		
 		public void spread() {
@@ -411,6 +576,9 @@ public class RoomBlocks {
 	}
 	
 	public class RoomDoor {
+		
+		String id = UUID.randomUUID().toString();
+		
 		private List<RoomBlock> blocks = new ArrayList<>();
 		
 		public void add(RoomBlock b) {
@@ -487,6 +655,7 @@ public class RoomBlocks {
 		public RoomDoor createDoorFor(RoomWall destiny) {
 			RoomDoor door = new RoomDoor();
 			this.doors.put(destiny.id, door);
+			RoomBlocks.this.doors.add(door);
 			return door;
 		}
 		

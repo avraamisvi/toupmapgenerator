@@ -14,7 +14,7 @@ public class LevelGenerator {
 	public LevelGenerator(RoomAlgorithm algorithm) {
 		this.algorithm = algorithm;
 		this.doorGen = new DoorGenerator();
-		pathGen = new RoomPathGenerator();
+//		pathGen = new RoomPathGenerator();
 	}
 
 	public void generate(Level level) {
@@ -55,6 +55,8 @@ public class LevelGenerator {
 		
 		level.getGrid().configureAdjacentRooms();
 		level.forEach(room -> doorGen.generate(level, room));
-		pathGen.generate(level);
+//		pathGen.generate(level);
+		
+		level.forEach(room -> room.getGrid().createPath());
 	}
 }

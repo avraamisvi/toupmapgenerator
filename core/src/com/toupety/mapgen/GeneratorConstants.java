@@ -28,7 +28,7 @@ public interface GeneratorConstants {
 	int MIN_ROOM_WIDTH  = 2;
 	int MIN_ROOM_HEIGHT = 2;	
 	
-	int MAX_ROOMS = 5;//
+	int MAX_ROOMS = 60;//
 	
 	int MAX_MIN_ROOMS = 5;
 	

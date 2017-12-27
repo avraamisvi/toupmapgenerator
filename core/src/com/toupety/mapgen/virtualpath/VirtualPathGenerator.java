@@ -83,20 +83,20 @@ public class VirtualPathGenerator {
 			if(dir == null) {
 				if(source.x < target.x) {//right
 					source.openRight = true;
-					source = VirtualPathGenerator.this.grid[source.x+1][source.y];
+//					source = VirtualPathGenerator.this.grid[source.x+1][source.y];
 					dir = Direction.RIGHT;
 				} else if(source.x > target.x) {//left
 					source.openLeft = true;
-					source = VirtualPathGenerator.this.grid[source.x-1][source.y];
+//					source = VirtualPathGenerator.this.grid[source.x-1][source.y];
 					dir = Direction.LEFT;
 				} else {
 					if(source.y < target.y) {//down
 						source.openBottom = true;
-						source = VirtualPathGenerator.this.grid[source.x][source.y+1];
+//						source = VirtualPathGenerator.this.grid[source.x][source.y+1];
 						dir = Direction.DOWN;
 					} else if(source.y > target.y) {//up
 						source.openTop = true;
-						source = VirtualPathGenerator.this.grid[source.y-1][source.y];
+//						source = VirtualPathGenerator.this.grid[source.y-1][source.y];
 						dir = Direction.UP;
 					}				
 				}				

@@ -57,7 +57,7 @@ public class RoomGridScreenDrawner implements ElementDrawner<RoomBlocks> {
 			x = (dim.getW() - x) + dim.getX();
 //			int y = (bl.getY() * Constants.ROOM_BLOCK_SIZE) + dim.getY();
 			
-			int pseudWorldRoomY = grid.getDimensions().getY() * Configuration.getLevelGridElementWidth();
+			int pseudWorldRoomY = grid.getDimensions().getY() * Configuration.getLevelGridElementContentSize();
 			int y = (bl.getY() + pseudWorldRoomY) * (GeneratorConstants.ROOM_BLOCK_SIZE);
 			
 			ShapeType shType = ShapeType.Filled;

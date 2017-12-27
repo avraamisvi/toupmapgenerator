@@ -1,0 +1,6 @@
+- criar fechador de paths sem saida, se o path nao tiver saida, ou estiver
+ desconectado de qualquer lugar, escolher um lad para abrir ou fecha-lo
+ 
+ - criar algoritmos de path para conectar as portas e deixar a geracao mais dinamica
+ 
+ - a depender o tamanha do sala ela pode ter mais de um quadro target, se so tiver uma porta

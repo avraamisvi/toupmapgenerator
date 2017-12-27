@@ -2,6 +2,7 @@ package com.toupety.mapgen;
 
 import com.toupety.mapgen.mold.MoldFactory;
 
+@Deprecated
 public class RoomGenerator {
 
 //	MoldFactory moldFactory; 

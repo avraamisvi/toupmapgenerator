@@ -21,8 +21,8 @@ public class DoorGenerator {
 		source.forEachRight(target -> {
 			if(!source.getGrid().getRightWall().containsDoorFor(target.getGrid().getLeftWall())) {
 			
-				int srcx = source.getX() * Configuration.getLevelGridElementWidth() + 1;
-				int srcy = source.getY() * Configuration.getLevelGridElementWidth();
+				int srcx = source.getX() * Configuration.getLevelGridElementContentSize() + 1;
+				int srcy = source.getY() * Configuration.getLevelGridElementContentSize();
 			
 				List<BlockTupple> blocks = findBlocks(source.getGrid().getRightWall(), target.getGrid().getLeftWall(), srcx, srcy);
 				
@@ -53,8 +53,8 @@ public class DoorGenerator {
 			
 			if(!source.getGrid().getLeftWall().containsDoorFor(target.getGrid().getRightWall())) {
 			
-				int srcx = source.getX() * Configuration.getLevelGridElementWidth() - 1;
-				int srcy = source.getY() * Configuration.getLevelGridElementWidth();
+				int srcx = source.getX() * Configuration.getLevelGridElementContentSize() - 1;
+				int srcy = source.getY() * Configuration.getLevelGridElementContentSize();
 			
 				List<BlockTupple> blocks = findBlocks(source.getGrid().getLeftWall(), target.getGrid().getRightWall(), srcx, srcy);
 				
@@ -85,8 +85,8 @@ public class DoorGenerator {
 			
 			if(!source.getGrid().getTopWall().containsDoorFor(target.getGrid().getBottomWall())) {
 			
-				int srcx = source.getX() * Configuration.getLevelGridElementWidth();
-				int srcy = source.getY() * Configuration.getLevelGridElementWidth() - 1;
+				int srcx = source.getX() * Configuration.getLevelGridElementContentSize();
+				int srcy = source.getY() * Configuration.getLevelGridElementContentSize() - 1;
 			
 				List<BlockTupple> blocks = findBlocks(source.getGrid().getTopWall(), target.getGrid().getBottomWall(), srcx, srcy);
 				
@@ -117,8 +117,8 @@ public class DoorGenerator {
 			
 			if(!source.getGrid().getBottomWall().containsDoorFor(target.getGrid().getTopWall())) {
 			
-				int srcx = source.getX() * Configuration.getLevelGridElementWidth();
-				int srcy = source.getY() * Configuration.getLevelGridElementWidth() + 1;
+				int srcx = source.getX() * Configuration.getLevelGridElementContentSize();
+				int srcy = source.getY() * Configuration.getLevelGridElementContentSize() + 1;
 			
 				List<BlockTupple> blocks = findBlocks(source.getGrid().getBottomWall(), target.getGrid().getTopWall(), srcx, srcy);
 				

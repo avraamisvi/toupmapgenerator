@@ -6,6 +6,6 @@
 	"platform": {
 		"hight": 2
 	}, 
-	"open": ["left", "right", "top"],
+	"open": ["LEFT", "RIGHT", "TOP"],
 	"collision": []
 }

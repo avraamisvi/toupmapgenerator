@@ -56,7 +56,9 @@ public class LevelGenerator {
 		level.getGrid().configureAdjacentRooms();
 		level.forEach(room -> doorGen.generate(level, room));
 //		pathGen.generate(level);
-		
+	}
+	
+	public void generatePaths(Level level) {
 		level.forEach(room -> room.getGrid().createPath());
 	}
 }

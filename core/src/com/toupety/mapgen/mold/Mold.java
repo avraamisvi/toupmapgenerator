@@ -9,6 +9,7 @@ import com.toupety.mapgen.GeneratorConstants;
 public class Mold {
 
 	private MoldMeta meta;
+	private MoldBlock[][] grid;
 	private List<MoldBlock> blocks;
 	int width  = GeneratorConstants.LEVEL_BLOCK_WIDTH / GeneratorConstants.ROOM_BLOCK_SIZE; 
 	int height = GeneratorConstants.LEVEL_BLOCK_WIDTH / GeneratorConstants.ROOM_BLOCK_SIZE;
@@ -19,11 +20,15 @@ public class Mold {
 		width  = meta.maxWidth; 
 		height = meta.maxHeigth;
 		
+		grid = new MoldBlock[width][height];
+		
 		String line;
-		for(int y = 0; y < lines.size(); y++) {
+		for(int y = 0; y < height; y++) {
 			line = lines.get(y);
-			for(int x = 0; x < line.length(); x++) {
-				blocks.add(new MoldBlock(line.charAt(x), x, y));//TODO metadata for each block?
+			for(int x = 0; x < width; x++) {
+				MoldBlock b = new MoldBlock(line.charAt(x), x, y);
+				blocks.add(b);//TODO metadata for each block?
+				grid[x][y] = b;
 			}
 		}
 		
@@ -44,5 +49,9 @@ public class Mold {
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	public MoldBlock[][] getGrid() {
+		return grid;
 	}
 }

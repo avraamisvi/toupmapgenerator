@@ -44,9 +44,11 @@ public class RoomScreenDrawner implements ElementDrawner<Room> {
 			colorindex = 0;
 		}
 		
+//		drawLine(element);
+		
 		renderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
 		renderer.begin(ShapeType.Filled);
-		renderer.setColor(getColor(element.getIndex()));
+		renderer.setColor(getColor(element.getIndex()));//
 		
 		Dimensions world = null;
 		if(!Configuration.invert) {			
@@ -61,6 +63,19 @@ public class RoomScreenDrawner implements ElementDrawner<Room> {
 		colorindex++;
 		
 		gridDrawner.draw(element.getGrid());
+	}
+	
+	public void drawLine(Room element) {
+		
+		renderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
+		renderer.begin(ShapeType.Line);
+		renderer.setColor(Color.RED);//getColor(element.getIndex())
+		
+		Dimensions world = null;
+		world = Util.convertDimmensions(element).toRoomWorldDimmensions();
+		
+		renderer.rect(world.getX(), world.getY(), world.getW(), world.getH());
+		renderer.end();
 	}
 	
 	private Color getColor(Integer index) {

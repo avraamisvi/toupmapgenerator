@@ -135,10 +135,10 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
 			executor.execute(() -> {
-//				RoomDimmensionsAlgorithm algo = new BoundedRoomDimmensionsAlgorithm(defaultArgs());
+				RoomAlgorithm algo = new BoundedRoomAlgorithm(defaultArgs());
 //				level = new Level(Constants.WIDTH, Constants.HEIGHT);
-//				new LevelGenerator(algo).generate(level);
-				new RoomGenerator().generate(level);
+				new LevelGenerator(algo).generatePaths(level);
+//				new RoomGenerator().generate(level);
 			});
 		}		
 

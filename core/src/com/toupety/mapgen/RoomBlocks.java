@@ -21,7 +21,7 @@ public class RoomBlocks {
 	private int w, h;
 	private Dimensions dim;
 	
-//	private List<RoomLocalPath> paths = new ArrayList<>();
+	private List<RoomLocalPath> paths = new ArrayList<>();
 	private List<RoomLocalPath> bottomPaths = new ArrayList<>();
 	private List<RoomLocalPath> leftPaths = new ArrayList<>();
 	private List<RoomLocalPath> rightPaths = new ArrayList<>();
@@ -69,37 +69,92 @@ public class RoomBlocks {
 		this.fillWalls();
 	}
 	
-//	private void createRoomPathFrom(int lw, int lh, RoomBlock block, Direction dir) {
-//		RoomLocalPath newPath = new RoomLocalPath(dir, lw, lh);
-//		this.paths.add(newPath);
-//		newPath.addFrom(block);
-//	}
+	public void createPath() {
+		this.createPathFromTopDoor();
+		this.createPathFromLeftDoor();
+		this.createPathFromRightDoor();
+		this.createPathFromBottomDoor();
+		
+		//TODO spread
+	}
 	
-	public void createPathFromTop(RoomDoor target, Direction dir) {
+	private boolean needOpen(List<String> opens) {
+		return this.doors.stream().filter(door -> {
+			return opens.contains(door.getPosition().name());			
+		}).count() > 0;
+	}
+	
+	public void createPathFromTopDoor() {
 
 		this.topWall.forEachDoor(door -> {
 			Mold mod = MoldFactory.get().getAny(m -> {
-				for(String open : m.getMeta().open) {
-					if(open.equals(Direction.DOWN.name())) {
-						return true;
-					}
-				}
-				
-				return false;
+				return this.needOpen(m.getMeta().open) && m.getMeta().open.contains(Position.TOP.name());
 			});
 			
-			RoomLocalPath newPath = new RoomLocalPath(dir, mod);
+			RoomLocalPath newPath = new RoomLocalPath(Direction.DOWN, mod);
 			door.sort();
 			
 			RoomBlock block = door.blocks.get(0);
 			block = getFirstRoomBlockInsideLevelBlock(block.x, block.y);
+			newPath.addFrom(block);
+			
+			this.topPaths.add(newPath);
+		});
+	}
+	
+	public void createPathFromBottomDoor() {
+
+		this.bottomWall.forEachDoor(door -> {
+			Mold mod = MoldFactory.get().getAny(m -> {
+				return this.needOpen(m.getMeta().open) && m.getMeta().open.contains(Position.BOTTOM.name());
+			});
+			
+			RoomLocalPath newPath = new RoomLocalPath(Direction.UP, mod);
+			door.sort();
+			
+			RoomBlock block = door.blocks.get(0);
+			block = getFirstRoomBlockInsideLevelBlock(block.x, block.y);
+			newPath.addFrom(block);
 			
 			this.bottomPaths.add(newPath);
 		});
-		
-//		while
-		
 	}
+	
+	public void createPathFromLeftDoor() {
+
+		this.leftWall.forEachDoor(door -> {
+			Mold mod = MoldFactory.get().getAny(m -> {
+				return this.needOpen(m.getMeta().open) && m.getMeta().open.contains(Position.LEFT.name());
+			});
+			
+			RoomLocalPath newPath = new RoomLocalPath(Direction.RIGHT, mod);
+			door.sort();
+			
+			RoomBlock block = door.blocks.get(0);
+			block = getFirstRoomBlockInsideLevelBlock(block.x, block.y);
+			newPath.addFrom(block);
+			
+			this.leftPaths.add(newPath);
+		});
+	}	
+	
+	public void createPathFromRightDoor() {
+
+		this.rightWall.forEachDoor(door -> {
+			Mold mod = MoldFactory.get().getAny(m -> {
+				return this.needOpen(m.getMeta().open) && m.getMeta().open.contains(Position.RIGHT.name());
+			});
+			
+			RoomLocalPath newPath = new RoomLocalPath(Direction.LEFT, mod);
+			door.sort();
+			
+			RoomBlock block = door.blocks.get(0);
+			block = getFirstRoomBlockInsideLevelBlock(block.x, block.y);
+			newPath.addFrom(block);
+			
+			this.rightPaths.add(newPath);
+		});
+	}	
 	
 	public RoomBlock getFirstRoomBlockInsideLevelBlock(int x, int y) {
 		
@@ -261,11 +316,6 @@ public class RoomBlocks {
 		return this.dim;
 	}
 	
-	public void createDoor() {
-		//cria as portas nos elementos conectados
-		//------
-	}
-	
 	public void connectDoors() {
 		//conecta duas portas gerando um path, esse path pode ser esparramado
 		boolean done = false;
@@ -293,17 +343,6 @@ public class RoomBlocks {
 			this.x = x;
 			this.y = y;
 		}
-		
-//		public boolean fit(Mold mold) {
-//			
-//			mold
-//			.stream()
-//			.forEach(bl -> {
-//				grid[bl.getX()][bl.getY()].owner = bl;
-//			});
-//			
-//			return true;
-//		}
 		
 		public void setMold(MoldBlock mold) {
 			this.owner = mold;
@@ -433,9 +472,24 @@ public class RoomBlocks {
 				return;
 			}
 			
-			this.mold.stream().forEach(mb -> {
+			RoomBlock column = block;
+			RoomBlock line   = block;
+			
+			for(int x = 0; x < this.mold.getWidth(); x++) {
+				for(int y = 0; y < this.mold.getHeight(); y++) {
+					
+					this.grid[x][y] = new RoomLocalPathElement(column, x, y);
+					column.setMold(this.mold.getGrid()[x][y]);
+					
+					column = column.down;
+					if(column == null)
+						break;
+				}
 				
-			});
+				line = column = line.right;
+				if(line == null)
+					break;				
+			}
 		}
 		
 		public void add(RoomBlock block, MoldBlock moldBlock) {//FIXME BEM LIXO ESSE CODIGO
@@ -463,9 +517,18 @@ public class RoomBlocks {
 	
 	public class RoomDoor {
 		
+		Position position;
 		String id = UUID.randomUUID().toString();
 		
 		private List<RoomBlock> blocks = new ArrayList<>();
+		
+		public RoomDoor(Position position) {
+			this.position = position;
+		}
+		
+		public Position getPosition() {
+			return position;
+		}
 		
 		public void add(RoomBlock b) {
 			blocks.add(b);
@@ -535,8 +598,9 @@ public class RoomBlocks {
 			return lx+","+ly;
 		}
 		
+		@Deprecated
 		public RoomDoor getAnyDoor() {
-			return this.doors.get(random.nextInt(this.doors.size()));
+			return this.doors.get(random.nextInt(this.doors.size()));//FIXME error
 		}
 
 		/**
@@ -554,7 +618,7 @@ public class RoomBlocks {
 		}
 		
 		public RoomDoor createDoorFor(RoomWall destiny) {
-			RoomDoor door = new RoomDoor();
+			RoomDoor door = new RoomDoor(this.pos);
 			this.doors.put(destiny.id, door);
 			RoomBlocks.this.doors.add(door);
 			return door;

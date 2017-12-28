@@ -70,14 +70,12 @@ public class RoomGridScreenDrawner implements ElementDrawner<RoomBlocks> {
 //				render = true;
 //				color.set(1, 1, 1, 1);
 //				shType = ShapeType.Line;
-			} else if(bl.getOwner() != null) {//TODO
-				render = true;
-//				shType = ShapeType.Line;
-				if(bl.getOwner().getValue() != '.')
-					color.set(1, 1, 1, 1);
-				else
-					color.set(0, 0, 0, 1);
+			} else if(bl.getMetaInfo() != null) {//TODO
 				
+				if(bl.getMetaInfo().getType().equals(".")) {
+					render = true;
+					color.set(0, 0, 0, 1);
+				}
 			}
 			
 			if(render) {

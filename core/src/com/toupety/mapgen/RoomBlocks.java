@@ -6,10 +6,13 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.math.RandomXS128;
+import com.toupety.mapgen.cave.BlockMetaInfo;
+import com.toupety.mapgen.cave.CaveGenerator;
 import com.toupety.mapgen.mold.Mold;
 import com.toupety.mapgen.mold.MoldBlock;
 import com.toupety.mapgen.mold.MoldFactory;
@@ -21,11 +24,11 @@ public class RoomBlocks {
 	private int w, h;
 	private Dimensions roomDim;
 	
-	private List<RoomLocalPath> paths = new ArrayList<>();
-	private List<RoomLocalPath> bottomPaths = new ArrayList<>();
-	private List<RoomLocalPath> leftPaths = new ArrayList<>();
-	private List<RoomLocalPath> rightPaths = new ArrayList<>();
-	private List<RoomLocalPath> topPaths = new ArrayList<>();
+//	private List<RoomLocalPath> paths = new ArrayList<>();
+//	private List<RoomLocalPath> bottomPaths = new ArrayList<>();
+//	private List<RoomLocalPath> leftPaths = new ArrayList<>();
+//	private List<RoomLocalPath> rightPaths = new ArrayList<>();
+//	private List<RoomLocalPath> topPaths = new ArrayList<>();
 	
 	private List<RoomDoor> doors = new ArrayList<>();
 	public HashSet<String> joinedDoors = new HashSet<>();
@@ -69,37 +72,44 @@ public class RoomBlocks {
 		this.fillWalls();
 	}
 	
-	public void createPath() {
+	public Optional<RoomBlock> getAt(int x, int y) {
+		if((x < this.w && y < this.h) && (x >= 0 && y >= 0)) {
+			return Optional.of(this.grid[x][y]);
+		}
+		return Optional.empty();
+	}
+	
+//	public void createPath() {
 //		this.createPathFromTopDoor();
 //		this.createPathFromLeftDoor();
 //		this.createPathFromRightDoor();
 //		this.createPathFromBottomDoor();
 		
-		VirtualPathGenerator vph = new VirtualPathGenerator(roomDim.getW(), roomDim.getH());
-		vph.process(this);
-		System.out.println("teste");
-
-		vph.forEach(path -> {
-			Mold mod = MoldFactory.get().getAny(mo -> {
-				return path.isAcceptable(mo.getMeta());
-			});
-			
-			if(mod != null) {
-				int lx = path.x * Configuration.getLevelGridElementContentSize();
-				int ly = path.y * Configuration.getLevelGridElementContentSize();
-				
-				RoomLocalPath newPath = new RoomLocalPath(Direction.DOWN, mod);
-				newPath.addFrom(this.grid[lx][ly]);
-			}
-			
-		});
+//		VirtualPathGenerator vph = new VirtualPathGenerator(roomDim.getW(), roomDim.getH());
+//		vph.process(this);
+//		System.out.println("teste");
+//
+//		vph.forEach(path -> {
+//			Mold mod = MoldFactory.get().getAny(mo -> {
+//				return path.isAcceptable(mo.getMeta());
+//			});
+//			
+//			if(mod != null) {
+//				int lx = path.x * Configuration.getLevelGridElementContentSize();
+//				int ly = path.y * Configuration.getLevelGridElementContentSize();
+//				
+//				RoomLocalPath newPath = new RoomLocalPath(Direction.DOWN, mod);
+//				newPath.addFrom(this.grid[lx][ly]);
+//			}
+//			
+//		});
 		
 //		Mold mod = MoldFactory.get().getAny(m -> {
 //		return this.needOpen(m.getMeta().open) && m.getMeta().open.contains(Position.TOP.name());
 //	});		
 		
 		//TODO spread
-	}
+//	}
 	
 //	private boolean needOpen(List<String> opens) {//TODO refazer usando a logica do virtual path
 //		return this.doors.stream().filter(door -> {
@@ -338,6 +348,10 @@ public class RoomBlocks {
 		this.doors.forEach(con);
 	}
 	
+	public void createCave() {
+		new CaveGenerator().generate(this);
+	}
+	
 //	public void createPath() {
 //		if(paths.size() == 0) {
 //			this.getBottomWall().forEachDoor(door -> {
@@ -438,9 +452,9 @@ public class RoomBlocks {
 		return bottomWall;
 	}
 	
-	public boolean isUsed(int x, int y) {
-		return this.grid[x][y].isUsed();
-	}
+//	public boolean isUsed(int x, int y) {
+//		return this.grid[x][y].isUsed();
+//	}
 	
 //	public synchronized boolean put(Mold room) {
 //		return this.grid[0][0].fit(room);//TODO algoritmo precisa analisar e procurar regiões com path e ai aplica nessas regioes
@@ -507,28 +521,37 @@ public class RoomBlocks {
 		RoomBlock left;
 		RoomBlock right;
 		
-		RoomLocalPath path;
+//		RoomLocalPath path;
 		boolean door;
 		List<RoomWall> walls = new ArrayList<>();
+		BlockMetaInfo metaInfo = new BlockMetaInfo("x");//TODO metainfo
 		
-		private MoldBlock owner;
+//		private MoldBlock owner;
 		
 		public RoomBlock(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
 		
-		public void setMold(MoldBlock mold) {
-			this.owner = mold;
+		public BlockMetaInfo getMetaInfo() {
+			return metaInfo;
 		}
 		
-		public MoldBlock getOwner() {
-			return owner;
+		public void setMetaInfo(BlockMetaInfo metaInfo) {
+			this.metaInfo = metaInfo;
 		}
 		
-		public boolean isUsed() {
-			return owner != null;
-		}
+//		public void setMold(MoldBlock mold) {
+//			this.owner = mold;
+//		}
+//		
+//		public MoldBlock getOwner() {
+//			return owner;
+//		}
+		
+//		public boolean isUsed() {
+//			return owner != null;
+//		}
 		
 		public int getX() {
 			return x;
@@ -546,9 +569,9 @@ public class RoomBlocks {
 			return y + RoomBlocks.this.roomDim.getY();
 		}		
 		
-		public boolean isPath() {
-			return this.path != null;
-		}
+//		public boolean isPath() {
+//			return this.path != null;
+//		}
 		
 		public boolean isDoor() {
 			return door;
@@ -558,13 +581,13 @@ public class RoomBlocks {
 			return this.walls.size() > 1;
 		}
 		
-		void setPath(RoomLocalPath path) {
-			this.path = path;
-		}
-		
-		public RoomLocalPath getPath() {
-			return path;
-		}
+//		void setPath(RoomLocalPath path) {
+//			this.path = path;
+//		}
+//		
+//		public RoomLocalPath getPath() {
+//			return path;
+//		}
 
 		void setDoor(boolean door) {
 			this.door = door;
@@ -584,110 +607,110 @@ public class RoomBlocks {
 	}
 	
 	
-	public class RoomLocalPathElement {
-		
-		public RoomBlock block;
-		public int x, y;
-		
-		public RoomLocalPathElement(RoomBlock block, int x, int y) {
-			super();
-			this.block = block;
-			this.x = x;
-			this.y = y;
-		}
-		
-		void copyInto(RoomLocalPathElement path) {
-			path.block = block;
-			path.x = x;
-			path.y = y;
-		}
-	}
+//	public class RoomLocalPathElement {
+//		
+//		public RoomBlock block;
+//		public int x, y;
+//		
+//		public RoomLocalPathElement(RoomBlock block, int x, int y) {
+//			super();
+//			this.block = block;
+//			this.x = x;
+//			this.y = y;
+//		}
+//		
+//		void copyInto(RoomLocalPathElement path) {
+//			path.block = block;
+//			path.x = x;
+//			path.y = y;
+//		}
+//	}
 	
-	public class RoomLocalPath {
-//		private List<RoomBlock> blocks = new ArrayList<>();
-		private RoomLocalPathElement[][] grid;
-		private RoomDoor door;
-		private Direction dir;
-		private Mold mold;
-		
-		public RoomLocalPath(Direction dir, Mold mold) {
-			this.dir = dir;
-			this.grid = new RoomLocalPathElement[mold.getWidth()][mold.getHeight()];
-			this.mold = mold;
-		}
-		
-		public int getWidth() {
-			return this.grid.length;
-		}
-		
-		public int getHeight() {
-			return this.grid[0].length;
-		}		
-		
-		public void setDoorOrigin(RoomDoor door) {
-			this.door = door; 
-		}
-		
-		public RoomDoor getDoorOrigin() {
-			return this.door;
-		}
-		
-		public boolean isOwneredBy(RoomDoor door) {
-			return this.door == door;
-		}
-		
-		public Direction getDirection() {
-			return dir;
-		}
-		
-		public void addFrom(RoomBlock block) {
-			
-			if(block == null) {
-				return;
-			}
-			
-			RoomBlock column = block;
-			RoomBlock line   = block;
-			
-			for(int x = 0; x < this.mold.getWidth(); x++) {
-				for(int y = 0; y < this.mold.getHeight(); y++) {
-					
-					this.grid[x][y] = new RoomLocalPathElement(column, x, y);
-					column.setMold(this.mold.getGrid()[x][y]);
-					
-					column = column.down;
-					if(column == null)
-						break;
-				}
-				
-				line = column = line.right;
-				if(line == null)
-					break;				
-			}
-		}
-		
-		public void add(RoomBlock block, MoldBlock moldBlock) {//FIXME BEM LIXO ESSE CODIGO
-			if(block == null)
-				return;
-			
-			if(!block.isWall() && !block.isDoor() && !block.isPath()) {
-				block.setPath(this);
-				block.setMold(moldBlock);
-				this.grid[moldBlock.getX()][moldBlock.getY()] = new RoomLocalPathElement(block, moldBlock.getX(), moldBlock.getY());//TODO is this pathele really needed?
-			} else {
-				if(block.isPath()) {
-					if(block.getPath() != null) {
-						if(block.getPath().getDoorOrigin() != null) {
-							if(this.door != null) {
-								RoomBlocks.this.addJoinedDoorPath(this.door, block.getPath().getDoorOrigin());
-							}
-						}
-					}
-				}
-			}
-		}		
-			
-	}
+//	public class RoomLocalPath {
+////		private List<RoomBlock> blocks = new ArrayList<>();
+//		private RoomLocalPathElement[][] grid;
+//		private RoomDoor door;
+//		private Direction dir;
+//		private Mold mold;
+//		
+//		public RoomLocalPath(Direction dir, Mold mold) {
+//			this.dir = dir;
+//			this.grid = new RoomLocalPathElement[mold.getWidth()][mold.getHeight()];
+//			this.mold = mold;
+//		}
+//		
+//		public int getWidth() {
+//			return this.grid.length;
+//		}
+//		
+//		public int getHeight() {
+//			return this.grid[0].length;
+//		}		
+//		
+//		public void setDoorOrigin(RoomDoor door) {
+//			this.door = door; 
+//		}
+//		
+//		public RoomDoor getDoorOrigin() {
+//			return this.door;
+//		}
+//		
+//		public boolean isOwneredBy(RoomDoor door) {
+//			return this.door == door;
+//		}
+//		
+//		public Direction getDirection() {
+//			return dir;
+//		}
+//		
+//		public void addFrom(RoomBlock block) {
+//			
+//			if(block == null) {
+//				return;
+//			}
+//			
+//			RoomBlock column = block;
+//			RoomBlock line   = block;
+//			
+//			for(int x = 0; x < this.mold.getWidth(); x++) {
+//				for(int y = 0; y < this.mold.getHeight(); y++) {
+//					
+//					this.grid[x][y] = new RoomLocalPathElement(column, x, y);
+//					column.setMold(this.mold.getGrid()[x][y]);
+//					
+//					column = column.down;
+//					if(column == null)
+//						break;
+//				}
+//				
+//				line = column = line.right;
+//				if(line == null)
+//					break;				
+//			}
+//		}
+//		
+//		public void add(RoomBlock block, MoldBlock moldBlock) {//FIXME BEM LIXO ESSE CODIGO
+//			if(block == null)
+//				return;
+//			
+//			if(!block.isWall() && !block.isDoor() && !block.isPath()) {
+//				block.setPath(this);
+//				block.setMold(moldBlock);
+//				this.grid[moldBlock.getX()][moldBlock.getY()] = new RoomLocalPathElement(block, moldBlock.getX(), moldBlock.getY());//TODO is this pathele really needed?
+//			} else {
+//				if(block.isPath()) {
+//					if(block.getPath() != null) {
+//						if(block.getPath().getDoorOrigin() != null) {
+//							if(this.door != null) {
+//								RoomBlocks.this.addJoinedDoorPath(this.door, block.getPath().getDoorOrigin());
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}		
+//			
+//	}
 	
 	public class RoomDoor {
 		

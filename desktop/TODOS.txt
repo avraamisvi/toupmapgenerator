@@ -4,3 +4,9 @@
  - criar algoritmos de path para conectar as portas e deixar a geracao mais dinamica
  
  - a depender o tamanha do sala ela pode ter mais de um quadro target, se so tiver uma porta
+ 
+ - criar o conceito de room target ( numerico) para colocar items especiais, incluido posicao como top, ou bottom etc
+ por exemplo:
+ {
+ 	 "roomTarget": {position: TOP}
+ }

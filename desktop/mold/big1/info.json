@@ -1,11 +1,11 @@
 {
-	"name":"teste1",
+	"name":"big1",
 	"elements": ["ground"],
-	"maxWidth": 15,
+	"maxWidth": 30,
 	"maxHeigth": 15,
 	"platform": {
 		"hight": 2
 	}, 
-	"open": ["LEFT", "RIGHT"],
+	"open": ["LEFT"],
 	"collision": []
 }

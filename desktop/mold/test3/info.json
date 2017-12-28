@@ -5,7 +5,7 @@
 	"maxHeigth": 15,
 	"platform": {
 		"hight": 2
-	}, 
+	},
 	"open": ["LEFT", "RIGHT", "TOP"],
 	"collision": []
 }

@@ -59,6 +59,6 @@ public class LevelGenerator {
 	}
 	
 	public void generatePaths(Level level) {
-		level.forEach(room -> room.getGrid().createPath());
+		level.forEach(room -> room.getGrid().createCave());
 	}
 }

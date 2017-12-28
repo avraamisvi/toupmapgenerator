@@ -1,0 +1,112 @@
+--~ A reverse ipairs. Taken from http://lua-users.org/wiki/IteratorsTutorial ~--
+--[[parameters
+        t: the table to iterate over
+    returns
+        iterator function, the table and the index]]
+function ripairs(t)
+  local function ripairs_it(t,i)
+    i=i-1
+    local v=t[i]
+    if v==nil then return v end
+    return i,v
+  end
+  return ripairs_it, t, #t+1
+end
+
+--~ Seed the random numbers ~--
+math.randomseed(os.time())
+math.random()math.random()math.random()
+
+--~ Parameters ~--
+local width = 45        --~ Width of the map ~--
+local height = 45       --~ Height of the map ~--
+local border = 2        --~ Width around the border of the map. At least 2 ~--
+local kill_no = 6       --~ Minimum number of empty cells for a miner to die ~--
+local spawn_prob = 0.6  --~ Chance for a miner to spawn a clone per frame ~--
+
+local cell_kill_no = 6  --~ Minimum number of empty cells for that cell to be removed ~--
+
+local map = {}
+local miners = {}
+local draw = {}
+
+for x = 1, width do
+    map[x] = {}
+    for y = 1, height do
+        map[x][y] = "#"
+    end
+end
+
+table.insert(miners, {
+        x = math.random(border, width-border),
+        y = math.random(border, height-border)
+    })
+
+--~ Main miner loop ~--
+while #miners ~= 0 do
+    --~ Scan all the cells around the miner to check for empty ones --~
+    for i, miner in ripairs(miners) do
+        local empty = 0
+        for x = -1, 1 do
+            for y = -1, 1 do
+                if map[miner.x+x][miner.y+y] == " " or
+                (miner.x+x < border or miner.x+x > width-border) or
+                (miner.y+y < border or miner.y+y > height-border) then
+                    empty = empty + 1
+                end
+            end
+        end
+        --~ If there are enough empty ones, remove the miner ~--
+        if empty >= kill_no then
+            table.remove(miners, i)
+        else
+            --~ Randomly spawn in another miner at this spot ~--
+            if math.random() <= spawn_prob then
+            table.insert(miners, {
+                x = miner.x,
+                y = miner.y
+            })
+            end
+
+            --~ Randomly move the miner, making sure it's not out of bounds ~--
+            local xDir, yDir = math.random(-1, 1), math.random(-1, 1)
+            if (miner.x+xDir >= border and miner.x+xDir <= width-border) and (miner.y+yDir >= border and miner.y+yDir <= height-border) then
+                miner.x = miner.x + xDir
+                miner.y = miner.y + yDir
+            end
+
+            --~ Remove the cell the miner is on ~--
+            if map[miner.x][miner.y] then
+                map[miner.x][miner.y] = " "
+            end
+        end
+    end
+end
+
+for x = 2, #map-1 do
+    for y = 2, #map[x]-1 do
+        --~ Count the empty squares around this cell ~--
+        local empty = 0
+        for dX = -1, 1 do
+            for dY = -1, 1 do
+                if map[x+dX][y+dY] == " " then
+                    empty = empty + 1
+                end
+            end
+        end
+
+        --~ If there is enough many, remove the block ~--
+        if empty >= cell_kill_no then
+        map[x][y] = " "
+        end
+    end
+end
+
+--~ Display it as an ascii map ~--
+for x = 1, width do
+    for y = 1, height do
+        io.write(map[x][y])
+        io.write (" ")
+    end
+    io.write("\n")
+end

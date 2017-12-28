@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.Configuration;
 import com.toupety.mapgen.Direction;
 import com.toupety.mapgen.RoomBlocks;
@@ -17,6 +18,7 @@ public class VirtualPathGenerator {
 	private int w;
 	private int h;
 	Direction dir = null;
+	RandomXS128 rand = new RandomXS128();
 	
 	public VirtualPathGenerator(int w, int h) {
 		grid = new VirtualPathLevelBlock[w][h];
@@ -80,26 +82,51 @@ public class VirtualPathGenerator {
 
 		public void run() {
 			
+			rand.nextInt(4);
+			
 			if(dir == null) {
-				if(source.x < target.x) {//right
+				int direction = rand.nextInt(4);
+				
+				switch (Direction.values()[direction]) {
+				case RIGHT:
 					source.openRight = true;
-//					source = VirtualPathGenerator.this.grid[source.x+1][source.y];
 					dir = Direction.RIGHT;
-				} else if(source.x > target.x) {//left
+					break;
+				case UP:
+					source.openTop= true;
+					dir = Direction.UP;
+					break;
+				case LEFT:
 					source.openLeft = true;
-//					source = VirtualPathGenerator.this.grid[source.x-1][source.y];
 					dir = Direction.LEFT;
-				} else {
-					if(source.y < target.y) {//down
-						source.openBottom = true;
-//						source = VirtualPathGenerator.this.grid[source.x][source.y+1];
-						dir = Direction.DOWN;
-					} else if(source.y > target.y) {//up
-						source.openTop = true;
-//						source = VirtualPathGenerator.this.grid[source.y-1][source.y];
-						dir = Direction.UP;
-					}				
-				}				
+					break;
+				case DOWN:
+					source.openBottom = true;
+					dir = Direction.DOWN;
+					break;					
+				default:
+					break;
+				}
+				
+//				if(source.x < target.x) {//right
+//					source.openRight = true;
+////					source = VirtualPathGenerator.this.grid[source.x+1][source.y];
+//					dir = Direction.RIGHT;
+//				} else if(source.x > target.x) {//left
+//					source.openLeft = true;
+////					source = VirtualPathGenerator.this.grid[source.x-1][source.y];
+//					dir = Direction.LEFT;
+//				} else {
+//					if(source.y < target.y) {//down
+//						source.openBottom = true;
+////						source = VirtualPathGenerator.this.grid[source.x][source.y+1];
+//						dir = Direction.DOWN;
+//					} else if(source.y > target.y) {//up
+//						source.openTop = true;
+////						source = VirtualPathGenerator.this.grid[source.y-1][source.y];
+//						dir = Direction.UP;
+//					}				
+//				}				
 			}
 			
 			//TODO criar path algorithm list, and if there only one door, select any block as the target
@@ -108,40 +135,53 @@ public class VirtualPathGenerator {
 				if(dir == Direction.RIGHT) {
 					source.openRight = true;
 					if(source.x == w-1) {
-						source.openBottom = true;
-						dir = Direction.DOWN;
+//						source.openBottom = true;
+						if(target.y < source.y)
+							dir = Direction.UP;
+						else
+							dir = Direction.DOWN;
 					} else {
 						source = VirtualPathGenerator.this.grid[source.x+1][source.y];
+						source.openLeft = true;
 					}
-				}
-				
+				}else 				
 				if(dir == Direction.DOWN) {
 					source.openBottom = true;
 					if(source.y == h-1) {
-						source.openLeft = true;
-						dir = Direction.LEFT;
+//						source.openLeft = true;
+						if(target.x < source.x)
+							dir = Direction.LEFT;
+						else
+							dir = Direction.RIGHT;
 					} else {
 						source = VirtualPathGenerator.this.grid[source.x][source.y+1];
+						source.openTop= true;
 					}
-				}
-				
+				}else
 				if(dir == Direction.LEFT) {
 					source.openLeft = true;
 					if(source.x == 0) {
-						source.openTop = true;
-						dir = Direction.UP;
+//						source.openTop = true;
+						if(target.y < source.y)
+							dir = Direction.UP;
+						else
+							dir = Direction.DOWN;
 					} else {
 						source = VirtualPathGenerator.this.grid[source.x-1][source.y];
-					}
-				}				
-				
-				if(dir == Direction.UP) {
-					source.openBottom = true;
-					if(source.y == 0) {
 						source.openRight = true;
-						dir = Direction.RIGHT;
+					}
+				}else
+				if(dir == Direction.UP) {
+					source.openTop = true;
+					if(source.y == 0) {
+//						source.openRight = true;
+						if(target.x < source.x)
+							dir = Direction.LEFT;
+						else
+							dir = Direction.RIGHT;
 					} else {
 						source = VirtualPathGenerator.this.grid[source.x][source.y-1];
+						source.openTop = true;
 					}
 				}
 				

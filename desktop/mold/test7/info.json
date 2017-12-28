@@ -1,0 +1,39 @@
+{
+	"name":"teste7",
+	"elements": ["ground"],
+	"maxWidth": 15,
+	"maxHeigth": 15,
+	"platform": {
+		"hight": 2
+	}, 
+	"open": ["LEFT", "RIGHT", "DOWN"],
+	"collision": [
+		{
+			"type": "box",
+			"body": {
+				"height": 5,
+				"width": 4,
+				"x": 0,
+				"y": 10
+			}
+		},
+		{
+			"type": "box",
+			"body": {
+				"height": 3,
+				"width": 3,
+				"x": 4,
+				"y": 12
+			}
+		},
+		{
+			"type": "box",
+			"body": {
+				"height": 1,
+				"width": 8,
+				"x": 7,
+				"y": 14
+			}
+		}				
+	]
+}

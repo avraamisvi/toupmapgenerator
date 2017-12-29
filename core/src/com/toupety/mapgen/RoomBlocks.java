@@ -344,6 +344,10 @@ public class RoomBlocks {
 		return this.grid[lx][ly];
 	}
 	
+	public List<RoomDoor> getDoors() {
+		return doors;
+	}
+	
 	public void forEachDoor(Consumer<RoomDoor> con) {
 		this.doors.forEach(con);
 	}
@@ -522,7 +526,7 @@ public class RoomBlocks {
 		RoomBlock right;
 		
 //		RoomLocalPath path;
-		boolean door;
+		RoomDoor door;
 		List<RoomWall> walls = new ArrayList<>();
 		BlockMetaInfo metaInfo = new BlockMetaInfo("x");//TODO metainfo
 		
@@ -574,6 +578,10 @@ public class RoomBlocks {
 //		}
 		
 		public boolean isDoor() {
+			return door != null;
+		}
+		
+		public RoomDoor getDoor() {
 			return door;
 		}
 		
@@ -589,7 +597,7 @@ public class RoomBlocks {
 //			return path;
 //		}
 
-		void setDoor(boolean door) {
+		void setDoor(RoomDoor door) {
 			this.door = door;
 		}
 		
@@ -729,7 +737,7 @@ public class RoomBlocks {
 		
 		public void add(RoomBlock b) {
 			blocks.add(b);
-			b.setDoor(true);
+			b.setDoor(this);
 		}
 		
 		public void forEachBlock(Consumer<RoomBlock> c) {

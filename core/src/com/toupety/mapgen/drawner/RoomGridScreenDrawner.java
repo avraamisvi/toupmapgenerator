@@ -67,9 +67,9 @@ public class RoomGridScreenDrawner implements ElementDrawner<RoomBlocks> {
 				render = true;
 				color.set(0, 0, 0, 1);
 			} else if(bl.isWall()) {
-				render = true;
-				color.set(1, 1, 1, 1);
-				shType = ShapeType.Line;
+//				render = true;
+//				color.set(1, 1, 1, 1);
+//				shType = ShapeType.Line;
 			} else if(bl.getMetaInfo() != null) {//TODO
 				
 				if(bl.getMetaInfo().getType().equals(".")) {

@@ -1,0 +1,36 @@
+{
+  "name":"deserto",
+  "rooms": 60,
+  "key": {
+    "color":"BLUE",
+    "room": 30,
+    "limit": -1
+  },
+  "tags":[
+    {
+      "room": 10,
+      "id": "DOUBLE_JUMP",
+      "limit": 3
+    }
+  ],
+  "items": [
+    {
+      "id": "blue-key",
+      "from": 10,
+      "limit": 1,
+      "chance": 1
+    },    
+    {
+      "id": "big-verdanio",
+      "from": 3,
+      "limit": 1,
+      "chance": 0.16
+    },
+    {
+      "id": "small-verdanio",
+      "from": 2,
+      "limit": 2,
+      "chance": 0.16
+    }
+  ]
+}

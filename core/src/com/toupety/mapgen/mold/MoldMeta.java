@@ -7,6 +7,7 @@ public class MoldMeta {
 
 	public String name;
 	public List<String> elements;
+	public List<String> tags;
 	public int maxWidth;
 	public int maxHeigth;
 	public Platform platform;

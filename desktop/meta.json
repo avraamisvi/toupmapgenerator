@@ -1,0 +1,24 @@
+{
+  "items": {
+    "big-verdanio": {
+      "color":[0,1,0,1] 
+    },
+    "small-verdanio": {
+      "color":[0,1,0,1] 
+    }    
+  },
+  "tiles": {
+    "x": {
+      "color":[1,1,1,1],
+      "name": "ground"
+    },
+    ".": {
+      "color":[0,0,0,1],
+      "name": "space"
+    },
+    "s": {
+      "color":[0,1,1,1],
+      "name": "slipping"
+    }
+  }
+}

@@ -45,25 +45,32 @@ public class VirtualPathLevelBlock {
 	
 	public boolean isAcceptable(MoldMeta meta) {
 		
-		boolean ret = true;
-		
 		if( openTop ) {
-			ret &= meta.open.contains(Position.TOP.name());
+			if(!meta.open.contains(Position.TOP.name())) {
+				return false;
+			}
 		}
 		
 		if( openBottom ) {
-			ret &= meta.open.contains(Position.BOTTOM.name());
+			if(!meta.open.contains(Position.BOTTOM.name())) {
+				return false;
+			}
 		}
 
 		if( openLeft ) {
-			ret &= meta.open.contains(Position.LEFT.name());
+			if(!meta.open.contains(Position.LEFT.name())) {
+				return false;
+			}
 		}
 		
 		if( openRight ) {
-			ret &= meta.open.contains(Position.RIGHT.name());
-		}		
+			if(!meta.open.contains(Position.RIGHT.name())) {
+				return false;
+			}
+		}
 		
-		return ret && (openTop || openBottom || openLeft || openRight);
+		return (openTop || openBottom || openLeft || openRight);
+//		return ret && (openTop || openBottom || openLeft || openRight);
 	}
 	
 	public boolean isConnected(VirtualPathLevelBlock targ) {

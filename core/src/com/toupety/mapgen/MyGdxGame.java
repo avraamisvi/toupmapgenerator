@@ -1,5 +1,6 @@
 package com.toupety.mapgen;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -34,6 +35,12 @@ public class MyGdxGame extends ApplicationAdapter {
 		camera = CameraHolder.instance();
 //		camera.getOrtho().zoom = 100;
 //		camera.getOrtho().update();
+		
+		try {
+			Configuration.load();
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 		
 		this.executor = Executors.newSingleThreadExecutor();
 		

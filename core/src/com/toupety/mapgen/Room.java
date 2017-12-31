@@ -6,10 +6,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.toupety.mapgen.Configuration.Item;
+import com.toupety.mapgen.Configuration.Key;
+import com.toupety.mapgen.Configuration.Tag;
+import com.toupety.mapgen.RoomBlocks.RoomBlock;
 import com.toupety.mapgen.mold.Mold;
 
 public class Room {
@@ -30,21 +36,106 @@ public class Room {
 	private Set<Room> roomsBottom;
 	private Set<Room> roomsTop;
 	
+	private Key key;
+	private List<Tag> tags;
+	private List<Item> items;
+	RandomXS128 rand = new RandomXS128();
+	
+	private RoomLevelBlockElement[][] levelBlocks;
+	private List<RoomLevelBlockElement> levelBlocksList;
+	
 	public Room(Dimensions dim) {
+		rand.nextInt();rand.nextLong();
 		this.bounds = new Rectangle(dim.getX(), dim.getY(), dim.getW(), dim.getH());
 		
-//		int worldMultiplier = (Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE);//15
+		levelBlocks = new RoomLevelBlockElement[dim.getW()][dim.getH()];
+		levelBlocksList = new ArrayList<>();
 		
+		this.tags = new ArrayList<>();
+		this.items = new ArrayList<>();
+//		int worldMultiplier = (Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE);//15
 //		this.worldBounds = new Rectangle(dim.getX(), dim.getY(), dim.getW() * worldMultiplier, dim.getH() * worldMultiplier);
 		this.id = UUID.randomUUID().toString();
 		this.side = -1;
-		this.grid = new RoomBlocks(dim);
 		this.dim = dim;
 		
 		this.roomsLeft = new HashSet<>();
 		this.roomsRight = new HashSet<>();
 		this.roomsBottom = new HashSet<>();
-		this.roomsTop = new HashSet<>();		
+		this.roomsTop = new HashSet<>();
+		
+		this.grid = new RoomBlocks(this);
+		
+		for(int x = 0; x < dim.getW(); x++) {
+			for(int y = 0; y < dim.getH(); y++) {
+				this.levelBlocks[x][y] = new RoomLevelBlockElement(x, y);
+				levelBlocksList.add(this.levelBlocks[x][y]);
+				
+				configureDown(this.levelBlocks[x][y], x, y);
+				configureUp(this.levelBlocks[x][y], x, y);
+				configureLeft(this.levelBlocks[x][y], x, y);
+				configureRight(this.levelBlocks[x][y], x, y);
+				
+			}
+		}
+	}
+	
+	private void configureLeft(RoomLevelBlockElement el, int x, int y) {
+		x = x - 1;
+		if(x >= 0 && this.levelBlocks[x][y] != null) {
+			el.left = this.levelBlocks[x][y];
+			this.levelBlocks[x][y].right = el;
+		}
+	}
+	
+	private void configureRight(RoomLevelBlockElement el, int x, int y) {
+		x = x + 1;
+		if(x < this.dim.getW() && this.levelBlocks[x][y] != null) {
+			el.right = this.levelBlocks[x][y];
+			this.levelBlocks[x][y].left = el;
+		}
+	}	
+	
+	private void configureUp(RoomLevelBlockElement el, int x, int y) {
+		y = y - 1;
+		if(y >= 0 && this.levelBlocks[x][y] != null) {
+			el.top = this.levelBlocks[x][y];
+			this.levelBlocks[x][y].bottom = el;
+		}
+	}	
+	
+	private void configureDown(RoomLevelBlockElement el, int x, int y) {
+		y = y + 1;
+		if(y < this.dim.getH() && this.levelBlocks[x][y] != null) {
+			el.bottom = this.levelBlocks[x][y];
+			this.levelBlocks[x][y].top = el;
+		}
+	}	
+	
+	public boolean containsAdjacentRoomIndex(int id) {
+		
+		long ret = this.roomsLeft.stream().filter(r -> r.getIndex() == id).count();
+		ret = ret + this.roomsRight.stream().filter(r -> r.getIndex() == id).count();
+		ret = ret + this.roomsBottom.stream().filter(r -> r.getIndex() == id).count();
+		ret = ret + this.roomsTop.stream().filter(r -> r.getIndex() == id).count();
+		
+		return ret > 0;
+	}
+	
+	public List<Item> getItems() {
+		return items;
+	}
+	
+	public List<Tag> getTags() {
+		return tags;
+	}
+	
+	public void setKey(Key key) {
+		this.key = key;
+	}
+	
+	public Key getKey() {
+		return key;
 	}
 	
 	public void addLeft(Room room) {
@@ -153,23 +244,49 @@ public class Room {
 		this.index = index;
 	}
 	
-//	public void apply(Mold mold) {
-//		this.grid.put(mold);
-//	}
-	
 	public RoomBlocks getGrid() {//TODO melhorar
 		return grid;
 	}
+	
+	public RoomLevelBlockElement getLevelBlock(int x, int y) {
+		if(x < this.levelBlocks.length && y < this.levelBlocks[0].length)
+			return this.levelBlocks[x][y];
+		return null;
+	}
+	
+	public class RoomLevelBlockElement {
+		
+		public String item;
+		public boolean door;
+		public int x, y;
+		
+		RoomLevelBlockElement left, top, bottom, right;
 
-//	//TODO World Points sao o tamanho da room vezes 15 ou seja, a quantidade de quadros por bloco que a room ocupa,
-//	//pq no nivel da room cada quadro corresponde a 960
-//	/**
-//	 * Verifies if it contains the wx, and wy, but considering it as world points, for example
-//	 * @param wx
-//	 * @param wy
-//	 */
-//	public boolean containsWorldPoint(int wx, int wy) {
-//		// TODO Auto-generated method stub
-//		return this.worldBounds.contains(wx, wy);
-//	}
+		public RoomLevelBlockElement(int x, int y) {
+			super();
+			this.x = x;
+			this.y = y;
+		}
+		
+	}
+	
+	public List<RoomLevelBlockElement> getLevelBlocksList() {
+		return levelBlocksList;
+	}
+	
+	public void processItems() {
+		
+		List<RoomLevelBlockElement> list = this.levelBlocksList.stream().filter(ll -> {
+			return !ll.door;
+		}).collect(Collectors.toList());
+		
+		items.forEach(it -> {
+//			list.get(rand.nextInt(list.size())).item = it.id;
+			list.forEach(ll -> {
+				if(rand.nextDouble() < it.chance) {
+					ll.item = it.id;
+				}
+			});
+		});
+	}
 }

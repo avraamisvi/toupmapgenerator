@@ -1,0 +1,12 @@
+{
+	"name":"both_double_jump",
+	"elements": ["ground", "platforms"],
+	"tags": ["DOUBLE_JUMP"],
+	"maxWidth": 15,
+	"maxHeigth": 15,
+	"platform": {
+		"hight": 2
+	}, 
+	"open": ["LEFT", "RIGHT", "TOP", "BOTTOM"],
+	"collision": []
+}

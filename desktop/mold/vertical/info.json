@@ -1,0 +1,8 @@
+{
+	"name":"vertical",
+  "elements": ["ground", "platforms"],
+	"maxWidth": 15,
+	"maxHeigth": 15,
+	"open": ["TOP", "BOTTOM"],
+	"collision": []
+}

@@ -2,7 +2,7 @@ package com.toupety.mapgen;
 
 public interface GeneratorConstants {
 
-	int DOOR_START_POSITION = 6;
+	int DOOR_START_POSITION = 5;
 	
 	int MAX_ROOM_PATH_DIMENSIONS = 10; 
 	int MIN_ROOM_PATH_DIMENSIONS = 10;
@@ -25,8 +25,8 @@ public interface GeneratorConstants {
 	int MAX_ROOM_WIDTH  = 10;
 	int MAX_ROOM_HEIGHT = 10;
 	
-	int MIN_ROOM_WIDTH  = 2;
-	int MIN_ROOM_HEIGHT = 2;	
+	int MIN_ROOM_WIDTH  = 5;
+	int MIN_ROOM_HEIGHT = 5;	
 	
 	int MAX_ROOMS = 5;//
 	

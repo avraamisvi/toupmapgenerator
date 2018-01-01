@@ -1,8 +1,8 @@
 {
 	"name":"both",
   "elements": ["ground", "platforms"],
-	"maxWidth": 15,
-	"maxHeigth": 15,
+	"maxWidth": 30,
+	"maxHeigth": 30,
 	"platform": {
 		"hight": 2
 	}, 

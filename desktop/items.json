@@ -1,0 +1,16 @@
+{
+  "items": {
+    "big-verdanio":{
+      "name": "big-verdanio",
+      "shape": "box",
+      "width": 92,
+      "height": 114
+    },
+    "small-verdanio":{
+      "name": "small-verdanio",
+      "shape": "box",
+      "width": 64,
+      "height": 83
+    }
+  }
+}

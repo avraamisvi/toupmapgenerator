@@ -28,7 +28,7 @@ public class DoorGenerator {
 				
 				if(blocks.size() >= GeneratorConstants.MIN_DOOR_BLOCK_LENGTH) {
 //					int start = rand.nextInt((blocks.size() - 1) - GeneratorConstants.DOOR_BLOCKS_SIZE);//ints(1, blocks.size() - Constants.DOOR_LENGTH);
-					int start = GeneratorConstants.DOOR_START_POSITION;
+					int start = Configuration.getStartPosition();
 					blocks.sort((b1, b2) -> b1.source.y - b2.source.y);
 					
 					//FIXME esse codigo abaixo gera bugs horriveis SOLID ZERO!
@@ -60,7 +60,7 @@ public class DoorGenerator {
 				
 				if(blocks.size() >= GeneratorConstants.MIN_DOOR_BLOCK_LENGTH) {
 					//int start = rand.nextInt((blocks.size() - 1) - GeneratorConstants.DOOR_BLOCKS_SIZE);//ints(1, blocks.size() - Constants.DOOR_LENGTH);
-					int start = GeneratorConstants.DOOR_START_POSITION;
+					int start = Configuration.getStartPosition();
 					blocks.sort((b1, b2) -> b1.source.y - b2.source.y);
 					
 					//FIXME esse codigo abaixo gera bugs horriveis SOLID ZERO!
@@ -92,7 +92,7 @@ public class DoorGenerator {
 				
 				if(blocks.size() >= GeneratorConstants.MIN_DOOR_BLOCK_LENGTH) {
 //					int start = rand.nextInt((blocks.size() - 1) - GeneratorConstants.DOOR_BLOCKS_SIZE);
-					int start = GeneratorConstants.DOOR_START_POSITION;
+					int start = Configuration.getStartPosition();
 					blocks.sort((b1, b2) -> b1.source.x - b2.source.x);
 					
 					//FIXME esse codigo abaixo gera bugs horriveis SOLID ZERO!
@@ -124,7 +124,7 @@ public class DoorGenerator {
 				
 				if(blocks.size() >= GeneratorConstants.MIN_DOOR_BLOCK_LENGTH) {
 //					int start = rand.nextInt((blocks.size() - 1) - GeneratorConstants.DOOR_BLOCKS_SIZE);
-					int start = GeneratorConstants.DOOR_START_POSITION;
+					int start = Configuration.getStartPosition();
 					blocks.sort((b1, b2) -> b1.source.x - b2.source.x);
 					
 					//FIXME esse codigo abaixo gera bugs horriveis SOLID ZERO!

@@ -1,0 +1,19 @@
+{
+  "brushes": {
+    "ground": {
+      "name": "ground",
+      "tile": "x",
+      "color": [1,1,1,1]
+    },
+    "empty": {
+      "name": "space",
+      "tile": ".",
+      "color": [0,0,0,1]
+    },
+    "limo": {
+      "name": "limo",
+      "tile": "s",
+      "color": [0,1,0,1]
+    }    
+  }
+}

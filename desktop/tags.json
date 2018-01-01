@@ -1,9 +1,7 @@
 {
   "tags": {
     "DOUBLE_JUMP": {
-      "room": 10,
-      "id": "DOUBLE_JUMP",
-      "limit": 3
+      "id": "DOUBLE_JUMP"
     }
   }
 }

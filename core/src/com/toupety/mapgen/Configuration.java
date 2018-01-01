@@ -9,7 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Json;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toupety.mapgen.mold.MoldMeta;
 
 public class Configuration {
@@ -24,6 +29,8 @@ public class Configuration {
 	public static Items items;
 	public static List<ItemDefinition> itemsList;
 	
+	public static Areas areas;
+	public static Elements elements;
 	
 	public static int getLevelGridElementContentSize() {
 		return (GeneratorConstants.LEVEL_BLOCK_HEIGHT / GeneratorConstants.ROOM_BLOCK_SIZE);
@@ -55,6 +62,12 @@ public class Configuration {
 			itemsList.add(b);
 		});
 		
+		
+		areas = json.fromJson(Areas.class, new FileReader(Paths.get("./areas.json").toFile()));
+		areas.process();
+		
+		elements = json.fromJson(Elements.class, new FileReader(Paths.get("./elements.json").toFile()));
+		elements.process();
 	}
 	
 	public static class Data {
@@ -131,9 +144,224 @@ public class Configuration {
 		public String shape;
 		public int width;
 		public int height;
+		public float[] color;
+		
+		public int x;
+		public int y;
+		
+		@JsonIgnore
+		private Rectangle bounds;
+		
+		public void setPosition(int x, int y) {
+			this.x = x;
+			this.y = y;
+			this.bounds = new Rectangle(x, y, width, height);
+		}
+		
+		public boolean contains(int x, int y) {
+			
+			if(bounds == null) {
+				this.bounds = new Rectangle(x, y, width, height);
+			}			
+			
+			return bounds.contains(x, y);
+		}
+		
+		public void draw(ShapeRenderer renderer) {
+			draw(renderer, this.x, this.y);
+		}
+		
+		public void draw(ShapeRenderer renderer, int x, int y) {
+			
+			renderer.begin(ShapeType.Filled);
+			renderer.setColor(color[0], color[1], color[2], 1);
+			renderer.rect(x, y, width, height);
+			renderer.end();
+			
+			renderer.begin(ShapeType.Line);
+			renderer.setColor(Color.RED);
+			renderer.rect(x, y, width, height);
+			renderer.end();				
+		}		
+		
+		public ItemDefinition copy() {
+			ItemDefinition ret = new ItemDefinition();
+			ret.index = this.index;
+			ret.name = this.name;
+			ret.shape = this.shape;
+			ret.width = this.width;
+			ret.height = this.height;
+			ret.color = this.color;
+			ret.x = this.x;
+			ret.y = this.y;
+			
+			return ret;
+		}
 	}
 	
 	public static class Items {
-		Map<String, ItemDefinition> items;
+		HashMap<String, ItemDefinition> items;
 	}
+	
+	public static class AreaDefinition {
+		public int index = 0;
+		public String name;
+		public int width = 5;
+		public int height = 5;
+		public float[] color;
+		
+		public int x;
+		public int y;
+		
+		@JsonIgnore
+		private Rectangle bounds;
+		
+		public void setPosition(int x, int y) {
+			this.x = x;
+			this.y = y;
+			this.bounds = new Rectangle(x, y, width, height);
+		}
+		
+		public void setSize(int nx, int ny) {
+			
+			int w = nx - x;
+			int h = ny - y;
+			
+			if(w < 0)
+				w = 5;
+			
+			if(h < 0)
+				h = 5;
+			
+			this.bounds.height = h;
+			this.bounds.width = w;
+			
+			width = w;
+			height = h;
+		}		
+		
+		public boolean contains(int x, int y) {
+			
+			if(bounds == null) {
+				this.bounds = new Rectangle(x, y, width, height);
+			}
+			
+			return bounds.contains(x, y);
+		}
+		
+		public void draw(ShapeRenderer renderer) {
+			draw(renderer, this.x, this.y);
+		}
+		
+		public void draw(ShapeRenderer renderer, int x, int y) {
+			
+			renderer.begin(ShapeType.Filled);
+			renderer.setColor(color[0], color[1], color[2], 1);
+			renderer.rect(x, y, width, height);
+			renderer.end();
+			
+			renderer.begin(ShapeType.Line);
+			renderer.setColor(Color.WHITE);
+			renderer.rect(x, y, width, height);
+			renderer.end();				
+		}		
+		
+		public AreaDefinition copy() {
+			AreaDefinition ret = new AreaDefinition();
+			ret.index = this.index;
+			ret.name = this.name;
+			ret.width = this.width;
+			ret.height = this.height;
+			ret.color = this.color;
+			ret.x = this.x;
+			ret.y = this.y;
+			
+			return ret;
+		}
+	}
+	
+	public static class Areas {
+		public HashMap<String, AreaDefinition> areas;
+		public List<AreaDefinition> list = new ArrayList<>();
+		
+		public void process() {
+			areas.values().forEach(b -> {
+				b.index = list.size();
+				list.add(b);
+			});
+		}
+	}	
+	
+	public static class ElementDefinition {
+		public int index = 0;
+		public String name;
+		public String shape;
+		public int width;
+		public int height;
+		public float[] color;
+		
+		public int x;
+		public int y;
+		
+		@JsonIgnore
+		private Rectangle bounds;
+		
+		public void setPosition(int x, int y) {
+			this.x = x;
+			this.y = y;
+			this.bounds = new Rectangle(x, y, width, height);
+		}
+		
+		public boolean contains(int x, int y) {
+			
+			if(bounds == null) {
+				this.bounds = new Rectangle(x, y, width, height);
+			}			
+			
+			return bounds.contains(x, y);
+		}
+		
+		public void draw(ShapeRenderer renderer) {
+			draw(renderer, this.x, this.y);
+		}
+		
+		public void draw(ShapeRenderer renderer, int x, int y) {
+			
+			renderer.begin(ShapeType.Filled);
+			renderer.setColor(color[0], color[1], color[2], 1);
+			renderer.rect(x, y, width, height);
+			renderer.end();
+			
+			renderer.begin(ShapeType.Line);
+			renderer.setColor(Color.RED);
+			renderer.rect(x, y, width, height);
+			renderer.end();				
+		}		
+		
+		public ElementDefinition copy() {
+			ElementDefinition ret = new ElementDefinition();
+			ret.index = this.index;
+			ret.name = this.name;
+			ret.shape = this.shape;
+			ret.width = this.width;
+			ret.height = this.height;
+			ret.color = this.color;
+			ret.x = this.x;
+			ret.y = this.y;
+			
+			return ret;
+		}
+	}
+	
+	public static class Elements {
+		public HashMap<String, ElementDefinition> elements;
+		public List<ElementDefinition> list = new ArrayList<>();
+		
+		public void process() {
+			elements.values().forEach(b -> {
+				b.index = list.size();
+				list.add(b);
+			});
+		}
+	}	
 }

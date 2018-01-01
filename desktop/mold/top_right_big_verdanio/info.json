@@ -1,0 +1,27 @@
+{
+  "name" : "top_right_big_verdanio",
+  "elements" : [ ],
+  "items" : [ {
+    "index" : 0,
+    "name" : "big-verdanio",
+    "shape" : "box",
+    "width" : 92,
+    "height" : 114,
+    "color" : [ 0.0, 0.5, 0.0 ],
+    "x" : 1378,
+    "y" : 664
+  } ],
+  "areas" : [ {
+    "index" : 1,
+    "name" : "oil",
+    "width" : 384,
+    "height" : 160,
+    "color" : [ 0.3, 0.3, 0.3, 0.7 ],
+    "x" : 1282,
+    "y" : 1633
+  } ],
+  "tags" : null,
+  "maxWidth" : 30,
+  "maxHeigth" : 30,
+  "open" : [ "TOP", "RIGHT" ]
+}

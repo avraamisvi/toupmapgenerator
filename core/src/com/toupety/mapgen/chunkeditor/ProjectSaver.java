@@ -15,6 +15,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.toupety.mapgen.Configuration;
+import com.toupety.mapgen.Configuration.AreaDefinition;
+import com.toupety.mapgen.Configuration.ElementDefinition;
+import com.toupety.mapgen.Configuration.ItemDefinition;
 import com.toupety.mapgen.chunkeditor.Chunk.Block;
 import com.toupety.mapgen.mold.MoldBlock;
 
@@ -114,9 +117,11 @@ public class ProjectSaver {
 		@JsonProperty
 		String name;
 		@JsonProperty
-		List<String> elements;
+		List<ElementDefinition> elements;
 		@JsonProperty
-		List<String> items;
+		List<ItemDefinition> items;
+		@JsonProperty
+		List<AreaDefinition> areas;		
 		@JsonProperty
 		List<String> tags;
 		@JsonProperty

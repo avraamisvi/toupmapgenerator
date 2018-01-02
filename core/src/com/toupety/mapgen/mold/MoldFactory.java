@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -16,9 +17,11 @@ import com.badlogic.gdx.utils.Json;
 public class MoldFactory {
 
 	private static MoldFactory instance;
-	List<Mold> molds = new ArrayList<>();
+//	List<Mold> molds = new ArrayList<>();
 	Mold empty = null;
 	RandomXS128 rand = new RandomXS128();
+	
+	HashMap<String, Molds> moldsMap = new HashMap<>(); 
 	
 	public static MoldFactory get() {
 		
@@ -46,11 +49,19 @@ public class MoldFactory {
 					MoldMeta meta = json.fromJson(MoldMeta.class, new FileReader(path.resolve("info.json").toFile()));
 					
 					Mold mold = new Mold(meta, lines);
-					molds.add(mold);
+					String opens = meta.open.stream().sorted().collect(Collectors.joining("_"));
+					
+					Molds localMolds = null;
+					if(!moldsMap.containsKey(opens)) {
+						localMolds = new Molds();
+						moldsMap.put(opens, localMolds);
+					}
+					localMolds.molds.add(mold);
 					
 					if(meta.name.equals("empty")) {
 						empty = mold;
 					}
+					
 				} catch(Exception ex) {
 					throw new RuntimeException(ex);
 				}
@@ -62,26 +73,45 @@ public class MoldFactory {
 		}
 	}
 	
-	public Mold getAny() {
-		return this.molds.get(rand.nextInt(this.molds.size()));
-	}
+//	public Mold getAny() {
+//		return this.molds.get(rand.nextInt(this.molds.size()));
+//	}
 	
-	public Mold getAny(Predicate<Mold> filter) {
-		
-		mudar logica do get any para ao inves de filtrar molds diretamente, filtrar grupos de molds por aberto (openleft etc)
-		cada mold vai ter o seu percentual de chance de ser escolhido, posso criar isso de duas formas, o percentual pode ser aleatorio
-		ou predefinido no arquivo
-		
-		List<Mold> filtered = this.molds.stream().filter(filter).collect(Collectors.toList());
-		
-		if(filtered.size() > 0)
-			return filtered.get(rand.nextInt(filtered.size()));
-		else 
-			return null;
-		
-	}	
+//	public Mold getAny(Predicate<Mold> filter) {
+//		
+////		mudar logica do get any para ao inves de filtrar molds diretamente, filtrar grupos de molds por aberto (openleft etc) TODO
+////		cada mold vai ter o seu percentual de chance de ser escolhido, posso criar isso de duas formas, o percentual pode ser aleatorio
+////		ou predefinido no arquivo
+//		
+//		List<Mold> filtered = this.molds.stream().filter(filter).collect(Collectors.toList());
+//		
+//		if(filtered.size() > 0)
+//			return filtered.get(rand.nextInt(filtered.size()));
+//		else 
+//			return null;
+//		
+//	}
+	
+	public Molds getMolds(String opens) {
+		return moldsMap.get(opens);
+	}
 	
 	public Mold getEmpty() {
 		return empty;
+	}
+	
+	public class Molds {
+		List<Mold> molds = new ArrayList<>();
+		
+		public Mold getAny(Predicate<Mold> filter) {
+			
+			List<Mold> filtered = this.molds.stream().filter(filter).collect(Collectors.toList());
+			
+			if(filtered.size() > 0)
+				return filtered.get(rand.nextInt(filtered.size()));
+			else 
+				return null;
+			
+		}
 	}
 }

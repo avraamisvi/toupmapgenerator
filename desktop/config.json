@@ -6,6 +6,9 @@
     "room": 30,
     "limit": -1
   },
+  "palette": {
+
+  },
   "tags":[
     {
       "room": 10,

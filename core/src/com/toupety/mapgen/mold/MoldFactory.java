@@ -17,6 +17,7 @@ public class MoldFactory {
 
 	private static MoldFactory instance;
 	List<Mold> molds = new ArrayList<>();
+	Mold empty = null;
 	RandomXS128 rand = new RandomXS128();
 	
 	public static MoldFactory get() {
@@ -44,7 +45,12 @@ public class MoldFactory {
 					json.setIgnoreUnknownFields(true);
 					MoldMeta meta = json.fromJson(MoldMeta.class, new FileReader(path.resolve("info.json").toFile()));
 					
-					molds.add(new Mold(meta, lines));
+					Mold mold = new Mold(meta, lines);
+					molds.add(mold);
+					
+					if(meta.name.equals("empty")) {
+						empty = mold;
+					}
 				} catch(Exception ex) {
 					throw new RuntimeException(ex);
 				}
@@ -70,4 +76,8 @@ public class MoldFactory {
 			return null;
 		
 	}	
+	
+	public Mold getEmpty() {
+		return empty;
+	}
 }

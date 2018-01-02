@@ -274,6 +274,9 @@ public class Room {
 		return levelBlocksList;
 	}
 	
+	/**
+	 * Processa todos os items colocando cada um em um levelblock
+	 */
 	public void processItems() {
 		
 		List<RoomLevelBlockElement> list = this.levelBlocksList.stream().filter(ll -> {
@@ -281,7 +284,6 @@ public class Room {
 		}).collect(Collectors.toList());
 		
 		items.forEach(it -> {
-//			list.get(rand.nextInt(list.size())).item = it.id;
 			list.forEach(ll -> {
 				if(rand.nextDouble() < it.chance) {
 					ll.item = it.id;

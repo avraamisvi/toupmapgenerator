@@ -1,5 +1,5 @@
 {
-  "name" : "top_right_big_verdanio",
+  "name" : "bottom_left_big_verdanio",
   "elements" : [ ],
   "items" : [ {
     "index" : 0,
@@ -20,8 +20,8 @@
     "x" : 1282,
     "y" : 1633
   } ],
-  "tags" : [],
+  "tags" : [ ],
   "maxWidth" : 30,
   "maxHeigth" : 30,
-  "open" : [ "TOP", "RIGHT" ]
+  "open" : [ "BOTTOM", "LEFT" ]
 }

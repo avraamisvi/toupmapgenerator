@@ -1,10 +1,10 @@
 {
-  "name" : "both",
+  "name" : "bottom_left_right",
   "elements" : [ ],
   "items" : [ ],
   "areas" : [ ],
   "tags" : null,
   "maxWidth" : 30,
   "maxHeigth" : 30,
-  "open" : [ "TOP", "BOTTOM", "LEFT", "RIGHT" ]
+  "open" : [ "BOTTOM", "LEFT", "RIGHT" ]
 }

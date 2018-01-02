@@ -89,6 +89,7 @@ public class LevelGenerator {
 			if(it.isAvaiable()) {
 				if(it.from <= room.getIndex()) {
 					if(rand.nextInt() < it.chance) {
+						System.out.println("ITEM AP: " + it.id);
 						room.getItems().add(it);
 					}
 				}

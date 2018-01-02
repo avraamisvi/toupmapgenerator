@@ -1,12 +1,19 @@
 {
-	"name":"bothsmallverd",
-	"elements": ["ground", "platforms"],
-	"items": ["small-verdanio"],
-	"maxWidth": 15,
-	"maxHeigth": 15,
-	"platform": {
-		"hight": 2
-	}, 
-	"open": ["LEFT", "RIGHT", "TOP", "BOTTOM"],
-	"collision": []
+  "name" : "both_small_verdanio",
+  "elements" : [ ],
+  "items" : [ {
+    "index" : 0,
+    "name" : "small-verdanio",
+    "shape" : "box",
+    "width" : 92,
+    "height" : 114,
+    "color" : [ 0.0, 0.5, 0.0 ],
+    "x" : 1378,
+    "y" : 664
+  } ],
+  "areas" : [ ],
+  "tags" : null,
+  "maxWidth" : 30,
+  "maxHeigth" : 30,
+  "open" : [ "TOP", "BOTTOM", "LEFT", "RIGHT" ]
 }

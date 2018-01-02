@@ -16,11 +16,25 @@ public class VirtualPathLevelBlock {
 	public boolean openBottom;
 	public int x, y;
 	public List<VirtualPathLevelBlock> conected = new ArrayList<>();
+	private String item;
 
+	public VirtualPathLevelBlock right;
+	public VirtualPathLevelBlock left;
+	public VirtualPathLevelBlock top;
+	public VirtualPathLevelBlock bottom;
+	
 	public VirtualPathLevelBlock(int x, int y) {
 		super();
 		this.x = x;
 		this.y = y;
+	}
+	
+	public void setItem(String item) {
+		this.item = item;
+	}
+	
+	public String getItem() {
+		return item;
 	}
 	
 	public void setDoor(RoomDoor door) {
@@ -43,34 +57,47 @@ public class VirtualPathLevelBlock {
 		this.door = door;
 	}
 	
+	public boolean checkTags(MoldMeta meta) {
+		return true;
+	}
+	
 	public boolean isAcceptable(MoldMeta meta) {
 		
-		if( openTop ) {
-			if(!meta.open.contains(Position.TOP.name())) {
-				return false;
-			}
+		if(this.item != null && meta.items.stream().filter(it -> it.name.equals(this.item)).count() == 0)
+			return false;
+		
+		if(this.item == null && meta.items.size() > 0)
+			return false;
+		
+		if(!checkTags(meta))
+			return false;
+		
+		boolean top = meta.open.contains(Position.TOP.name());
+		boolean left = meta.open.contains(Position.LEFT.name());
+		boolean right = meta.open.contains(Position.RIGHT.name());
+		boolean bottom = meta.open.contains(Position.BOTTOM.name());
+		
+		if( (openTop && !top) || (!openTop && top) ) {
+			return false;
 		}
 		
-		if( openBottom ) {
-			if(!meta.open.contains(Position.BOTTOM.name())) {
-				return false;
-			}
-		}
-
-		if( openLeft ) {
-			if(!meta.open.contains(Position.LEFT.name())) {
-				return false;
-			}
+		if( (openBottom && !bottom) || (!openBottom && bottom) ) {
+			return false;
 		}
 		
-		if( openRight ) {
-			if(!meta.open.contains(Position.RIGHT.name())) {
-				return false;
-			}
-		}
+		if( (openLeft && !left) || (!openLeft && left) ) {
+			return false;
+		}		
+		
+		if( (openRight && !right) || (!openRight && right) ) {
+			return false;
+		}				
 		
 		return (openTop || openBottom || openLeft || openRight);
-//		return ret && (openTop || openBottom || openLeft || openRight);
+	}
+	
+	public boolean isPath() {
+		return openTop || openBottom || openLeft || openRight;
 	}
 	
 	public boolean isConnected(VirtualPathLevelBlock targ) {

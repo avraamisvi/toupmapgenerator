@@ -88,29 +88,46 @@ public class RoomBlocks {
 		return Optional.empty();
 	}
 	
+	/**
+	 * Aplica os molds aos caminhos.
+	 */
 	public void createPath() {
 //		this.createPathFromTopDoor();
 //		this.createPathFromLeftDoor();
 //		this.createPathFromRightDoor();
 //		this.createPathFromBottomDoor();
 		
+		System.out.println("criando os paths");
+		
 		VirtualPathGenerator vph = new VirtualPathGenerator(roomDim.getW(), roomDim.getH());
 		vph.process(this);
 		System.out.println("teste");
 
 		vph.forEach(path -> {
-			Mold mod = MoldFactory.get().getAny(mo -> {
-				return path.isAcceptable(mo.getMeta());
-			});
 			
-			if(mod != null) {
-				int lx = path.x * Configuration.getLevelGridElementContentSize();
-				int ly = path.y * Configuration.getLevelGridElementContentSize();
+			if(path.isPath()) {
+				Mold mod = MoldFactory.get().getAny(mo -> {
+					return path.isAcceptable(mo.getMeta());
+				});
 				
-				RoomLocalPath newPath = new RoomLocalPath(Direction.DOWN, mod);
-				newPath.addFrom(this.grid[lx][ly]);
+				if(mod == null) {
+					mod = MoldFactory.get().getEmpty();
+					System.out.println("################## not found ###################");
+					System.out.println("top:" + path.openTop);
+					System.out.println("bottom:" + path.openBottom);
+					System.out.println("left:" + path.openLeft);
+					System.out.println("right:" + path.openRight);
+					System.out.println("has ITEM: " + path.getItem());					
+				}
+				
+				if(mod != null) {
+					int lx = path.x * Configuration.getLevelGridElementContentSize();
+					int ly = path.y * Configuration.getLevelGridElementContentSize();
+					
+					RoomLocalPath newPath = new RoomLocalPath(Direction.DOWN, mod);
+					newPath.addFrom(this.grid[lx][ly]);
+				}
 			}
-			
 		});
 		
 //		Mold mod = MoldFactory.get().getAny(m -> {

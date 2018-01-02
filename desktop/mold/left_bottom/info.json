@@ -1,8 +1,0 @@
-{
-	"name":"leftbottom",
-  "elements": ["ground", "platforms"],
-	"maxWidth": 15,
-	"maxHeigth": 15,
-	"open": ["LEFT", "BOTTOM"],
-	"collision": []
-}

@@ -68,6 +68,8 @@ public class MoldFactory {
 	
 	public Mold getAny(Predicate<Mold> filter) {
 		
+		mudar logica do get any para ao inves de filtrar molds diretamente, filtrar grupos de molds por aberto (openleft etc)
+		
 		List<Mold> filtered = this.molds.stream().filter(filter).collect(Collectors.toList());
 		
 		if(filtered.size() > 0)

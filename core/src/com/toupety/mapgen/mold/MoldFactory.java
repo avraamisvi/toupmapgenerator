@@ -69,6 +69,8 @@ public class MoldFactory {
 	public Mold getAny(Predicate<Mold> filter) {
 		
 		mudar logica do get any para ao inves de filtrar molds diretamente, filtrar grupos de molds por aberto (openleft etc)
+		cada mold vai ter o seu percentual de chance de ser escolhido, posso criar isso de duas formas, o percentual pode ser aleatorio
+		ou predefinido no arquivo
 		
 		List<Mold> filtered = this.molds.stream().filter(filter).collect(Collectors.toList());
 		

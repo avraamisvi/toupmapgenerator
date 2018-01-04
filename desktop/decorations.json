@@ -1,0 +1,18 @@
+{
+  "elements": {
+    "cactus":{
+      "name": "cactus",
+      "width": 64,
+      "height": 128,
+      "color": [0, 1, 0],
+      "place": ["OVER_GROUND"]
+    },
+    "some":{
+      "name": "some",
+      "width": 92,
+      "height": 92,
+      "color": [0, 0.5, 0.6],
+      "place": ["WALL", "UNDER_ROOF"]
+    }    
+  }
+}

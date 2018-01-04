@@ -90,10 +90,6 @@ public class RoomBlocks {
 		return Optional.empty();
 	}
 	
-//	public void setBlockMetaInfoTile(int x, int y, String tile) {
-//		this.grid[x][y].metaInfo.setType(tile);
-//	}
-	
 	/**
 	 * Aplica os molds aos caminhos.
 	 */
@@ -149,11 +145,11 @@ public class RoomBlocks {
 		//TODO spread
 	}
 	
-	private boolean needOpen(List<String> opens) {//TODO refazer usando a logica do virtual path
-		return this.doors.stream().filter(door -> {
-			return opens.contains(door.getPosition().name());			
-		}).count() > 0;
-	}
+//	private boolean needOpen(List<String> opens) {//TODO refazer usando a logica do virtual path
+//		return this.doors.stream().filter(door -> {
+//			return opens.contains(door.getPosition().name());			
+//		}).count() > 0;
+//	}
 	
 //	private int countLevelBlocksLeft(int x) {
 //		int ret = 0;
@@ -268,6 +264,27 @@ public class RoomBlocks {
 //			this.rightPaths.add(newPath);
 //		});
 //	}	
+	
+	public void detectBlocksPlaces() {
+		for(int x = 0; x < this.grid.length; x++) {
+			for(int y = 0; y < this.grid[x].length; y++) {
+				
+				if(this.grid[x][y].isEmpty()) {
+					if(this.grid[x][y].down != null && !this.grid[x][y].down.isEmpty()) {
+						this.grid[x][y].setPlace(Place.OVER_GROUND);
+						this.grid[x][y].down.setPlace(Place.GROUND);
+					} else if(this.grid[x][y].up != null && !this.grid[x][y].up.isEmpty()) {
+						this.grid[x][y].setPlace(Place.UNDER_ROOF);
+						this.grid[x][y].up.setPlace(Place.ROOF);
+					}
+				} else {
+					if(this.grid[x][y].getPlace() == Place.NONE) {
+						this.grid[x][y].setPlace(Place.WALL);
+					}
+				}
+			}			
+		}		
+	}
 	
 	/**
 	 * Retorna o primeiro roomblock do levelblock onde se encontra o ponto x, y
@@ -468,7 +485,7 @@ public class RoomBlocks {
 		RoomDoor door;
 		List<RoomWall> walls = new ArrayList<>();
 		BlockMetaInfo metaInfo = new BlockMetaInfo("x");//TODO metainfo
-		
+		private Place place = Place.NONE;
 		private MoldBlock owner;
 		
 		public RoomBlock(int x, int y) {
@@ -551,6 +568,18 @@ public class RoomBlocks {
 		
 		public boolean isOwnered(RoomWall wall) {
 			return this.walls.stream().filter(w -> w.pos == wall.pos).findFirst().isPresent();
+		}
+		
+		public Place getPlace() {
+			return place;
+		}
+		
+		public void setPlace(Place place) {
+			this.place = place;
+		}
+		
+		public boolean isEmpty() {
+			return metaInfo.getType().equals(BlockMetaInfo.EMPTY.getType());
 		}
 	}
 	

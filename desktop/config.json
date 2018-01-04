@@ -1,6 +1,6 @@
 {
   "name":"deserto",
-  "voronoi": 0.3,
+  "voronoi": 0.4,
   "voronoiSize": 5,
   "rooms": 3,
   "key": {
@@ -12,7 +12,7 @@
     "base": "rock",
     "brushes": [
       {
-        "chance": 0.20,
+        "chance": 0.30,
         "name": "rock2"
       },
       {
@@ -21,6 +21,19 @@
       }      
     ]
   },
+  "decorations": {
+    "chance": 0.8,
+    "elements": [
+      {
+        "chance": 0.30,
+        "name": "cactus"
+      },
+      {
+        "chance": 0.10,
+        "name": "some"
+      }      
+    ]
+  },  
   "tags":[
     {
       "room": 10,

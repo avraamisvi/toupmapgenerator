@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -18,6 +19,7 @@ import com.toupety.mapgen.Configuration.Key;
 import com.toupety.mapgen.Configuration.Tag;
 import com.toupety.mapgen.RoomBlocks.RoomBlock;
 import com.toupety.mapgen.mold.Mold;
+import com.toupety.mapgen.painter.Decoration;
 
 public class Room {
 	
@@ -45,6 +47,8 @@ public class Room {
 	private RoomLevelBlockElement[][] levelBlocks;
 	private List<RoomLevelBlockElement> levelBlocksList;
 	private String tagString;
+	private List<Decoration> decorations;
+	
 	
 	public Room(Dimensions dim) {
 		rand.nextInt();rand.nextLong();
@@ -52,6 +56,7 @@ public class Room {
 		
 		levelBlocks = new RoomLevelBlockElement[dim.getW()][dim.getH()];
 		levelBlocksList = new ArrayList<>();
+		decorations = new ArrayList<>();
 		
 		this.tags = new HashSet<>();
 		this.items = new ArrayList<>();
@@ -83,7 +88,29 @@ public class Room {
 	}
 	
 	public void draw(ShapeRenderer renderer) {
-		//TODO draw todos os elementos e objetos
+		
+		Dimensions dim = grid.getDimensions().toRoomWorldDimmensions();
+//		decorations.forEach(dec -> {
+//			
+//		});
+		int x = 0;
+		int y = 0;
+		for(Decoration dec : decorations) {
+			x =  (GeneratorConstants.ROOM_BLOCK_SIZE * dec.x) + GeneratorConstants.ROOM_BLOCK_SIZE;
+			x = (dim.getW() - x) + dim.getX();
+			int pseudWorldRoomY = grid.getDimensions().getY() * Configuration.getLevelGridElementContentSize();
+			y = (dec.y + pseudWorldRoomY) * (GeneratorConstants.ROOM_BLOCK_SIZE);
+			
+			renderer.begin(ShapeType.Filled);
+			renderer.setColor(dec.color[0], dec.color[1], dec.color[2], 1);
+			renderer.rect(x, y, dec.width, dec.height);
+			renderer.end();			
+		}
+		
+	}
+	
+	public List<Decoration> getDecorations() {
+		return decorations;
 	}
 	
 	private void configureLeft(RoomLevelBlockElement el, int x, int y) {

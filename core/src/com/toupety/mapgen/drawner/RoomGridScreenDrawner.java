@@ -56,7 +56,6 @@ public class RoomGridScreenDrawner implements ElementDrawner<RoomBlocks> {
 			int x =  (GeneratorConstants.ROOM_BLOCK_SIZE * bl.getX()) + GeneratorConstants.ROOM_BLOCK_SIZE;
 			
 			x = (dim.getW() - x) + dim.getX();
-//			int y = (bl.getY() * Constants.ROOM_BLOCK_SIZE) + dim.getY();
 			
 			int pseudWorldRoomY = grid.getDimensions().getY() * Configuration.getLevelGridElementContentSize();
 			int y = (bl.getY() + pseudWorldRoomY) * (GeneratorConstants.ROOM_BLOCK_SIZE);

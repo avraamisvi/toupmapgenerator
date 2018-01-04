@@ -9,13 +9,13 @@ import com.toupety.mapgen.Configuration.Key;
 import com.toupety.mapgen.Configuration.Tag;
 import com.toupety.mapgen.algorithms.RoomAlgorithm;
 import com.toupety.mapgen.algorithms.RoomAlgorithmResult;
+import com.toupety.mapgen.painter.DecorationPainter;
 import com.toupety.mapgen.painter.VoronoiMap;
 
 public class LevelGenerator {
 	
 	private RoomAlgorithm algorithm;
 	private DoorGenerator doorGen;
-	private RoomPathGenerator pathGen;
 	RandomXS128 rand = new RandomXS128();
 	
 	
@@ -74,10 +74,10 @@ public class LevelGenerator {
 	}
 	
 	public void generatePaths(Level level) {
-//		level.forEach(room -> room.getGrid().createCave());
 		level.forEach(room -> { 
 			room.processItems();
 			room.getGrid().createPath();
+			room.getGrid().detectBlocksPlaces();
 		});
 	}
 	
@@ -126,5 +126,14 @@ public class LevelGenerator {
 		level.forEach(room -> {
 			voronoiMap.process(room.getGrid());		
 		});	
+		
+		decorate(level);
 	}	
+	
+	public void decorate(Level level) {
+		DecorationPainter painter = new DecorationPainter();
+		level.forEach(room -> {
+			painter.process(room.getGrid());		
+		});	
+	}		
 }

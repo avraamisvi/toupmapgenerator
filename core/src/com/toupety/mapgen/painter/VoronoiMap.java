@@ -29,7 +29,7 @@ public class VoronoiMap {
 		Palette palette = Configuration.properties.palette;
 		palette.sort();
 		
-		System.out.println("try to paint");
+//		System.out.println("try to paint");
 		
 		for(int x = 0; x < room.getW(); x++) {
 			for(int y = 0; y < room.getH(); y++) {
@@ -49,9 +49,11 @@ public class VoronoiMap {
 		}		
 	}
 	
+	NAO PODE SUBSTITUIR OS TILES Q NAO SAO DO TIPO GROUND X
+	
 	void apply(RoomBlocks room, Palette palette, int lx, int ly) {
 		
-		System.out.println("Paint");
+//		System.out.println("Paint");
 		
 		String brush = palette.getAny();
 		

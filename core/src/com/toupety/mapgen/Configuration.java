@@ -16,6 +16,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Json;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toupety.mapgen.mold.MoldMeta;
+import com.toupety.mapgen.painter.Decoration;
+import com.toupety.mapgen.painter.DecorationPalette;
+import com.toupety.mapgen.painter.Decorations;
 import com.toupety.mapgen.painter.Palette;
 
 public class Configuration {
@@ -32,6 +35,8 @@ public class Configuration {
 	
 	public static Areas areas;
 	public static Elements elements;
+	
+	public static Decorations decorations;
 	
 	public static int getLevelGridElementContentSize() {
 		return (GeneratorConstants.LEVEL_BLOCK_HEIGHT / GeneratorConstants.ROOM_BLOCK_SIZE);
@@ -69,6 +74,8 @@ public class Configuration {
 		
 		elements = json.fromJson(Elements.class, new FileReader(Paths.get("./elements.json").toFile()));
 		elements.process();
+		
+		decorations = json.fromJson(Decorations.class, new FileReader(Paths.get("./decorations.json").toFile()));
 	}
 	
 	public static class Data {
@@ -80,6 +87,7 @@ public class Configuration {
 		public Palette palette;
 		public float voronoi;
 		public int voronoiSize;
+		public DecorationPalette decorations;
 	}
 	
 	public static class Item {
@@ -367,5 +375,6 @@ public class Configuration {
 				list.add(b);
 			});
 		}
-	}	
+	}
+	
 }

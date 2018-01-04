@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -79,6 +80,10 @@ public class Room {
 				
 			}
 		}
+	}
+	
+	public void draw(ShapeRenderer renderer) {
+		//TODO draw todos os elementos e objetos
 	}
 	
 	private void configureLeft(RoomLevelBlockElement el, int x, int y) {

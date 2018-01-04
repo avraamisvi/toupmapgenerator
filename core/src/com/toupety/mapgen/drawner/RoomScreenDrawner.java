@@ -63,6 +63,8 @@ public class RoomScreenDrawner implements ElementDrawner<Room> {
 		colorindex++;
 		
 		gridDrawner.draw(element.getGrid());
+		
+		element.draw(renderer);
 	}
 	
 	public void drawLine(Room element) {
@@ -90,40 +92,4 @@ public class RoomScreenDrawner implements ElementDrawner<Room> {
 		return colors.get(idx);
 		
 	}
-
-//	private void drawnBlocks(Level level) {
-//		
-//		renderer.setProjectionMatrix(CameraHolder.instance().getOrtho().combined);
-//
-//		for(int x = 0; x < level.getWidth(); x++) {
-//			for(int y = 0; y < level.getHeight(); y++) {
-//				
-//				float color = colors[level.getGrid().getColor(x, y)];
-//				
-//				Dimmensions dim = Util.convertDimmensions(x, y, 1, 1).toWorldDimmensions();
-//				
-//				if(level.getGrid().isUsed(x, y)) {
-//					
-//					renderer.begin(ShapeType.Filled);
-//					renderer.setColor(1,color,1,1);
-//					
-//						renderer.rect(dim.getX(),
-//									 dim.getY(), 
-//									 dim.getW(), 
-//									 dim.getH());
-//					renderer.end();
-//				} else {
-//					renderer.begin(ShapeType.Line);
-//					renderer.setColor(1,0,0,1);
-//						
-//						renderer.rect(dim.getX(),
-//								 dim.getY(), 
-//								 dim.getW(), 
-//								 dim.getH());
-//					
-//					renderer.end();					
-//				}
-//			}
-//		}
-//	}	
 }

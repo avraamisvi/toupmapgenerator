@@ -18,6 +18,10 @@ public class BlockMetaInfo {
 		return type;
 	}
 	
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 	public static BlockMetaInfo parse(MoldBlock block) {//TODO temporary?
 		if(block.getValue() == '.') {
 			return EMPTY;

@@ -1,13 +1,23 @@
 {
   "name":"deserto",
-  "rooms": 60,
+  "rooms": 5,
   "key": {
     "color":"BLUE",
     "room": 30,
     "limit": -1
   },
   "palette": {
-
+    "base": "rock",
+    "brushes": [
+      {
+        "chance": 0.30,
+        "name": "rock2"
+      },
+      {
+        "chance": 0.20,
+        "name": "sand"
+      }      
+    ]
   },
   "tags":[
     {
@@ -17,6 +27,12 @@
     }
   ],
   "items": [
+    {
+      "id": "PHANTOM",
+      "from": 0,
+      "limit": 100,
+      "chance": 0.20
+    },       
     {
       "id": "blue-key",
       "from": 10,

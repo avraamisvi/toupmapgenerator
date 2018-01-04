@@ -141,7 +141,7 @@ public class Chunk implements InputProcessor{
 				
 				if(grid[x][y].filled != null) {
 					renderer.begin(ShapeType.Filled);
-					int col [] = grid[x][y].filled.color;
+					float col [] = grid[x][y].filled.color;
 					renderer.setColor(col[0], col[1], col[2], col[3]);
 					
 					renderer.rect(x * GeneratorConstants.ROOM_BLOCK_SIZE, 

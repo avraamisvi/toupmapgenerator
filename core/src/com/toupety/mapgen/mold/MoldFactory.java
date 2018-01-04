@@ -55,6 +55,8 @@ public class MoldFactory {
 					if(!moldsMap.containsKey(opens)) {
 						localMolds = new Molds();
 						moldsMap.put(opens, localMolds);
+					} else {
+						localMolds = moldsMap.get(opens);
 					}
 					localMolds.molds.add(mold);
 					

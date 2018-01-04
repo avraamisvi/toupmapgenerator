@@ -25,7 +25,7 @@ public class MyGdxGame extends ApplicationAdapter {
 //	private Texture img;
 	private Level level = new Level(GeneratorConstants.WIDTH, GeneratorConstants.HEIGHT);
 	private CameraHolder camera;
-	private ShapeRenderer testRenderer;
+//	private ShapeRenderer testRenderer;
 	private ExecutorService executor;
 	
 	@Override
@@ -44,7 +44,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		
 		this.executor = Executors.newSingleThreadExecutor();
 		
-		this.testRenderer = new ShapeRenderer();
+//		this.testRenderer = new ShapeRenderer();
 		
 		Gdx.graphics.setWindowedMode(1024, 648);
 	}

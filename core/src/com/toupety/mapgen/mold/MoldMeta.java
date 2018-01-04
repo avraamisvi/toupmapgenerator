@@ -2,6 +2,7 @@ package com.toupety.mapgen.mold;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.toupety.mapgen.Configuration.AreaDefinition;
 import com.toupety.mapgen.Configuration.ElementDefinition;
@@ -19,10 +20,24 @@ public class MoldMeta {
 	public Platform platform;
 	public List<String> open;
 	
+	private String tagString = null;
+	
 	List<HashMap<String, Object>> collision;
 	
 	public static class Platform {
 		public int height;
 		public int width;
-	}	
+	}
+	
+	public String getTagString() {
+		if(tagString == null && tags != null) {
+			synchronized(this) {
+				tagString = tags.stream().sorted().collect(Collectors.joining("_"));
+			}
+		} else {
+			tagString = "";
+		}
+		
+		return tagString;
+	}
 }

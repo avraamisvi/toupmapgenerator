@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.CameraHolder;
 import com.toupety.mapgen.Configuration;
+import com.toupety.mapgen.Configuration.Brush;
 import com.toupety.mapgen.GeneratorConstants;
 import com.toupety.mapgen.Dimensions;
 import com.toupety.mapgen.RoomBlocks;
@@ -75,6 +76,18 @@ public class RoomGridScreenDrawner implements ElementDrawner<RoomBlocks> {
 				if(bl.getMetaInfo().getType().equals(".")) {
 					render = true;
 					color.set(0, 0, 0, 1);
+				} else if(!bl.getMetaInfo().getType().equals("x")) {
+					
+					Brush brush = Configuration.brushesPerTile.get(bl.getMetaInfo().getType().charAt(0));
+					if(brush != null && bl.getOwner() != null) {
+						
+//						if(bl.getOwner() != null) {
+//							System.out.println("owner: " + brush.tile);
+//						}						
+//						
+						render = true;
+						color.set(brush.color[0], brush.color[1], brush.color[2], 1);	
+					}
 				}
 			}
 			

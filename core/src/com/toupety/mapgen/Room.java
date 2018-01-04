@@ -37,12 +37,13 @@ public class Room {
 	private Set<Room> roomsTop;
 	
 	private Key key;
-	private List<Tag> tags;
+	private HashSet<Tag> tags;
 	private List<Item> items;
 	RandomXS128 rand = new RandomXS128();
 	
 	private RoomLevelBlockElement[][] levelBlocks;
 	private List<RoomLevelBlockElement> levelBlocksList;
+	private String tagString;
 	
 	public Room(Dimensions dim) {
 		rand.nextInt();rand.nextLong();
@@ -51,7 +52,7 @@ public class Room {
 		levelBlocks = new RoomLevelBlockElement[dim.getW()][dim.getH()];
 		levelBlocksList = new ArrayList<>();
 		
-		this.tags = new ArrayList<>();
+		this.tags = new HashSet<>();
 		this.items = new ArrayList<>();
 //		int worldMultiplier = (Constants.LEVEL_BLOCK_WIDTH / Constants.ROOM_BLOCK_SIZE);//15
 //		this.worldBounds = new Rectangle(dim.getX(), dim.getY(), dim.getW() * worldMultiplier, dim.getH() * worldMultiplier);
@@ -126,7 +127,7 @@ public class Room {
 		return items;
 	}
 	
-	public List<Tag> getTags() {
+	public HashSet<Tag> getTags() {
 		return tags;
 	}
 	
@@ -291,4 +292,16 @@ public class Room {
 			});
 		});
 	}
+	
+	public String getTagString() {
+		if(tagString == null && tags != null) {
+			synchronized(this) {
+				tagString = tags.stream().map(t -> t.id).sorted().collect(Collectors.joining("_"));
+			}
+		} else {
+			tagString = "";
+		}
+		
+		return tagString;
+	}	
 }

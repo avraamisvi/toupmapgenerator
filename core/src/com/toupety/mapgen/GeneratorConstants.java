@@ -3,6 +3,10 @@ package com.toupety.mapgen;
 public interface GeneratorConstants {
 
 //	int DOOR_START_POSITION = 5;
+
+	int MAX_VORONOI_ISLAND_SIZE = 15;
+	String DEFAULT_GROUND_BRUSH = "ground";
+	String ITEM_PHANTOM = "PHANTOM"; //item usado para criar items fantons e aumentar a complexidade das salas que possuem apenas 1 porta.
 	
 	int MAX_ROOM_PATH_DIMENSIONS = 10; 
 	int MIN_ROOM_PATH_DIMENSIONS = 10;

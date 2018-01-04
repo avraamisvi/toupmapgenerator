@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
+import com.toupety.mapgen.Configuration;
 import com.toupety.mapgen.Dimensions;
 import com.toupety.mapgen.Level;
 import com.toupety.mapgen.Room;
@@ -28,12 +29,12 @@ public class BoundedRoomAlgorithm implements RoomAlgorithm {
 	
 	private Random ran = new Random();
 	
-	public BoundedRoomAlgorithm(Map<String, Object> config) {
+	public BoundedRoomAlgorithm(Map<String, Object> config) {//TODO mudar tudo para o arquivo de config
 		this.maxRoomWidth = Integer.parseInt(config.get(MAX_ROOM_WIDTH).toString());
 		this.maxRoomHeight = Integer.parseInt(config.get(MAX_ROOM_HEIGHT).toString());
 		this.minRoomWidth = Integer.parseInt(config.get(MIN_ROOM_WIDTH).toString());
 		this.minRoomHeight = Integer.parseInt(config.get(MIN_ROOM_HEIGHT).toString());
-		this.maxRooms = Integer.parseInt(config.get(MAX_ROOMS).toString());
+		this.maxRooms = Configuration.properties.rooms;//Integer.parseInt(config.get(MAX_ROOMS).toString());
 		this.maxIterations = Integer.parseInt(config.get(MAX_ITERATIONS).toString());
 	}
 	

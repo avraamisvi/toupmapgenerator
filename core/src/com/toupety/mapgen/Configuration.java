@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Json;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toupety.mapgen.mold.MoldMeta;
+import com.toupety.mapgen.painter.Palette;
 
 public class Configuration {
 
@@ -76,6 +77,7 @@ public class Configuration {
 		public Key key;
 		public List<Item> items;
 		public List<Tag> tags;
+		public Palette palette;
 	}
 	
 	public static class Item {
@@ -131,7 +133,7 @@ public class Configuration {
 		   public int index = 0;
 		   public String name;
 		   public String tile;
-		   public int[] color;
+		   public float[] color;
 	}
 	
 	public static class Brushes {

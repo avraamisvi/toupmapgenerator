@@ -9,6 +9,7 @@ import com.toupety.mapgen.Configuration.Key;
 import com.toupety.mapgen.Configuration.Tag;
 import com.toupety.mapgen.algorithms.RoomAlgorithm;
 import com.toupety.mapgen.algorithms.RoomAlgorithmResult;
+import com.toupety.mapgen.painter.VoronoiMap;
 
 public class LevelGenerator {
 	
@@ -69,16 +70,23 @@ public class LevelGenerator {
 			applyTags(level, room);
 		});
 		
-		level.forEach(room -> {
-			room.processItems();
-		});
-		
 //		pathGen.generate(level);
 	}
 	
 	public void generatePaths(Level level) {
 //		level.forEach(room -> room.getGrid().createCave());
-		level.forEach(room -> room.getGrid().createPath());
+		VoronoiMap voronoiMap = new VoronoiMap();
+		level.forEach(room -> { 
+			room.getGrid().createPath();
+			room.processItems();
+			voronoiMap.process(room.getGrid());			
+		});
+		
+//		level.forEach(room -> {
+//
+//		});	
+		
+		System.out.println("voronoi");
 	}
 	
 	void applyItems(Level level, Room room) {

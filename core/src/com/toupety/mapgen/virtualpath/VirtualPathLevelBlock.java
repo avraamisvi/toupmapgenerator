@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.toupety.mapgen.GeneratorConstants;
 import com.toupety.mapgen.Position;
 import com.toupety.mapgen.RoomBlocks.RoomDoor;
 import com.toupety.mapgen.mold.MoldMeta;
@@ -28,12 +29,14 @@ public class VirtualPathLevelBlock {
 	public VirtualPathLevelBlock left;
 	public VirtualPathLevelBlock top;
 	public VirtualPathLevelBlock bottom;
+	private VirtualPathGenerator owner;
 	
-	public VirtualPathLevelBlock(int x, int y) {
+	public VirtualPathLevelBlock(VirtualPathGenerator owner,  int x, int y) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.opens = new HashSet<>();
+		this.owner = owner;
 	}
 	
 	public void setItem(String item) {
@@ -65,16 +68,18 @@ public class VirtualPathLevelBlock {
 	}
 	
 	public boolean checkTags(MoldMeta meta) {
-		return true;
+		return this.owner.blocks.getOwner().getTagString().equals(meta.getTagString());
 	}
 	
 	public boolean isAcceptable(MoldMeta meta) {
 		
-		if(this.item != null && meta.items.stream().filter(it -> it.name.equals(this.item)).count() == 0)
-			return false;
-		
-		if(this.item == null && meta.items.size() > 0)
-			return false;
+		if(this.item != GeneratorConstants.ITEM_PHANTOM) {//se phatom entao ignora
+			if(this.item != null && meta.items.stream().filter(it -> it.name.equals(this.item)).count() == 0)
+				return false;
+			
+			if(this.item == null && meta.items.size() > 0)
+				return false;
+		}
 		
 		if(!checkTags(meta))
 			return false;

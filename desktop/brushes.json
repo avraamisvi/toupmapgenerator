@@ -5,6 +5,26 @@
       "tile": "x",
       "color": [1,1,1,1]
     },
+    "sand": {
+      "name": "sand",
+      "tile": "n",
+      "color": [1, 0.831, 0, 1]
+    },   
+    "rock": {
+      "name": "rock",
+      "tile": "r",
+      "color": [0.733, 0.337, 0, 1]
+    },
+    "rock2": {
+      "name": "rock2",
+      "tile": "2",
+      "color": [0.2,0.3,0.8,1]
+    },    
+    "fabric": {
+      "name": "fabric",
+      "tile": "f",
+      "color": [0.3,0.8,0.2,1]
+    },      
     "empty": {
       "name": "space",
       "tile": ".",

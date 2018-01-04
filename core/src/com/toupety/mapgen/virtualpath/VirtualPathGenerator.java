@@ -32,7 +32,7 @@ public class VirtualPathGenerator {
 		
 		for(int x = 0; x < w; x++) {
 			for(int y = 0; y < h; y++) {
-				grid[x][y] = new VirtualPathLevelBlock(x, y);
+				grid[x][y] = new VirtualPathLevelBlock(this, x, y);
 				
 				configureDown(this.grid[x][y], x, y);
 				configureUp(this.grid[x][y], x, y);
@@ -210,44 +210,44 @@ public class VirtualPathGenerator {
 				previous = source;
 
 			     if(dir == Direction.RIGHT) {
-					source.openRight = true;
+					source.setOpenRight(true);
 					if(source.right != null && (source.right.getItem() == null || itemPath)) {
-						source.right.openLeft = true;
+						source.right.setOpenLeft(true);
 						source = source.right;
 					} else {
 						if(source.y < target.y && source.bottom != null ) {//&& source.bottom.getItem() == null
-							source.openBottom = true;
-							source.bottom.openTop = true;
+							source.setOpenBottom(true);
+							source.bottom.setOpenTop(true);
 							source = source.bottom;
 							dir = Direction.DOWN;
 						} else if(source.y > target.y && source.top != null ) {//&& source.top.getItem() == null
-							source.openTop = true;
-							source.top.openBottom = true;
+							source.setOpenTop(true);
+							source.top.setOpenBottom(true);
 							source = source.top;
 							dir = Direction.UP;
 						} else {
 							if(source.right == null) {
 								dir = Direction.LEFT;
 							} else {
-								source.right.openLeft = true;
+								source.right.setOpenLeft(true);
 								source = source.right;
 							}
 						}
 					}
 				 } else if(dir == Direction.LEFT) {
-						source.openLeft = true;
+						source.setOpenLeft(true);
 						if(source.left != null && (source.left.getItem() == null || itemPath)) {
-							source.left.openRight = true;
+							source.left.setOpenRight(true);
 							source = source.left;
 						} else {
 							if(source.y < target.y && source.bottom != null ) {//&& source.bottom.getItem() == null
-								source.openBottom = true;
-								source.bottom.openTop = true;
+								source.setOpenBottom(true);
+								source.bottom.setOpenTop(true);
 								source = source.bottom;
 								dir = Direction.DOWN;
 							} else if(source.y > target.y && source.top != null ) {//&& source.top.getItem() == null
-								source.openTop = true;
-								source.top.openBottom = true;
+								source.setOpenTop(true);
+								source.top.setOpenBottom(true);
 								source = source.top;
 								dir = Direction.UP;
 							} else {
@@ -255,25 +255,25 @@ public class VirtualPathGenerator {
 								if(source.left == null) {
 									dir = Direction.RIGHT;
 								} else {								
-									source.left.openRight = true;//continua nao tem oq fazer
+									source.left.setOpenRight(true);//continua nao tem oq fazer
 									source = source.left;
 								}
 							}
 						}
 				 } else if(dir == Direction.UP) {
-						source.openTop = true;
+						source.setOpenTop(true);
 						if(source.top != null && (source.top.getItem() == null  || itemPath)) {
-							source.top.openBottom = true;
+							source.top.setOpenBottom(true);
 							source = source.top;
 						} else {
 							if(source.x < target.x && source.right != null ) {//&& source.bottom.getItem() == null
-								source.openRight = true;
-								source.right.openLeft = true;
+								source.setOpenRight(true);
+								source.right.setOpenLeft(true);
 								source = source.right;
 								dir = Direction.RIGHT;
 							} else if(source.x > target.x && source.left != null ) {//&& source.top.getItem() == null
-								source.openLeft = true;
-								source.left.openRight = true;
+								source.setOpenLeft(true);
+								source.left.setOpenRight(true);
 								source = source.left;
 								dir = Direction.LEFT;
 							} else {
@@ -281,25 +281,25 @@ public class VirtualPathGenerator {
 								if(source.top == null) {
 									dir = Direction.DOWN;
 								} else {								
-									source.top.openBottom = true;
+									source.top.setOpenBottom(true);
 									source = source.top;
 								}
 							}
 						}
 				 } else if(dir == Direction.DOWN) {
-						source.openBottom = true;
+						source.setOpenBottom(true);
 						if(source.bottom != null && ( source.bottom.getItem() == null  || itemPath)) {
-							source.bottom.openTop = true;
+							source.bottom.setOpenTop(true);
 							source = source.bottom;
 						} else {
 							if(source.x < target.x && source.right != null ) {//&& source.bottom.getItem() == null
-								source.openRight = true;
-								source.right.openLeft = true;
+								source.setOpenRight(true);
+								source.right.setOpenLeft(true);
 								source = source.right;
 								dir = Direction.RIGHT;
 							} else if(source.x > target.x && source.left != null ) {//&& source.top.getItem() == null
-								source.openLeft = true;
-								source.left.openRight = true;
+								source.setOpenLeft(true);
+								source.left.setOpenRight(true);
 								source = source.left;
 								dir = Direction.LEFT;
 							} else {
@@ -307,7 +307,7 @@ public class VirtualPathGenerator {
 								if(source.bottom == null) {
 									dir = Direction.UP;
 								} else {								
-									source.bottom.openTop = true;
+									source.bottom.setOpenTop(true);
 									source = source.bottom;
 								}
 							}
@@ -409,75 +409,72 @@ public class VirtualPathGenerator {
 			}
 		}
 
-		private boolean containsItem() {
-			
-			boolean ret = false;
-			
-			if(dir == Direction.RIGHT) {
-				source.openRight = true;
-				source.openLeft = true;
-				ret = contains(source.x+1, source.y);
-				if(ret) {
-					if(target.y < source.y)
-						dir = Direction.UP;
-					else
-						dir = Direction.DOWN;
-				}
-			} else if(dir == Direction.DOWN) {
-				source.openBottom = true;
-				source.openTop = true;
-				ret = contains(source.x+1, source.y);
-				if(ret) {
-					if(target.x < source.x)
-						dir = Direction.LEFT;
-					else
-						dir = Direction.RIGHT;
-				}
-			} else if(dir == Direction.LEFT) {
-				source.openRight = true;
-				source.openLeft = true;
-				ret = contains(source.x+1, source.y);
-				if(ret) {
-					if(target.y < source.y)
-						dir = Direction.UP;
-					else
-						dir = Direction.DOWN;
-				}
-			} else if(dir == Direction.UP) {
-				source.openTop = true;
-				source.openBottom = true;
-				ret = contains(source.x+1, source.y);
-				if(ret) {
-					if(target.x < source.x)
-						dir = Direction.LEFT;
-					else
-						dir = Direction.RIGHT;
-				}
-			}
-			
-			return ret;
-		}
+//		private boolean containsItem() {
+//			
+//			boolean ret = false;
+//			
+//			if(dir == Direction.RIGHT) {
+//				source.openRight = true;
+//				source.openLeft = true;
+//				ret = contains(source.x+1, source.y);
+//				if(ret) {
+//					if(target.y < source.y)
+//						dir = Direction.UP;
+//					else
+//						dir = Direction.DOWN;
+//				}
+//			} else if(dir == Direction.DOWN) {
+//				source.openBottom = true;
+//				source.openTop = true;
+//				ret = contains(source.x+1, source.y);
+//				if(ret) {
+//					if(target.x < source.x)
+//						dir = Direction.LEFT;
+//					else
+//						dir = Direction.RIGHT;
+//				}
+//			} else if(dir == Direction.LEFT) {
+//				source.openRight = true;
+//				source.openLeft = true;
+//				ret = contains(source.x+1, source.y);
+//				if(ret) {
+//					if(target.y < source.y)
+//						dir = Direction.UP;
+//					else
+//						dir = Direction.DOWN;
+//				}
+//			} else if(dir == Direction.UP) {
+//				source.openTop = true;
+//				source.openBottom = true;
+//				ret = contains(source.x+1, source.y);
+//				if(ret) {
+//					if(target.x < source.x)
+//						dir = Direction.LEFT;
+//					else
+//						dir = Direction.RIGHT;
+//				}
+//			}
+//			
+//			return ret;
+//		}
 
 		private Direction getInitialDirection() {
 			rand.nextInt(4);
+			
 			if(dir == null) {
 				int direction = rand.nextInt(4);
 				
 				switch (Direction.values()[direction]) {
 				case RIGHT:
-					source.openRight = true;
 					dir = Direction.RIGHT;
 					break;
 				case UP:
-					source.openTop= true;
 					dir = Direction.UP;
 					break;
 				case LEFT:
-					source.openLeft = true;
 					dir = Direction.LEFT;
 					break;
 				case DOWN:
-					source.openBottom = true;
 					dir = Direction.DOWN;
 					break;					
 				default:

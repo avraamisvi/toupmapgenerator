@@ -90,9 +90,9 @@ public class RoomBlocks {
 		return Optional.empty();
 	}
 	
-	public void setBlockMetaInfoTile(int x, int y, String tile) {
-		this.grid[x][y].metaInfo.setType(tile);
-	}
+//	public void setBlockMetaInfoTile(int x, int y, String tile) {
+//		this.grid[x][y].metaInfo.setType(tile);
+//	}
 	
 	/**
 	 * Aplica os molds aos caminhos.

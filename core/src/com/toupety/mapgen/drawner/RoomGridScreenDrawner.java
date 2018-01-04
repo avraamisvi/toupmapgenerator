@@ -79,7 +79,7 @@ public class RoomGridScreenDrawner implements ElementDrawner<RoomBlocks> {
 				} else if(!bl.getMetaInfo().getType().equals("x")) {
 					
 					Brush brush = Configuration.brushesPerTile.get(bl.getMetaInfo().getType().charAt(0));
-					if(brush != null && bl.getOwner() != null) {
+					if(brush != null) {// && bl.getOwner() != null
 						
 //						if(bl.getOwner() != null) {
 //							System.out.println("owner: " + brush.tile);

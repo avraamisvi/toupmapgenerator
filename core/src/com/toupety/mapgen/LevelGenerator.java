@@ -75,18 +75,10 @@ public class LevelGenerator {
 	
 	public void generatePaths(Level level) {
 //		level.forEach(room -> room.getGrid().createCave());
-		VoronoiMap voronoiMap = new VoronoiMap();
 		level.forEach(room -> { 
-			room.getGrid().createPath();
 			room.processItems();
-			voronoiMap.process(room.getGrid());			
+			room.getGrid().createPath();
 		});
-		
-//		level.forEach(room -> {
-//
-//		});	
-		
-		System.out.println("voronoi");
 	}
 	
 	void applyItems(Level level, Room room) {
@@ -127,5 +119,12 @@ public class LevelGenerator {
 				room.setKey(key);
 			}
 		}
+	}
+
+	public void paint(Level level) {
+		VoronoiMap voronoiMap = new VoronoiMap();
+		level.forEach(room -> {
+			voronoiMap.process(room.getGrid());		
+		});	
 	}	
 }

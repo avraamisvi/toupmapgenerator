@@ -1,6 +1,8 @@
 {
   "name":"deserto",
-  "rooms": 5,
+  "voronoi": 0.3,
+  "voronoiSize": 5,
+  "rooms": 3,
   "key": {
     "color":"BLUE",
     "room": 30,
@@ -10,11 +12,11 @@
     "base": "rock",
     "brushes": [
       {
-        "chance": 0.30,
+        "chance": 0.20,
         "name": "rock2"
       },
       {
-        "chance": 0.20,
+        "chance": 0.10,
         "name": "sand"
       }      
     ]
@@ -31,7 +33,7 @@
       "id": "PHANTOM",
       "from": 0,
       "limit": 100,
-      "chance": 0.20
+      "chance": 0.40
     },       
     {
       "id": "blue-key",

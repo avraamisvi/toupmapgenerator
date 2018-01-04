@@ -1,9 +1,13 @@
 package com.toupety.mapgen.painter;
 
+import java.util.Optional;
+
 import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.Configuration;
 import com.toupety.mapgen.GeneratorConstants;
 import com.toupety.mapgen.RoomBlocks;
+import com.toupety.mapgen.RoomBlocks.RoomBlock;
+import com.toupety.mapgen.cave.BlockMetaInfo;
 
 public class VoronoiMap {
 
@@ -25,27 +29,42 @@ public class VoronoiMap {
 		Palette palette = Configuration.properties.palette;
 		palette.sort();
 		
+		System.out.println("try to paint");
+		
 		for(int x = 0; x < room.getW(); x++) {
 			for(int y = 0; y < room.getH(); y++) {
-				apply(room, palette, x, y);
+				Optional<RoomBlock> op = room.getAt(x, y);
+				if(op.isPresent()) {
+					if(op.get().getOwner() != null) {
+						
+						rand.nextFloat();
+						float island = rand.nextFloat();
+						
+						if(island < Configuration.properties.voronoi) {
+							apply(room, palette, x, y);
+						}
+					}
+				}
 			}
 		}		
 	}
 	
 	void apply(RoomBlocks room, Palette palette, int lx, int ly) {
 		
+		System.out.println("Paint");
+		
 		String brush = palette.getAny();
 		
 		if(brush == null)
 			return;
 		
-		int w = this.rand.nextInt(GeneratorConstants.MAX_VORONOI_ISLAND_SIZE) + GeneratorConstants.MAX_VORONOI_ISLAND_SIZE/2;
-		int h = this.rand.nextInt(GeneratorConstants.MAX_VORONOI_ISLAND_SIZE) + GeneratorConstants.MAX_VORONOI_ISLAND_SIZE/2;
+		int w = this.rand.nextInt(Configuration.properties.voronoiSize) + 1;
+		int h = this.rand.nextInt(Configuration.properties.voronoiSize) + 1;
 		
-		int minX = Math.abs(lx-(w/2));
-		int minY = Math.abs(ly-(h/2));
-		int maxX = lx+(w/2);
-		int maxY = ly+(h/2);
+		int minX = Math.abs(lx - w);
+		int minY = Math.abs(ly - h);
+		int maxX = lx;//lx+(w/2);
+		int maxY = ly;//ly+(h/2);
 		
 		if(minX < 0) {
 			minX = 0;
@@ -63,12 +82,16 @@ public class VoronoiMap {
 			maxY = room.getH();
 		}		
 		
-		for(int x = minX; x < maxX; x++) {
+//		room.getAt(lx, ly).ifPresent(b -> {
+//			if(!b.getMetaInfo().getType().equals("."))
+//				b.getMetaInfo().setType(Configuration.brushes.get(brush).tile);
+//		});
+		
+		for(int x = maxX; x >= minX; x--) {
 			for(int y = minY; y < maxY; y++) {
-				
 				room.getAt(x, y).ifPresent(b -> {
 					if(!b.getMetaInfo().getType().equals("."))
-						b.getMetaInfo().setType(Configuration.brushes.get(brush).tile);
+						b.setMetaInfo(new BlockMetaInfo(Configuration.brushes.get(brush).tile));//.setType();
 				});
 			}
 		}	

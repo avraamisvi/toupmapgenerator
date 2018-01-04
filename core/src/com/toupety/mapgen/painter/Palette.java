@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.badlogic.gdx.math.RandomXS128;
+import com.toupety.mapgen.GeneratorConstants;
 
 public class Palette {
 
@@ -35,7 +36,7 @@ public class Palette {
 			return op.get().name;
 		}
 		
-		return null;
+		return GeneratorConstants.DEFAULT_GROUND_BRUSH;//GeneratorConstants.DEFAULT_GROUND_BRUSH
 	}
 
 	public static class BrushChance {

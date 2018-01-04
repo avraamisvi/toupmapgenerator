@@ -148,7 +148,14 @@ public class MyGdxGame extends ApplicationAdapter {
 //				new RoomGenerator().generate(level);
 			});
 		}		
-
+		if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+			executor.execute(() -> {
+				RoomAlgorithm algo = new BoundedRoomAlgorithm(defaultArgs());
+//				level = new Level(Constants.WIDTH, Constants.HEIGHT);
+				new LevelGenerator(algo).paint(level);
+//				new RoomGenerator().generate(level);
+			});
+		}	
 //		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 //			cam.rotate(-rotationSpeed, 0, 0, 1);
 //		}

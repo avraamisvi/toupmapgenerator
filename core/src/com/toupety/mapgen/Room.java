@@ -279,7 +279,7 @@ public class Room {
 	 * Processa todos os items colocando cada um em um levelblock
 	 */
 	public void processItems() {
-		
+		rand.nextDouble();
 		List<RoomLevelBlockElement> list = this.levelBlocksList.stream().filter(ll -> {
 			return !ll.door;
 		}).collect(Collectors.toList());

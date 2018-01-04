@@ -78,6 +78,8 @@ public class Configuration {
 		public List<Item> items;
 		public List<Tag> tags;
 		public Palette palette;
+		public float voronoi;
+		public int voronoiSize;
 	}
 	
 	public static class Item {

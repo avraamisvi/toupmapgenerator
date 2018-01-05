@@ -82,7 +82,7 @@ public class Configuration {
 		public String name;
 		public int rooms;
 		public Key key;
-		public List<Item> items;
+		public List<ItemConfiguration> items;
 		public List<Tag> tags;
 		public Palette palette;
 		public float voronoi;
@@ -90,7 +90,7 @@ public class Configuration {
 		public DecorationPalette decorations;
 	}
 	
-	public static class Item {
+	public static class ItemConfiguration {
 	   public String id;
 	   public int from;
 	   public int limit;
@@ -150,6 +150,7 @@ public class Configuration {
 		public HashMap<String, Brush> brushes;
 	}
 	
+	//used for moldes editor
 	public static class ItemDefinition {
 		public int index = 0;
 		public String name;

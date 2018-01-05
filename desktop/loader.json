@@ -1,0 +1,14 @@
+{
+  "name":"desert",
+  "brushes":{
+    "x": {
+      "target": "rock"
+    },
+    "s": {
+      "target": "lime",
+      "scripts": [
+        "disable_grip"
+      ]
+    }
+  }
+}

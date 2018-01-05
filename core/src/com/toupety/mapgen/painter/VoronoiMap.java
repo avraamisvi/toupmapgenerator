@@ -49,7 +49,7 @@ public class VoronoiMap {
 		}		
 	}
 	
-	NAO PODE SUBSTITUIR OS TILES Q NAO SAO DO TIPO GROUND X
+//	NAO PODE SUBSTITUIR OS TILES Q NAO SAO DO TIPO GROUND X
 	
 	void apply(RoomBlocks room, Palette palette, int lx, int ly) {
 		
@@ -82,34 +82,16 @@ public class VoronoiMap {
 		
 		if(maxY > room.getH()) {
 			maxY = room.getH();
-		}		
-		
-//		room.getAt(lx, ly).ifPresent(b -> {
-//			if(!b.getMetaInfo().getType().equals("."))
-//				b.getMetaInfo().setType(Configuration.brushes.get(brush).tile);
-//		});
+		}
 		
 		for(int x = maxX; x >= minX; x--) {
 			for(int y = minY; y < maxY; y++) {
 				room.getAt(x, y).ifPresent(b -> {
-					if(!b.getMetaInfo().getType().equals("."))
+					if(b.getMetaInfo().getType().equals(BlockMetaInfo.FULL.getType()))//apenas os tipos x sao substituidos
 						b.setMetaInfo(new BlockMetaInfo(Configuration.brushes.get(brush).tile));//.setType();
 				});
 			}
-		}	
+		}
 		
 	}
- 	
-//	class VoronoiMapBlock {
-//		int x; 
-//		int y;
-//		String brush;
-//		
-//		public VoronoiMapBlock(int x, int y, String brush) {
-//			super();
-//			this.x = x;
-//			this.y = y;
-//			this.brush = brush;
-//		}
-//	}
 }

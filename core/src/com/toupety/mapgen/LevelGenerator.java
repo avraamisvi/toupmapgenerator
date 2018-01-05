@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.badlogic.gdx.math.RandomXS128;
-import com.toupety.mapgen.Configuration.Item;
+import com.toupety.mapgen.Configuration.ItemConfiguration;
 import com.toupety.mapgen.Configuration.Key;
 import com.toupety.mapgen.Configuration.Tag;
 import com.toupety.mapgen.algorithms.RoomAlgorithm;
@@ -83,7 +83,7 @@ public class LevelGenerator {
 	
 	void applyItems(Level level, Room room) {
 		
-		List<Item> items = Configuration.properties.items;
+		List<ItemConfiguration> items = Configuration.properties.items;
 		
 		items.forEach(it -> {
 			if(it.isAvaiable()) {

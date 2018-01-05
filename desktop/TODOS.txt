@@ -10,3 +10,8 @@
  {
  	 "roomTarget": {position: TOP}
  }
+
+ Os blocos nos moldes sao por padrao de 2 tipos
+ x e .
+
+ O gerador nao vai substituir os moldes que forem diferentes de x, ou seja, alguns blocos no molde pode ser de algum outro meta tipo, por exemplo, salto duplo, espinhos, etc, isso sera importante no loader, que ira tratar esses blocos da maneira configurada.

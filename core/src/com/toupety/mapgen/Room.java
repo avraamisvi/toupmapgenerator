@@ -14,12 +14,16 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.toupety.mapgen.Configuration.Item;
+import com.toupety.mapgen.Configuration.ItemConfiguration;
 import com.toupety.mapgen.Configuration.Key;
 import com.toupety.mapgen.Configuration.Tag;
+import com.toupety.mapgen.LevelGeneratorPersistence.RoomInfo;
 import com.toupety.mapgen.RoomBlocks.RoomBlock;
 import com.toupety.mapgen.mold.Mold;
 import com.toupety.mapgen.painter.Decoration;
+import com.toupety.mapgen.room.RoomArea;
+import com.toupety.mapgen.room.RoomElement;
+import com.toupety.mapgen.room.RoomItem;
 
 public class Room {
 	
@@ -41,7 +45,7 @@ public class Room {
 	
 	private Key key;
 	private HashSet<Tag> tags;
-	private List<Item> items;
+	private List<ItemConfiguration> items;
 	RandomXS128 rand = new RandomXS128();
 	
 	private RoomLevelBlockElement[][] levelBlocks;
@@ -49,6 +53,13 @@ public class Room {
 	private String tagString;
 	private List<Decoration> decorations;
 	
+	/**
+	 * Metadata to help generate the correct file info for room, contains position for elements and other things like itens etc.
+	 */
+	//Position of the items and elements in the room
+	private List<RoomItem> roomItemsPosition; //receive from mold
+	private List<RoomArea> roomAreasPosition;//receive from mold
+	private List<RoomElement> roomElementsPosition;//receive from mold
 	
 	public Room(Dimensions dim) {
 		rand.nextInt();rand.nextLong();
@@ -155,7 +166,7 @@ public class Room {
 		return ret > 0;
 	}
 	
-	public List<Item> getItems() {
+	public List<ItemConfiguration> getItems() {
 		return items;
 	}
 	
@@ -335,5 +346,34 @@ public class Room {
 		}
 		
 		return tagString;
-	}	
+	}
+	
+	public void addItemPosition(RoomItem item) {
+		this.roomItemsPosition.add(item);
+	}
+
+	public void addAreaPosition(RoomArea area) {
+		this.roomAreasPosition.add(area);
+	}
+	
+	public void addItemPosition(RoomElement element) {
+		this.roomElementsPosition.add(element);
+	}
+	
+	public RoomInfo generateRoomInfo() {
+		RoomInfo ret = new RoomInfo();
+		
+		ret.index = this.index;
+		ret.areas    = this.roomAreasPosition;
+		ret.items    = this.roomItemsPosition;
+		ret.elements = this.roomElementsPosition;
+		ret.x = this.getX();
+		ret.y = this.getY();
+		ret.width = this.getWidth();
+		ret.heigth = this.getHeight();
+		ret.key = this.key.color;
+		ret.tags = this.tags.stream().map(t -> t.id).collect(Collectors.toList());
+		
+		return ret;
+	}
 }

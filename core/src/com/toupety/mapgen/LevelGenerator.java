@@ -70,13 +70,12 @@ public class LevelGenerator {
 			applyTags(level, room);
 		});
 		
-//		pathGen.generate(level);
 	}
 	
 	public void generatePaths(Level level) {
 		level.forEach(room -> { 
 			room.processItems();
-			room.getGrid().createPath();
+			room.getGrid().createPathApplyMolds();
 			room.getGrid().detectBlocksPlaces();
 		});
 	}

@@ -36,7 +36,7 @@ public class Palette {
 			return op.get().name;
 		}
 		
-		return GeneratorConstants.DEFAULT_GROUND_BRUSH;//GeneratorConstants.DEFAULT_GROUND_BRUSH
+		return base;//GeneratorConstants.DEFAULT_GROUND_BRUSH
 	}
 
 	public static class BrushChance {

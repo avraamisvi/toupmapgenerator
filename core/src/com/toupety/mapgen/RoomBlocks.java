@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.math.RandomXS128;
+import com.toupety.mapgen.Configuration.ItemDefinition;
 import com.toupety.mapgen.Room.RoomLevelBlockElement;
 import com.toupety.mapgen.cave.BlockMetaInfo;
 import com.toupety.mapgen.cave.CaveGenerator;
@@ -18,7 +19,9 @@ import com.toupety.mapgen.mold.Mold;
 import com.toupety.mapgen.mold.MoldBlock;
 import com.toupety.mapgen.mold.MoldFactory;
 import com.toupety.mapgen.mold.MoldFactory.Molds;
+import com.toupety.mapgen.painter.Decoration;
 import com.toupety.mapgen.painter.Palette;
+import com.toupety.mapgen.room.RoomItem;
 import com.toupety.mapgen.virtualpath.VirtualPathGenerator;
 
 public class RoomBlocks {
@@ -93,13 +96,9 @@ public class RoomBlocks {
 	/**
 	 * Aplica os molds aos caminhos.
 	 */
-	public void createPath() {
-//		this.createPathFromTopDoor();
-//		this.createPathFromLeftDoor();
-//		this.createPathFromRightDoor();
-//		this.createPathFromBottomDoor();
+	public void createPathApplyMolds() {
 		
-		System.out.println("criando os paths");
+		System.out.println("criando os paths e settando os molds");
 		
 		VirtualPathGenerator vph = new VirtualPathGenerator(roomDim.getW(), roomDim.getH());
 		vph.process(this);
@@ -120,12 +119,14 @@ public class RoomBlocks {
 				
 				if(mod == null) {
 					mod = MoldFactory.get().getEmpty();
-					System.out.println("################## not found ###################");
-					System.out.println("top:" + path.isOpenTop());
-					System.out.println("bottom:" + path.isOpenBottom());
-					System.out.println("left:" + path.isOpenLeft());
-					System.out.println("right:" + path.isOpenRight());
-					System.out.println("has ITEM: " + path.getItem());					
+					if(!GeneratorConstants.ITEM_PHANTOM.equals(path.getItem())) {
+						System.out.println("################## not found ###################");
+						System.out.println("top:" + path.isOpenTop());
+						System.out.println("bottom:" + path.isOpenBottom());
+						System.out.println("left:" + path.isOpenLeft());
+						System.out.println("right:" + path.isOpenRight());
+						System.out.println("has ITEM: " + path.getItem());			
+					}
 				}
 				
 				if(mod != null) {
@@ -138,132 +139,7 @@ public class RoomBlocks {
 			}
 		});
 		
-//		Mold mod = MoldFactory.get().getAny(m -> {
-//		return this.needOpen(m.getMeta().open) && m.getMeta().open.contains(Position.TOP.name());
-//	});		
-		
-		//TODO spread
-	}
-	
-//	private boolean needOpen(List<String> opens) {//TODO refazer usando a logica do virtual path
-//		return this.doors.stream().filter(door -> {
-//			return opens.contains(door.getPosition().name());			
-//		}).count() > 0;
-//	}
-	
-//	private int countLevelBlocksLeft(int x) {
-//		int ret = 0;
-//		
-//		ret = Math.abs(Configuration.getLevelGridElementContentSize() - x)/Configuration.getLevelGridElementContentSize();
-//		
-//		return ret;
-//	}
-//	
-//	private int countLevelBlocksRight(int x) {
-//		int ret = 0;
-//		
-//		ret = roomDim.getW() - (Math.abs(Configuration.getLevelGridElementContentSize() + x)/Configuration.getLevelGridElementContentSize());
-//		
-//		return ret;
-//	}
-//	
-//	private int countLevelBlocksUp(int y) {
-//		int ret = 0;
-//		
-//		ret = Math.abs(Configuration.getLevelGridElementContentSize() - y)/Configuration.getLevelGridElementContentSize();
-//		
-//		return ret;
-//	}	
-//	
-//	private int countLevelBlocksBottom(int y) {
-//		int ret = 0;
-//		
-//		ret = roomDim.getH() - (Math.abs(Configuration.getLevelGridElementContentSize() + y)/Configuration.getLevelGridElementContentSize());
-//		
-//		return ret;
-//	}
-//	
-//	private boolean found;//USADO NO VIRTUAL PATH
-////	private VirtualPath lastVirtual;
-//	
-//	private void setFoundDoor(boolean found) {
-//		this.found = found;
-//	}
-////	private void setLastVirtualPath(VirtualPath virtual) {
-////		this.lastVirtual = virtual;
-////	}	
-	
-//	public void createPathFromTopDoor() {
-//
-//		this.topWall.forEachDoor(door -> {
-//			Mold mod = MoldFactory.get().getAny(m -> {
-//				return this.needOpen(m.getMeta().open) && m.getMeta().open.contains(Position.TOP.name());
-//			});
-//			
-//			RoomLocalPath newPath = new RoomLocalPath(Direction.DOWN, mod);
-//			door.sort();
-//			
-//			RoomBlock block = door.blocks.get(0);
-//			block = getFirstRoomBlockInsideLevelBlock(block.x, block.y);
-//			newPath.addFrom(block);
-//			
-//			this.topPaths.add(newPath);
-//		});
-//	}
-//	
-//	public void createPathFromBottomDoor() {
-//
-//		this.bottomWall.forEachDoor(door -> {
-//			Mold mod = MoldFactory.get().getAny(m -> {
-//				return this.needOpen(m.getMeta().open) && m.getMeta().open.contains(Position.BOTTOM.name());
-//			});
-//			
-//			RoomLocalPath newPath = new RoomLocalPath(Direction.UP, mod);
-//			door.sort();
-//			
-//			RoomBlock block = door.blocks.get(0);
-//			block = getFirstRoomBlockInsideLevelBlock(block.x, block.y);
-//			newPath.addFrom(block);
-//			
-//			this.bottomPaths.add(newPath);
-//		});
-//	}
-//	
-//	public void createPathFromLeftDoor() {
-//
-//		this.leftWall.forEachDoor(door -> {
-//			Mold mod = MoldFactory.get().getAny(m -> {
-//				return this.needOpen(m.getMeta().open) && m.getMeta().open.contains(Position.LEFT.name());
-//			});
-//			
-//			RoomLocalPath newPath = new RoomLocalPath(Direction.RIGHT, mod);
-//			door.sort();
-//			
-//			RoomBlock block = door.blocks.get(0);
-//			block = getFirstRoomBlockInsideLevelBlock(block.x, block.y);
-//			newPath.addFrom(block);
-//			
-//			this.leftPaths.add(newPath);
-//		});
-//	}	
-//	
-//	public void createPathFromRightDoor() {
-//
-//		this.rightWall.forEachDoor(door -> {
-//			Mold mod = MoldFactory.get().getAny(m -> {
-//				return this.needOpen(m.getMeta().open) && m.getMeta().open.contains(Position.RIGHT.name());
-//			});
-//			
-//			RoomLocalPath newPath = new RoomLocalPath(Direction.LEFT, mod);
-//			door.sort();
-//			
-//			RoomBlock block = door.blocks.get(0);
-//			block = getFirstRoomBlockInsideLevelBlock(block.x, block.y);
-//			newPath.addFrom(block);
-//			
-//			this.rightPaths.add(newPath);
-//		});
-//	}	
+	}	
 	
 	public void detectBlocksPlaces() {
 		for(int x = 0; x < this.grid.length; x++) {
@@ -312,44 +188,6 @@ public class RoomBlocks {
 		new CaveGenerator().generate(this);
 	}
 	
-//	public void createPath() {
-//		if(paths.size() == 0) {
-//			this.getBottomWall().forEachDoor(door -> {
-//				createPathBottom(door);
-//			});
-//			this.getTopWall().forEachDoor(door -> {
-//				createPathTop(door);
-//			});
-//			this.getRightWall().forEachDoor(door -> {
-//				createPathRight(door);
-//			});
-//			this.getLeftWall().forEachDoor(door -> {
-//				createPathLeft(door);
-//			});			
-//		}
-//		
-//		int maxPaths = 1000;
-//		while(!isDoorsPathJoined()) {
-//			RoomLocalPath path = this.paths.get(random.nextInt(this.paths.size()));
-//			RoomLocalPathElement any = new RoomLocalPathElement(null, -1, -1);
-//			Direction dir = path.getAny(any);
-//			
-//			int lw = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
-//			int lh = random.nextInt(GeneratorConstants.MAX_ROOM_PATH_DIMENSIONS) + GeneratorConstants.MIN_ROOM_PATH_DIMENSIONS;
-//			
-//			if(any.block == null)
-//				continue;
-//			
-//			RoomLocalPath newPath = new RoomLocalPath(dir, lw, lh);
-//			this.paths.add(newPath);
-//			newPath.addFrom(any.block);
-//			
-//			if(maxPaths <= 0)
-//				break;
-//			
-//			maxPaths--;
-//		}
-//	}
 	
 	public void addJoinedDoorPath(RoomDoor door1, RoomDoor door2) {
 		this.joinedDoors.add(door1.id);
@@ -412,14 +250,6 @@ public class RoomBlocks {
 		return bottomWall;
 	}
 	
-//	public boolean isUsed(int x, int y) {
-//		return this.grid[x][y].isUsed();
-//	}
-	
-//	public synchronized boolean put(Mold room) {
-//		return this.grid[0][0].fit(room);//TODO algoritmo precisa analisar e procurar regiões com path e ai aplica nessas regioes
-//	}
-	
 	private void configureLeft(RoomBlock el, int x, int y) {
 		x = x - 1;
 		if(x >= 0 && this.grid[x][y] != null) {
@@ -470,6 +300,18 @@ public class RoomBlocks {
 		while(!done) {
 			
 		}
+	}
+	
+	public Point parsePosition(int ox, int oy) {
+		
+		Dimensions dim = getDimensions().toRoomWorldDimmensions();
+		
+		int x =  (GeneratorConstants.ROOM_BLOCK_SIZE * ox) + GeneratorConstants.ROOM_BLOCK_SIZE;
+		x = (dim.getW() - x) + dim.getX();
+		int pseudWorldRoomY = getDimensions().getY() * Configuration.getLevelGridElementContentSize();
+		int y = (oy + pseudWorldRoomY) * (GeneratorConstants.ROOM_BLOCK_SIZE);
+		
+		return new Point(x, y);
 	}	
 	
 	public class RoomBlock {
@@ -609,6 +451,7 @@ public class RoomBlocks {
 		private RoomDoor door;
 		private Direction dir;
 		private Mold mold;
+		private RoomBlock originalBlock;
 		
 		public RoomLocalPath(Direction dir, Mold mold) {
 			this.dir = dir;
@@ -646,6 +489,8 @@ public class RoomBlocks {
 				return;
 			}
 			
+			originalBlock = block;
+			
 			RoomBlock column = block;
 			RoomBlock line   = block;
 			
@@ -664,28 +509,60 @@ public class RoomBlocks {
 				if(line == null)
 					break;				
 			}
+			
+			this.setItems();
 		}
 		
-		public void add(RoomBlock block, MoldBlock moldBlock) {//FIXME BEM LIXO ESSE CODIGO
-			if(block == null)
-				return;
+		public void setItems() {
+			List<ItemDefinition> itms = mold.getMeta().items;
 			
-			if(!block.isWall() && !block.isDoor() && !block.isPath()) {
-				block.setPath(this);
-				block.setMold(moldBlock);
-				this.grid[moldBlock.getX()][moldBlock.getY()] = new RoomLocalPathElement(block, moldBlock.getX(), moldBlock.getY());//TODO is this pathele really needed?
-			} else {
-				if(block.isPath()) {
-					if(block.getPath() != null) {
-						if(block.getPath().getDoorOrigin() != null) {
-							if(this.door != null) {
-								RoomBlocks.this.addJoinedDoorPath(this.door, block.getPath().getDoorOrigin());
-							}
-						}
+			RoomBlock firstBlock = getFirstRoomBlockInsideLevelBlock(originalBlock.x, originalBlock.y);
+			Point point = parsePosition(firstBlock.x, firstBlock.y);
+			
+			int mw = mold.getWidth();
+			
+			if(itms != null && itms.size() > 0) {
+				for(ItemDefinition itm : itms) {
+					
+					if(itm.name == GeneratorConstants.ITEM_PHANTOM) {
+						continue;
 					}
+					//TODO POSICAO TEM Q SER RELATIVA POR SALA
+					//TODO entender pq dividir por 2
+					int ix = ((mw * GeneratorConstants.ROOM_BLOCK_SIZE)/2) - itm.x;//TODO os molds sao gerados na orientacao x oposta ou seja, o zero comeca do lado direito aqui inverto
+					
+					//TODO ROOM ITEM TEM Q RECEBER A POSICAO RELATIVA POR SALA
+					RoomItem itemPos = new RoomItem();
+					itemPos.x = 0;//point.x + ix
+					itemPos.y = 0;//point.y + itm.y
+					itemPos.name = itm.name;
+					RoomBlocks.this.owner.addItemPosition(itemPos);
 				}
 			}
-		}		
+		}
+		
+
+		
+//		public void add(RoomBlock block, MoldBlock moldBlock) {//FIXME BEM LIXO ESSE CODIGO
+//			if(block == null)
+//				return;
+//			
+//			if(!block.isWall() && !block.isDoor() && !block.isPath()) {
+//				block.setPath(this);
+//				block.setMold(moldBlock);
+//				this.grid[moldBlock.getX()][moldBlock.getY()] = new RoomLocalPathElement(block, moldBlock.getX(), moldBlock.getY());//TODO is this pathele really needed?
+//			} else {
+//				if(block.isPath()) {
+//					if(block.getPath() != null) {
+//						if(block.getPath().getDoorOrigin() != null) {
+//							if(this.door != null) {
+//								RoomBlocks.this.addJoinedDoorPath(this.door, block.getPath().getDoorOrigin());
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}		
 			
 	}
 	

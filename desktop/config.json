@@ -64,7 +64,7 @@
       "id": "small-verdanio",
       "from": 2,
       "limit": 2,
-      "chance": 0.16
+      "chance": 0.5
     }
   ]
 }

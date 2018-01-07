@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.toupety.mapgen.Configuration.ItemConfiguration;
+import com.toupety.mapgen.Configuration.ItemDefinition;
 import com.toupety.mapgen.Configuration.Key;
 import com.toupety.mapgen.Configuration.Tag;
 import com.toupety.mapgen.LevelGeneratorPersistence.RoomInfo;
@@ -57,9 +58,9 @@ public class Room {
 	 * Metadata to help generate the correct file info for room, contains position for elements and other things like itens etc.
 	 */
 	//Position of the items and elements in the room
-	private List<RoomItem> roomItemsPosition; //receive from mold
-	private List<RoomArea> roomAreasPosition;//receive from mold
-	private List<RoomElement> roomElementsPosition;//receive from mold
+	private List<RoomItem> roomItemsPosition = new ArrayList<>(); //receive from mold
+	private List<RoomArea> roomAreasPosition = new ArrayList<>();//receive from mold
+	private List<RoomElement> roomElementsPosition = new ArrayList<>();//receive from mold
 	
 	public Room(Dimensions dim) {
 		rand.nextInt();rand.nextLong();
@@ -101,9 +102,7 @@ public class Room {
 	public void draw(ShapeRenderer renderer) {
 		
 		Dimensions dim = grid.getDimensions().toRoomWorldDimmensions();
-//		decorations.forEach(dec -> {
-//			
-//		});
+
 		int x = 0;
 		int y = 0;
 		for(Decoration dec : decorations) {
@@ -118,7 +117,28 @@ public class Room {
 			renderer.end();			
 		}
 		
+		for(RoomItem itm : roomItemsPosition) {
+			
+			Point point = parsePosition(itm.x, itm.y);
+			
+			ItemDefinition item = Configuration.items.items.get(itm.name);
+			renderer.begin(ShapeType.Filled);
+			renderer.setColor(item.color[0], item.color[1], item.color[2], 1);
+			renderer.rect(point.x, point.y, item.width, item.height);
+			renderer.end();
+		}		
+		
 	}
+	
+	//TODO codigo repetido colocar num util
+	public Point parsePosition(int ox, int oy) {
+		Dimensions dim = this.dim.toRoomWorldDimmensions();
+		int x =  (GeneratorConstants.ROOM_BLOCK_SIZE * ox) + GeneratorConstants.ROOM_BLOCK_SIZE;
+		x = (dim.getW() - x) + dim.getX();
+		int pseudWorldRoomY = this.dim.getY() * Configuration.getLevelGridElementContentSize();
+		int y = (oy + pseudWorldRoomY) * (GeneratorConstants.ROOM_BLOCK_SIZE);
+		return new Point(x, y);
+	}	
 	
 	public List<Decoration> getDecorations() {
 		return decorations;
@@ -371,8 +391,10 @@ public class Room {
 		ret.y = this.getY();
 		ret.width = this.getWidth();
 		ret.heigth = this.getHeight();
-		ret.key = this.key.color;
-		ret.tags = this.tags.stream().map(t -> t.id).collect(Collectors.toList());
+		if(this.key != null)
+			ret.key = this.key.color;
+		if(this.tags != null)
+			ret.tags = this.tags.stream().map(t -> t.id).collect(Collectors.toList());
 		
 		return ret;
 	}

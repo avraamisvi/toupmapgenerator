@@ -56,29 +56,37 @@ public class LevelGeneratorPersistence {
 		}
 	}
 	
-	private static void saveRoom(Room r, Path root) throws JsonProcessingException, IOException {
+	private static void saveRoom(Room r, Path root) {
 		
-		Path roomPath = root.resolve("room_" + r.getIndex());
-		
-		Files.createDirectory(roomPath);
-		
-		Path moldPath = roomPath.resolve("mold.txt");
-		Path infoPath = roomPath.resolve("info.json");		
-
-		ObjectMapper mapper = new ObjectMapper();
-		ObjectWriter pretty = mapper.writerWithDefaultPrettyPrinter();
-		
-		Files.write(infoPath, pretty.writeValueAsBytes(r.generateRoomInfo()));					
-		
-		StringBuilder builder = new StringBuilder();
-		
-		for (int j = 0; j < r.getGrid().getH(); j++) {
-			for (int i = r.getGrid().getW() - 1; i >= 0; i--) {
-				RoomBlock b = r.getGrid().getAt(i, j).get();
-				builder.append(b.getMetaInfo().getType());
+		try {
+			Path roomPath = root.resolve("room_" + r.getIndex());
+			
+			Files.createDirectory(roomPath);
+			
+			
+			Path mapPath = roomPath.resolve("map.txt");
+			Path infoPath = roomPath.resolve("info.json");		
+	
+			ObjectMapper mapper = new ObjectMapper();
+			ObjectWriter pretty = mapper.writerWithDefaultPrettyPrinter();
+			
+			Files.write(infoPath, pretty.writeValueAsBytes(r.generateRoomInfo()));					
+			
+			StringBuilder builder = new StringBuilder();
+			
+			for (int j = 0; j < r.getGrid().getH(); j++) {
+				for (int i = 0; i < r.getGrid().getW(); i++) {
+					RoomBlock b = r.getGrid().getAt(i, j).get();
+					builder.append(b.getMetaInfo().getType());
+				}
+				builder.append("\n");
 			}
-			builder.append("\n");
-		}		
+			
+			Files.write(mapPath, builder.toString().getBytes());
+			
+		} catch(Throwable ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 	
 	public RoomInfo processRoomInfo(Room room) {

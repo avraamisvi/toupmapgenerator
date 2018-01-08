@@ -116,15 +116,16 @@ public class Room {
 			renderer.rect(x, y, dec.width, dec.height);
 			renderer.end();			
 		}
+
 		
 		for(RoomItem itm : roomItemsPosition) {
 			
-			Point point = parsePosition(itm.x, itm.y);
+//			Point point = parsePosition(itm.x, itm.y);
 			
 			ItemDefinition item = Configuration.items.items.get(itm.name);
 			renderer.begin(ShapeType.Filled);
 			renderer.setColor(item.color[0], item.color[1], item.color[2], 1);
-			renderer.rect(point.x, point.y, item.width, item.height);
+			renderer.rect(itm.x + dim.getX(), itm.y + dim.getY(), item.width, item.height);
 			renderer.end();
 		}		
 		

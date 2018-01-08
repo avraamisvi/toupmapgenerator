@@ -181,7 +181,7 @@ public class Configuration {
 		}
 		
 		public void draw(ShapeRenderer renderer) {
-			draw(renderer, this.x, this.y);
+			draw(renderer, this.x * GeneratorConstants.ROOM_BLOCK_SIZE, this.y * GeneratorConstants.ROOM_BLOCK_SIZE);
 		}
 		
 		public void draw(ShapeRenderer renderer, int x, int y) {
@@ -241,16 +241,16 @@ public class Configuration {
 			int h = ny - y;
 			
 			if(w < 0)
-				w = 5;
+				w = 1;
 			
 			if(h < 0)
-				h = 5;
+				h = 1;
+			
+			width = w + 1;
+			height = h + 1;
 			
 			this.bounds.height = h;
-			this.bounds.width = w;
-			
-			width = w;
-			height = h;
+			this.bounds.width = w;			
 		}		
 		
 		public boolean contains(int x, int y) {
@@ -263,19 +263,19 @@ public class Configuration {
 		}
 		
 		public void draw(ShapeRenderer renderer) {
-			draw(renderer, this.x, this.y);
+			draw(renderer, this.x * GeneratorConstants.ROOM_BLOCK_SIZE, this.y * GeneratorConstants.ROOM_BLOCK_SIZE);
 		}
 		
 		public void draw(ShapeRenderer renderer, int x, int y) {
 			
 			renderer.begin(ShapeType.Filled);
 			renderer.setColor(color[0], color[1], color[2], 1);
-			renderer.rect(x, y, width, height);
+			renderer.rect(x, y, width * GeneratorConstants.ROOM_BLOCK_SIZE, height * GeneratorConstants.ROOM_BLOCK_SIZE);
 			renderer.end();
 			
 			renderer.begin(ShapeType.Line);
 			renderer.setColor(Color.WHITE);
-			renderer.rect(x, y, width, height);
+			renderer.rect(x, y, width * GeneratorConstants.ROOM_BLOCK_SIZE, height * GeneratorConstants.ROOM_BLOCK_SIZE);
 			renderer.end();				
 		}		
 		
@@ -335,19 +335,19 @@ public class Configuration {
 		}
 		
 		public void draw(ShapeRenderer renderer) {
-			draw(renderer, this.x, this.y);
+			draw(renderer, this.x * GeneratorConstants.ROOM_BLOCK_SIZE, this.y * GeneratorConstants.ROOM_BLOCK_SIZE);
 		}
 		
 		public void draw(ShapeRenderer renderer, int x, int y) {
 			
 			renderer.begin(ShapeType.Filled);
 			renderer.setColor(color[0], color[1], color[2], 1);
-			renderer.rect(x, y, width, height);
+			renderer.rect(x, y, width * GeneratorConstants.ROOM_BLOCK_SIZE, height * GeneratorConstants.ROOM_BLOCK_SIZE);
 			renderer.end();
 			
 			renderer.begin(ShapeType.Line);
 			renderer.setColor(Color.RED);
-			renderer.rect(x, y, width, height);
+			renderer.rect(x, y, width * GeneratorConstants.ROOM_BLOCK_SIZE, height * GeneratorConstants.ROOM_BLOCK_SIZE);
 			renderer.end();				
 		}		
 		

@@ -515,9 +515,14 @@ public class RoomBlocks {
 		
 		public void setItems() {
 			List<ItemDefinition> itms = mold.getMeta().items;
+//			
+//			RoomBlock firstBlock = getFirstRoomBlockInsideLevelBlock(originalBlock.x, originalBlock.y);
+//			Point point = parsePosition(firstBlock.x, firstBlock.y);
 			
-			RoomBlock firstBlock = getFirstRoomBlockInsideLevelBlock(originalBlock.x, originalBlock.y);
-			Point point = parsePosition(firstBlock.x, firstBlock.y);
+			Point point = new Point(originalBlock.x, originalBlock.y);
+			point.x = point.x * GeneratorConstants.ROOM_BLOCK_SIZE;
+			point.y = point.y * GeneratorConstants.ROOM_BLOCK_SIZE;
+//			if(point.x)
 			
 			int mw = mold.getWidth();
 			
@@ -529,12 +534,12 @@ public class RoomBlocks {
 					}
 					//TODO POSICAO TEM Q SER RELATIVA POR SALA
 					//TODO entender pq dividir por 2
-					int ix = ((mw * GeneratorConstants.ROOM_BLOCK_SIZE)/2) - itm.x;//TODO os molds sao gerados na orientacao x oposta ou seja, o zero comeca do lado direito aqui inverto
+					int ix = (mw * GeneratorConstants.ROOM_BLOCK_SIZE) - itm.x;//TODO os molds sao gerados na orientacao x oposta ou seja, o zero comeca do lado direito aqui inverto
 					
 					//TODO ROOM ITEM TEM Q RECEBER A POSICAO RELATIVA POR SALA
 					RoomItem itemPos = new RoomItem();
-					itemPos.x = 0;//point.x + ix
-					itemPos.y = 0;//point.y + itm.y
+					itemPos.x = point.x + ix;//point.x + ix
+					itemPos.y = point.y + itm.y;//point.y + itm.y
 					itemPos.name = itm.name;
 					RoomBlocks.this.owner.addItemPosition(itemPos);
 				}

@@ -587,7 +587,17 @@ public class Chunk implements InputProcessor{
 		} else {
 			if(selectedElement != null) {
 				ElementDefinition item = selectedElement.copy();
-				item.setPosition(this.mousex, this.mousey);
+//				item.setPosition(this.mousex, this.mousey);
+				
+				for(int x = 0; x < grid.length; x++) {
+					for(int y = 0; y < grid[0].length; y++) {
+						if(grid[x][y].bounds.contains(this.mousex, this.mousey)) {
+							item.setPosition(x, y);
+							break;
+						}
+					}
+				}				
+				
 				elements.add(item);
 			}
 		}
@@ -601,8 +611,18 @@ public class Chunk implements InputProcessor{
 			});
 		} else {
 			if(selectedItem != null) {
+				
 				ItemDefinition item = selectedItem.copy();
-				item.setPosition(this.mousex, this.mousey);
+				
+				for(int x = 0; x < grid.length; x++) {
+					for(int y = 0; y < grid[0].length; y++) {
+						if(grid[x][y].bounds.contains(this.mousex, this.mousey)) {
+							item.setPosition(x, y);
+							break;
+						}
+					}
+				}
+				
 				items.add(item);
 			}
 		}
@@ -616,7 +636,16 @@ public class Chunk implements InputProcessor{
 			});
 		} else {
 			if(selectedArea.isSelected()) {
-				selectedArea.setPosition(this.mousex, this.mousey);
+				
+				for(int x = 0; x < grid.length; x++) {
+					for(int y = 0; y < grid[0].length; y++) {
+						if(grid[x][y].bounds.contains(this.mousex, this.mousey)) {
+							selectedArea.setPosition(x, y);
+							break;
+						}
+					}
+				}				
+				
 			}
 		}
 	}	
@@ -776,27 +805,51 @@ public class Chunk implements InputProcessor{
 			if(area == null || drawnMode != DrawnMode.AREA)
 				return;
 			
-			if(x == -1) {
-				drawCircle();
-			} else {
+			if(x != -1) {
+//				drawCircle();
+//			} else {
 				drawArea();
 			}
 		}
 
-		private void drawCircle() {
-			renderer.begin(ShapeType.Filled);
-			renderer.setColor(area.color[0], area.color[1], area.color[2], area.color[3]);
-			renderer.circle(mousex, mousey, 2);
-			renderer.end();
-		}
+//		private void drawCircle() {
+//			renderer.begin(ShapeType.Filled);
+//			renderer.setColor(area.color[0], area.color[1], area.color[2], area.color[3]);
+//			renderer.circle(mousex, mousey, 2);
+//			renderer.end();
+//		}
 		
 		private void drawArea() {
-			area.setSize(mousex, mousey);
+			
+			int nextX = this.x;
+			int nextY = this.y;
+			
+			OUT: for(int lx = this.x; lx < grid.length; lx++) {
+				for(int ly = this.y; ly < grid[0].length; ly++) {
+					if(grid[lx][ly].bounds.contains(mousex, mousey)) {
+						System.out.println(lx);
+						System.out.println(ly);
+						nextX = lx;
+						nextY = ly;
+						break OUT;
+					}
+				}
+			}
+		
 			renderer.begin(ShapeType.Filled);
-			renderer.setColor(area.color[0], area.color[1], area.color[2], area.color[3]);
-			renderer.circle(mousex, mousey, 2);
+			renderer.setColor(area.color[0], area.color[1], area.color[2], 1);
+			renderer.rect(x * GeneratorConstants.ROOM_BLOCK_SIZE, y * GeneratorConstants.ROOM_BLOCK_SIZE,
+					((nextX - x)+1) * GeneratorConstants.ROOM_BLOCK_SIZE, ((nextY - y)+1) * GeneratorConstants.ROOM_BLOCK_SIZE);
 			renderer.end();
-			area.draw(renderer);
+			
+			area.setSize(nextX, nextY);
+//			System.out.println("AREA X: " + ((mousex/GeneratorConstants.ROOM_BLOCK_SIZE) - x));
+//			System.out.println("AREA Y: " + ((mousex/GeneratorConstants.ROOM_BLOCK_SIZE) - y));
+//			renderer.begin(ShapeType.Filled);
+//			renderer.setColor(area.color[0], area.color[1], area.color[2], area.color[3]);
+//			renderer.circle(mousex, mousey, 2);
+//			renderer.end();
+//			area.draw(renderer);
 		}
 	}
 }

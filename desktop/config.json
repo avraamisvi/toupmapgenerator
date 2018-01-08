@@ -45,7 +45,7 @@
     {
       "id": "PHANTOM",
       "from": 0,
-      "limit": 100,
+      "limit": 1000,
       "chance": 0.40
     },       
     {
@@ -56,15 +56,15 @@
     },    
     {
       "id": "big-verdanio",
-      "from": 3,
+      "from": 5,
       "limit": 1,
       "chance": 0.16
     },
     {
       "id": "small-verdanio",
-      "from": 2,
-      "limit": 2,
-      "chance": 0.5
+      "from": 0,
+      "limit": 1,
+      "chance": 1
     }
   ]
 }

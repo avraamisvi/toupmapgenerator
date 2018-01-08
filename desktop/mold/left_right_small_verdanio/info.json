@@ -4,11 +4,11 @@
     "index" : 0,
     "name" : "box",
     "shape" : "box",
-    "width" : 128,
-    "height" : 128,
+    "width" : 2,
+    "height" : 2,
     "color" : [ 1.0, 0.8, 0.0 ],
-    "x" : 875,
-    "y" : 1581
+    "x" : 13,
+    "y" : 24
   } ],
   "items" : [ {
     "index" : 0,
@@ -17,17 +17,17 @@
     "width" : 92,
     "height" : 114,
     "color" : [ 0.0, 0.5, 0.0 ],
-    "x" : 1378,
-    "y" : 664
+    "x" : 21,
+    "y" : 10
   } ],
   "areas" : [ {
     "index" : 1,
     "name" : "oil",
-    "width" : 507,
-    "height" : 177,
+    "width" : 8,
+    "height" : 3,
     "color" : [ 0.3, 0.3, 0.3, 0.7 ],
-    "x" : 1156,
-    "y" : 1036
+    "x" : 18,
+    "y" : 16
   } ],
   "tags" : null,
   "maxWidth" : 30,

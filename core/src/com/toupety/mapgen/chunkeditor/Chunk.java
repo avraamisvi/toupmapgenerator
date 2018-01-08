@@ -59,6 +59,9 @@ public class Chunk implements InputProcessor{
 	Block grid[][] = new Block[Configuration.getLevelGridElementContentSize()][Configuration.getLevelGridElementContentSize()];
 	private int mousex;
 	private int mousey;
+
+	private int mouseGridX;
+	private int mouseGridY;	
 	
 	private Brush brush = Configuration.brushes.get("ground");
 	
@@ -277,8 +280,8 @@ public class Chunk implements InputProcessor{
 		font.draw(spriteBatch, "ITEM: " + selectedItem.name, 1900, 1950);
 		
 		spriteBatch.end();
-		
-		selectedItem.draw(renderer, this.mousex, this.mousey);
+		System.out.println(this.mouseGridX);
+		selectedItem.draw(renderer, this.mouseGridX * GeneratorConstants.ROOM_BLOCK_SIZE, this.mouseGridY * GeneratorConstants.ROOM_BLOCK_SIZE);
 	}
 	
 	void drawnElementSelected() {
@@ -295,7 +298,7 @@ public class Chunk implements InputProcessor{
 		
 		spriteBatch.end();
 		
-		selectedElement.draw(renderer, this.mousex, this.mousey);
+		selectedElement.draw(renderer, this.mouseGridX * GeneratorConstants.ROOM_BLOCK_SIZE, this.mouseGridY * GeneratorConstants.ROOM_BLOCK_SIZE);
 	}	
 	
 	
@@ -730,6 +733,19 @@ public class Chunk implements InputProcessor{
 		this.mousex = (int) point.x;
 		this.mousey = (int) point.y;
 		
+		OUT: for(int lx = 0; lx < grid.length; lx++) {//TODO melhorar
+			for(int ly = 0; ly < grid[0].length; ly++) {
+				if(grid[lx][ly].bounds.contains(mousex, mousey)) {
+					this.mouseGridX = lx;
+					this.mouseGridY = ly;
+					break OUT;
+				}
+			}
+		}
+		
+//		this.mouseGridX = (this.mousex / GeneratorConstants.ROOM_BLOCK_SIZE) + (this.mousex % GeneratorConstants.ROOM_BLOCK_SIZE);
+//		this.mouseGridY = (this.mousey / GeneratorConstants.ROOM_BLOCK_SIZE) + (this.mousey % GeneratorConstants.ROOM_BLOCK_SIZE);
+				
 //		this.mousex = (this.mousex % GeneratorConstants.ROOM_BLOCK_SIZE) + GeneratorConstants.ROOM_BLOCK_SIZE;
 //		this.mousey = (this.mousey % GeneratorConstants.ROOM_BLOCK_SIZE) + GeneratorConstants.ROOM_BLOCK_SIZE;
 		
@@ -827,8 +843,6 @@ public class Chunk implements InputProcessor{
 			OUT: for(int lx = this.x; lx < grid.length; lx++) {
 				for(int ly = this.y; ly < grid[0].length; ly++) {
 					if(grid[lx][ly].bounds.contains(mousex, mousey)) {
-						System.out.println(lx);
-						System.out.println(ly);
 						nextX = lx;
 						nextY = ly;
 						break OUT;

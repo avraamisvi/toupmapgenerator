@@ -340,14 +340,18 @@ public class Configuration {
 		
 		public void draw(ShapeRenderer renderer, int x, int y) {
 			
+//			int realW = width  * GeneratorConstants.ROOM_BLOCK_SIZE;
+//			int realH = height * GeneratorConstants.ROOM_BLOCK_SIZE;
+			
 			renderer.begin(ShapeType.Filled);
 			renderer.setColor(color[0], color[1], color[2], 1);
-			renderer.rect(x, y, width * GeneratorConstants.ROOM_BLOCK_SIZE, height * GeneratorConstants.ROOM_BLOCK_SIZE);
+//			renderer.rect(x + realW/4, y + realH/4, realW, realH);
+			renderer.rect(x - width/4, y - height/4, width, height);
 			renderer.end();
 			
 			renderer.begin(ShapeType.Line);
 			renderer.setColor(Color.RED);
-			renderer.rect(x, y, width * GeneratorConstants.ROOM_BLOCK_SIZE, height * GeneratorConstants.ROOM_BLOCK_SIZE);
+			renderer.rect(x - width/4, y - height/4, width, height);
 			renderer.end();				
 		}		
 		

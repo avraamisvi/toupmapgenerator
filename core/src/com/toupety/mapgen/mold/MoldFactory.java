@@ -21,7 +21,8 @@ public class MoldFactory {
 	Mold empty = null;
 	RandomXS128 rand = new RandomXS128();
 	
-	HashMap<String, Molds> moldsMap = new HashMap<>(); 
+	HashMap<String, Molds> moldsMap = new HashMap<>();
+	private Mold verdanio; 
 	
 	public static MoldFactory get() {
 		
@@ -48,6 +49,10 @@ public class MoldFactory {
 					json.setIgnoreUnknownFields(true);
 					MoldMeta meta = json.fromJson(MoldMeta.class, new FileReader(path.resolve("info.json").toFile()));
 					
+					if(meta.name.contains("verdanio")) {
+						System.out.println("meta.name: "+ meta.name);
+					}
+					
 					Mold mold = new Mold(meta, lines);
 					String opens = meta.open.stream().sorted().collect(Collectors.joining("_"));
 					
@@ -62,6 +67,10 @@ public class MoldFactory {
 					
 					if(meta.name.equals("empty")) {
 						empty = mold;
+					}
+					
+					if(meta.name.contains("verdanio")) {
+						verdanio = mold;
 					}
 					
 				} catch(Exception ex) {
@@ -101,6 +110,11 @@ public class MoldFactory {
 	public Mold getEmpty() {
 		return empty;
 	}
+	
+	@Deprecated
+	public Mold getVerdanio() {//APENAS PARA TESTES
+		return verdanio;
+	}	
 	
 	public class Molds {
 		List<Mold> molds = new ArrayList<>();

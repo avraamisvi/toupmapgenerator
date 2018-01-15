@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.Configuration.ItemDefinition;
 import com.toupety.mapgen.Room.RoomLevelBlockElement;
@@ -128,12 +129,12 @@ public class RoomBlocks {
 						System.out.println("has ITEM: " + path.getItem());			
 					}
 				}
-				
+//				mod = MoldFactory.get().getVerdanio();//FIXME REMOVER usado apenas para testes
 				if(mod != null) {
 					int lx = path.x * Configuration.getLevelGridElementContentSize();
 					int ly = path.y * Configuration.getLevelGridElementContentSize();
 					
-					RoomLocalPath newPath = new RoomLocalPath(Direction.DOWN, mod);
+					RoomLocalPath newPath = new RoomLocalPath(Direction.DOWN, mod);//FIXME PARECE Q nao to usando o RoomLocalPath de fato, ou seja, guardando
 					newPath.addFrom(this.grid[lx][ly]);
 				}
 			}
@@ -499,6 +500,7 @@ public class RoomBlocks {
 					
 					this.grid[x][y] = new RoomLocalPathElement(column, x, y);
 					column.setMold(this.mold.getGrid()[x][y]);
+					this.setItems(this.mold.getGrid()[x][y], column);
 					
 					column = column.down;
 					if(column == null)
@@ -510,40 +512,47 @@ public class RoomBlocks {
 					break;				
 			}
 			
-			this.setItems();
 		}
 		
-		public void setItems() {
-			List<ItemDefinition> itms = mold.getMeta().items;
-//			
-//			RoomBlock firstBlock = getFirstRoomBlockInsideLevelBlock(originalBlock.x, originalBlock.y);
-//			Point point = parsePosition(firstBlock.x, firstBlock.y);
+		public void setItems(MoldBlock moldBlock, RoomBlock roomBlock) {
 			
-			Point point = new Point(originalBlock.x, originalBlock.y);
-			point.x = point.x * GeneratorConstants.ROOM_BLOCK_SIZE;
-			point.y = point.y * GeneratorConstants.ROOM_BLOCK_SIZE;
-//			if(point.x)
+			//TODO TA CONSUMINDO UMA BAITA MEMORIA AHHAHAAH
+			moldBlock.forEachItems(it -> {
+				
+				RoomItem roomItem = new RoomItem();
+				roomItem.x = roomBlock.x;
+				roomItem.y = roomBlock.y;
+				roomItem.name = it.name;
+				roomItem.dx = roomBlock.x;
+				roomItem.dy = roomBlock.y;
+				
+				RoomBlocks.this.owner.addItemPosition(roomItem);
+			});
 			
-			int mw = mold.getWidth();
 			
-			if(itms != null && itms.size() > 0) {
-				for(ItemDefinition itm : itms) {
-					
-					if(itm.name == GeneratorConstants.ITEM_PHANTOM) {
-						continue;
-					}
-					//TODO POSICAO TEM Q SER RELATIVA POR SALA
-					//TODO entender pq dividir por 2
-					int ix = (mw * GeneratorConstants.ROOM_BLOCK_SIZE) - itm.x;//TODO os molds sao gerados na orientacao x oposta ou seja, o zero comeca do lado direito aqui inverto
-					
-					//TODO ROOM ITEM TEM Q RECEBER A POSICAO RELATIVA POR SALA
-					RoomItem itemPos = new RoomItem();
-					itemPos.x = point.x + ix;//point.x + ix
-					itemPos.y = point.y + itm.y;//point.y + itm.y
-					itemPos.name = itm.name;
-					RoomBlocks.this.owner.addItemPosition(itemPos);
-				}
-			}
+			/*
+			 * 			if(bl.getOwner() != null ) {
+				final int fx = x;
+				final int fy = y;
+				
+				bl.getOwner().forEachItems(itm -> {//desenhando os items
+					renderer.begin(ShapeType.Filled);
+					renderer.setColor(itm.color[0], itm.color[1], itm.color[2], 1);
+					renderer.rect(fx + itm.dx, fy + itm.dy, itm.width, itm.height);
+					renderer.end();						
+				});
+			}	
+			
+			int x =  (GeneratorConstants.ROOM_BLOCK_SIZE * bl.getX()) + GeneratorConstants.ROOM_BLOCK_SIZE;
+			
+			x = (dim.getW() - x) + dim.getX();
+			
+			int pseudWorldRoomY = grid.getDimensions().getY() * Configuration.getLevelGridElementContentSize();
+			int y = (bl.getY() + pseudWorldRoomY) * (GeneratorConstants.ROOM_BLOCK_SIZE);
+						
+			*
+			*
+			 */
 		}
 		
 

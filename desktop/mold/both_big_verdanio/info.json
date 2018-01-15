@@ -1,5 +1,5 @@
 {
-  "name" : "both_small_verdanio",
+  "name" : "both_big_verdanio",
   "elements" : [ {
     "index" : 0,
     "name" : "box",
@@ -14,7 +14,7 @@
   } ],
   "items" : [ {
     "index" : 0,
-    "name" : "small-verdanio",
+    "name" : "big-verdanio",
     "shape" : "box",
     "width" : 92,
     "height" : 114,

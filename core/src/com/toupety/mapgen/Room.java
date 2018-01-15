@@ -100,12 +100,12 @@ public class Room {
 	}
 	
 	public void draw(ShapeRenderer renderer) {
-		
+		//TODO provavelmente esses decorations estao sendo impressos erradamente
 		Dimensions dim = grid.getDimensions().toRoomWorldDimmensions();
 
 		int x = 0;
 		int y = 0;
-		for(Decoration dec : decorations) {
+		for(Decoration dec : decorations) {//TODO parece haver erro aqui
 			x =  (GeneratorConstants.ROOM_BLOCK_SIZE * dec.x) + GeneratorConstants.ROOM_BLOCK_SIZE;
 			x = (dim.getW() - x) + dim.getX();
 			int pseudWorldRoomY = grid.getDimensions().getY() * Configuration.getLevelGridElementContentSize();
@@ -117,15 +117,17 @@ public class Room {
 			renderer.end();			
 		}
 
-		
 		for(RoomItem itm : roomItemsPosition) {
 			
-//			Point point = parsePosition(itm.x, itm.y);
+			x =  (GeneratorConstants.ROOM_BLOCK_SIZE * itm.x) + GeneratorConstants.ROOM_BLOCK_SIZE;
+			x = (dim.getW() - x) + dim.getX();
+			int pseudWorldRoomY = grid.getDimensions().getY() * Configuration.getLevelGridElementContentSize();
+			y = (itm.y + pseudWorldRoomY) * (GeneratorConstants.ROOM_BLOCK_SIZE);
 			
 			ItemDefinition item = Configuration.items.items.get(itm.name);
 			renderer.begin(ShapeType.Filled);
 			renderer.setColor(item.color[0], item.color[1], item.color[2], 1);
-			renderer.rect(itm.x + dim.getX(), itm.y + dim.getY(), item.width, item.height);
+			renderer.rect(x + itm.dx, y + itm.dy, item.width, item.height);
 			renderer.end();
 		}		
 		
@@ -377,7 +379,7 @@ public class Room {
 		this.roomAreasPosition.add(area);
 	}
 	
-	public void addItemPosition(RoomElement element) {
+	public void addElementPosition(RoomElement element) {
 		this.roomElementsPosition.add(element);
 	}
 	

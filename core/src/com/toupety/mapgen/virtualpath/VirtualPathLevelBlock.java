@@ -84,7 +84,7 @@ public class VirtualPathLevelBlock {
 		if(!checkTags(meta))
 			return false;
 		
-		boolean top = meta.open.contains(Position.TOP.name());
+		boolean top = meta.open.contains(Position.TOP.name());//TODO precisa verificar isso?
 		boolean left = meta.open.contains(Position.LEFT.name());
 		boolean right = meta.open.contains(Position.RIGHT.name());
 		boolean bottom = meta.open.contains(Position.BOTTOM.name());

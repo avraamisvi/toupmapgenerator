@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.toupety.mapgen.CameraHolder;
 import com.toupety.mapgen.Configuration;
 import com.toupety.mapgen.Configuration.Brush;
+import com.toupety.mapgen.Configuration.ItemDefinition;
+import com.toupety.mapgen.room.RoomItem;
 import com.toupety.mapgen.GeneratorConstants;
 import com.toupety.mapgen.Dimensions;
 import com.toupety.mapgen.RoomBlocks;
@@ -97,8 +99,20 @@ public class RoomGridScreenDrawner implements ElementDrawner<RoomBlocks> {
 				renderer.begin(shType);
 				renderer.setColor(color);
 				renderer.rect(x, y, size, size);
-				renderer.end();				
+				renderer.end();
 			}
+			
+//			if(bl.getOwner() != null ) {
+//				final int fx = x;
+//				final int fy = y;
+//				
+//				bl.getOwner().forEachItems(itm -> {//desenhando os items
+//					renderer.begin(ShapeType.Filled);
+//					renderer.setColor(itm.color[0], itm.color[1], itm.color[2], 1);
+//					renderer.rect(fx + itm.dx, fy + itm.dy, itm.width, itm.height);
+//					renderer.end();						
+//				});
+//			}			
 		});
 	}
 }

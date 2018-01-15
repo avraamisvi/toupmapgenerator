@@ -8,19 +8,21 @@
     "height" : 2,
     "color" : [ 1.0, 0.8, 0.0 ],
     "x" : 13,
-    "y" : 24
+    "y" : 24,
+    "dx" : 0,
+    "dy" : 0
   } ],
   "items" : [ {
     "index" : 0,
-    "name" : "small-verdanio",
+    "name" : "big-verdanio",
     "shape" : "box",
     "width" : 92,
     "height" : 114,
     "color" : [ 0.0, 0.5, 0.0 ],
     "x" : 21,
-    "y" : 9,
-    "dx" : 29,
-    "dy" : 22
+    "y" : 10,
+    "dx" : 37,
+    "dy" : 14
   } ],
   "areas" : [ {
     "index" : 1,

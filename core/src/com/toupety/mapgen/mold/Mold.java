@@ -27,9 +27,16 @@ public class Mold {
 			line = lines.get(y);
 			for(int x = 0; x < width; x++) {
 				MoldBlock b = new MoldBlock(line.charAt(x), x, y);
+				b.setMeta(meta);
 				blocks.add(b);//TODO metadata for each block?
 				grid[x][y] = b;
 			}
+		}
+		
+		if(meta.items != null && !meta.items.isEmpty()) {
+			meta.items.forEach(itm -> {
+				grid[(meta.maxWidth - 1) - itm.x][itm.y].addItem(itm);//(meta.maxWidth - 1) inverte o X
+			});
 		}
 		
 		this.meta = meta;

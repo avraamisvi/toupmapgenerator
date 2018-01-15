@@ -1,0 +1,21 @@
+{
+  "name" : "top_bottom",
+  "elements" : [ ],
+  "items" : [ {
+    "index" : 0,
+    "name" : "big-verdanio",
+    "shape" : "box",
+    "width" : 92,
+    "height" : 114,
+    "color" : [ 0.0, 0.5, 0.0 ],
+    "x" : 21,
+    "y" : 10,
+    "dx" : 37,
+    "dy" : 14
+  } ],
+  "areas" : [ ],
+  "tags" : null,
+  "maxWidth" : 30,
+  "maxHeigth" : 30,
+  "open" : [ "TOP", "BOTTOM" ]
+}

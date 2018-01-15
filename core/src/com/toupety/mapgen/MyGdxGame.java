@@ -9,12 +9,14 @@ import java.util.concurrent.Executors;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.toupety.mapgen.algorithms.BoundedRoomAlgorithm;
 import com.toupety.mapgen.algorithms.RoomAlgorithm;
 import com.toupety.mapgen.drawner.DrawnerFactory;
@@ -47,6 +49,60 @@ public class MyGdxGame extends ApplicationAdapter {
 //		this.testRenderer = new ShapeRenderer();
 		
 		Gdx.graphics.setWindowedMode(1024, 648);
+		
+		Gdx.input.setInputProcessor(new InputProcessor() {
+			
+			@Override
+			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+				Vector3 point = CameraHolder.instance().getOrtho().unproject(new Vector3(screenX, screenY, 0));
+				System.out.println("touchUp");
+				System.out.println(point.x);
+				System.out.println(point.y);
+				return false;
+			}
+			
+			@Override
+			public boolean touchDragged(int screenX, int screenY, int pointer) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean scrolled(int amount) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean mouseMoved(int screenX, int screenY) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean keyUp(int keycode) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean keyTyped(char character) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean keyDown(int keycode) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});		
 	}
 
 	private Map<String, Object> defaultArgs() {
@@ -95,6 +151,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	
 	int deslocSpeed = GeneratorConstants.DESLOC_SPEED;
 	private void handleInput() {
+		
 		if (Gdx.input.isKeyPressed(Input.Keys.PLUS)) {
 			deslocSpeed += 500;
 		}		

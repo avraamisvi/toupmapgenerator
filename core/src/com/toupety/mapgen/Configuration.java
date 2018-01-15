@@ -104,7 +104,7 @@ public class Configuration {
 	   }
 	   
 	   public boolean isAvaiable() {
-		   return limit > 0 || limit == -1;
+		   return limit != 0;
 	   }	   
 	}
 	

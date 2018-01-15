@@ -2,6 +2,7 @@ package com.toupety.mapgen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +16,8 @@ import com.badlogic.gdx.math.RandomXS128;
 public class Level {
 	private int height;
 	private int width;
-	private Map<String, Room> rooms;
+	private LinkedHashMap<String, Room> rooms;
+	private List<Room> roomsList;
 	private List<String> ids;
 	private RandomXS128 rand;
 	private LevelGrid grid;
@@ -24,7 +26,8 @@ public class Level {
 	public Level(int width, int height) {
 		this.height = height;
 		this.width = width;
-		this.rooms = new HashMap<>();
+		this.rooms = new LinkedHashMap<>();
+		this.roomsList = new ArrayList<>();
 		this.ids = new ArrayList<>();
 		this.rand = new RandomXS128();
 		
@@ -55,9 +58,13 @@ public class Level {
 			if(grid.addRoom(room)) {			
 				this.ids.add(room.getId());
 				rooms.put(room.getId(), room);
+				roomsList.add(room);
 			}
 		}
-		
+	}
+	
+	public Room getRoom(int pos) {
+		return roomsList.get(pos);
 	}
 	
 	public void forEach(Consumer<Room> consumer) {

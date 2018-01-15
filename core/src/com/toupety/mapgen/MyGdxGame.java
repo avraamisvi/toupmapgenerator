@@ -160,6 +160,16 @@ public class MyGdxGame extends ApplicationAdapter {
 			executor.execute(() -> {
 				LevelGeneratorPersistence.save(level);
 			});
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.PERIOD)) {
+			if(Configuration.roomToDraw < level.size()-1) {
+				Configuration.roomToDraw++;
+			}
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.COMMA)) {
+			if(Configuration.roomToDraw > -1) {
+				Configuration.roomToDraw--;
+			}
 		}			
 //		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 //			cam.rotate(-rotationSpeed, 0, 0, 1);

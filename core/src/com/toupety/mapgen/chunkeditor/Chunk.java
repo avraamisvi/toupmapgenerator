@@ -280,8 +280,9 @@ public class Chunk implements InputProcessor{
 		font.draw(spriteBatch, "ITEM: " + selectedItem.name, 1900, 1950);
 		
 		spriteBatch.end();
-		System.out.println(this.mouseGridX);
-		selectedItem.draw(renderer, this.mouseGridX * GeneratorConstants.ROOM_BLOCK_SIZE, this.mouseGridY * GeneratorConstants.ROOM_BLOCK_SIZE);
+//		System.out.println(this.mouseGridX);
+//		selectedItem.draw(renderer, this.mouseGridX * GeneratorConstants.ROOM_BLOCK_SIZE, this.mouseGridY * GeneratorConstants.ROOM_BLOCK_SIZE);
+		selectedItem.draw(renderer, this.mousex, this.mousey);
 	}
 	
 	void drawnElementSelected() {
@@ -298,7 +299,8 @@ public class Chunk implements InputProcessor{
 		
 		spriteBatch.end();
 		
-		selectedElement.draw(renderer, this.mouseGridX * GeneratorConstants.ROOM_BLOCK_SIZE, this.mouseGridY * GeneratorConstants.ROOM_BLOCK_SIZE);
+//		selectedElement.draw(renderer, this.mouseGridX * GeneratorConstants.ROOM_BLOCK_SIZE, this.mouseGridY * GeneratorConstants.ROOM_BLOCK_SIZE);
+		selectedElement.draw(renderer, this.mousex, this.mousey);
 	}	
 	
 	
@@ -553,6 +555,9 @@ public class Chunk implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		System.out.println("touchDown");
+		System.out.println(screenX);
+		System.out.println(screenY);
 		return false;
 	}
 
@@ -596,6 +601,7 @@ public class Chunk implements InputProcessor{
 					for(int y = 0; y < grid[0].length; y++) {
 						if(grid[x][y].bounds.contains(this.mousex, this.mousey)) {
 							item.setPosition(x, y);
+							item.setDelta((int)(this.mousex - grid[x][y].bounds.x), (int)(this.mousey - grid[x][y].bounds.y));
 							break;
 						}
 					}
@@ -621,6 +627,7 @@ public class Chunk implements InputProcessor{
 					for(int y = 0; y < grid[0].length; y++) {
 						if(grid[x][y].bounds.contains(this.mousex, this.mousey)) {
 							item.setPosition(x, y);
+							item.setDelta((int)(this.mousex - grid[x][y].bounds.x), (int)(this.mousey - grid[x][y].bounds.y));
 							break;
 						}
 					}

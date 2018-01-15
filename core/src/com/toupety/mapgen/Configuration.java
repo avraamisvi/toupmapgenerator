@@ -23,6 +23,7 @@ import com.toupety.mapgen.painter.Palette;
 
 public class Configuration {
 
+	public static int roomToDraw = -1;
 	public static boolean invert = false;
 	public static Data properties;
 	
@@ -161,15 +162,23 @@ public class Configuration {
 		
 		public int x;
 		public int y;
+		public int dx;
+		public int dy;
 		
 		@JsonIgnore
 		private Rectangle bounds;
+
 		
 		public void setPosition(int x, int y) {
 			this.x = x;
 			this.y = y;
 			this.bounds = new Rectangle(x, y, width, height);
 		}
+		
+		public void setDelta(int x, int y) {
+			this.dx = x;
+			this.dy = y;
+		}	
 		
 		public boolean contains(int x, int y) {
 			
@@ -181,7 +190,14 @@ public class Configuration {
 		}
 		
 		public void draw(ShapeRenderer renderer) {
-			draw(renderer, this.x * GeneratorConstants.ROOM_BLOCK_SIZE, this.y * GeneratorConstants.ROOM_BLOCK_SIZE);
+			int fx = this.x * GeneratorConstants.ROOM_BLOCK_SIZE;
+			int fy = this.y * GeneratorConstants.ROOM_BLOCK_SIZE;
+			
+			fx = dx + fx;
+			fy = dy + fy;
+			
+			draw(renderer, fx, fy);			
+//			draw(renderer, this.x * GeneratorConstants.ROOM_BLOCK_SIZE, this.y * GeneratorConstants.ROOM_BLOCK_SIZE);
 		}
 		
 		public void draw(ShapeRenderer renderer, int x, int y) {
@@ -207,6 +223,8 @@ public class Configuration {
 			ret.color = this.color;
 			ret.x = this.x;
 			ret.y = this.y;
+			ret.dx = this.dx;
+			ret.dy = this.dy;
 			
 			return ret;
 		}
@@ -318,7 +336,15 @@ public class Configuration {
 		
 		@JsonIgnore
 		private Rectangle bounds;
+		public int dx;
+		public int dy;
 		
+		public void setDelta(int x, int y) {
+			this.dx = x;
+			this.dy = y;
+		}		
+		
+		//o bloco o qual o elemento esta associado
 		public void setPosition(int x, int y) {
 			this.x = x;
 			this.y = y;
@@ -335,7 +361,14 @@ public class Configuration {
 		}
 		
 		public void draw(ShapeRenderer renderer) {
-			draw(renderer, this.x * GeneratorConstants.ROOM_BLOCK_SIZE, this.y * GeneratorConstants.ROOM_BLOCK_SIZE);
+			
+			int fx = this.x * GeneratorConstants.ROOM_BLOCK_SIZE;
+			int fy = this.y * GeneratorConstants.ROOM_BLOCK_SIZE;
+			
+			fx = dx + fx;
+			fy = dy + fy;
+			
+			draw(renderer, fx, fy);
 		}
 		
 		public void draw(ShapeRenderer renderer, int x, int y) {
@@ -345,13 +378,14 @@ public class Configuration {
 			
 			renderer.begin(ShapeType.Filled);
 			renderer.setColor(color[0], color[1], color[2], 1);
-//			renderer.rect(x + realW/4, y + realH/4, realW, realH);
-			renderer.rect(x - width/4, y - height/4, width, height);
+//			renderer.rect(x - width/4, y - height/4, width, height);
+			renderer.rect(x, y, width, height);
 			renderer.end();
 			
 			renderer.begin(ShapeType.Line);
 			renderer.setColor(Color.RED);
-			renderer.rect(x - width/4, y - height/4, width, height);
+//			renderer.rect(x - width/4, y - height/4, width, height);
+			renderer.rect(x, y, width, height);
 			renderer.end();				
 		}		
 		

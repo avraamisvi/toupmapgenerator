@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.toupety.mapgen.CameraHolder;
+import com.toupety.mapgen.Configuration;
 import com.toupety.mapgen.GeneratorConstants;
 import com.toupety.mapgen.Dimensions;
 import com.toupety.mapgen.Level;
@@ -31,11 +32,18 @@ public class LevelScreenDrawner implements ElementDrawner<Level> {
 				.instance()
 				.getElementDrawner(Room.class);
 		
-		drawner.ifPresent(d -> {
-			level.forEach(r -> {				
-				d.draw(r);
+		if(Configuration.roomToDraw > -1) {
+			drawner.ifPresent(d -> {
+				d.draw(level.getRoom(Configuration.roomToDraw));
 			});			
-		});
+		} else {
+			drawner.ifPresent(d -> {
+				level.forEach(r -> {
+					d.draw(r);
+				});			
+			});
+		}
+		
 	}
 	
 	private void drawnBounds(Level level) {

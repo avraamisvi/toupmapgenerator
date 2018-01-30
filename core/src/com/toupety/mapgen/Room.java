@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.toupety.mapgen.Configuration.AreaDefinition;
 import com.toupety.mapgen.Configuration.ItemConfiguration;
 import com.toupety.mapgen.Configuration.ItemDefinition;
 import com.toupety.mapgen.Configuration.Key;
@@ -129,7 +130,21 @@ public class Room {
 			renderer.setColor(item.color[0], item.color[1], item.color[2], 1);
 			renderer.rect(x + itm.dx, y + itm.dy, item.width, item.height);
 			renderer.end();
-		}		
+		}	
+		
+		for(RoomArea areapos : roomAreasPosition) {
+			
+			x =  (GeneratorConstants.ROOM_BLOCK_SIZE * areapos.x) + GeneratorConstants.ROOM_BLOCK_SIZE;
+			x = (dim.getW() - x) + dim.getX();
+			int pseudWorldRoomY = grid.getDimensions().getY() * Configuration.getLevelGridElementContentSize();
+			y = (areapos.y + pseudWorldRoomY) * (GeneratorConstants.ROOM_BLOCK_SIZE);
+			
+			AreaDefinition area = Configuration.areas.areas.get(areapos.name);
+			renderer.begin(ShapeType.Filled);
+			renderer.setColor(area.color[0], area.color[1], area.color[2], 1);
+			renderer.rect(x, y, area.width, area.height);
+			renderer.end();
+		}
 		
 	}
 	

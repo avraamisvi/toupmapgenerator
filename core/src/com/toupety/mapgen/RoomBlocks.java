@@ -22,6 +22,7 @@ import com.toupety.mapgen.mold.MoldFactory;
 import com.toupety.mapgen.mold.MoldFactory.Molds;
 import com.toupety.mapgen.painter.Decoration;
 import com.toupety.mapgen.painter.Palette;
+import com.toupety.mapgen.room.RoomArea;
 import com.toupety.mapgen.room.RoomItem;
 import com.toupety.mapgen.virtualpath.VirtualPathGenerator;
 
@@ -500,7 +501,9 @@ public class RoomBlocks {
 					
 					this.grid[x][y] = new RoomLocalPathElement(column, x, y);
 					column.setMold(this.mold.getGrid()[x][y]);
+					
 					this.setItems(this.mold.getGrid()[x][y], column);
+					this.setAreas(this.mold.getGrid()[x][y], column);
 					
 					column = column.down;
 					if(column == null)
@@ -515,47 +518,29 @@ public class RoomBlocks {
 		}
 		
 		public void setItems(MoldBlock moldBlock, RoomBlock roomBlock) {
-			
 			//TODO TA CONSUMINDO UMA BAITA MEMORIA AHHAHAAH
 			moldBlock.forEachItems(it -> {
-				
 				RoomItem roomItem = new RoomItem();
 				roomItem.x = roomBlock.x;
 				roomItem.y = roomBlock.y;
 				roomItem.name = it.name;
-				roomItem.dx = roomBlock.x;
-				roomItem.dy = roomBlock.y;
+				roomItem.dx = it.dx;
+				roomItem.dy = it.dy;
 				
 				RoomBlocks.this.owner.addItemPosition(roomItem);
 			});
-			
-			
-			/*
-			 * 			if(bl.getOwner() != null ) {
-				final int fx = x;
-				final int fy = y;
-				
-				bl.getOwner().forEachItems(itm -> {//desenhando os items
-					renderer.begin(ShapeType.Filled);
-					renderer.setColor(itm.color[0], itm.color[1], itm.color[2], 1);
-					renderer.rect(fx + itm.dx, fy + itm.dy, itm.width, itm.height);
-					renderer.end();						
-				});
-			}	
-			
-			int x =  (GeneratorConstants.ROOM_BLOCK_SIZE * bl.getX()) + GeneratorConstants.ROOM_BLOCK_SIZE;
-			
-			x = (dim.getW() - x) + dim.getX();
-			
-			int pseudWorldRoomY = grid.getDimensions().getY() * Configuration.getLevelGridElementContentSize();
-			int y = (bl.getY() + pseudWorldRoomY) * (GeneratorConstants.ROOM_BLOCK_SIZE);
-						
-			*
-			*
-			 */
 		}
 		
-
+		public void setAreas(MoldBlock moldBlock, RoomBlock roomBlock) {
+			//TODO TA CONSUMINDO UMA BAITA MEMORIA AHHAHAAH
+			moldBlock.getArea(moldBlock.getX(), moldBlock.getY()).ifPresent(area -> {
+				RoomArea bean = new RoomArea();
+				bean.x = roomBlock.x;
+				bean.y = roomBlock.y;
+				bean.name = area.name;
+				RoomBlocks.this.owner.addAreaPosition(bean);				
+			});
+		}		
 		
 //		public void add(RoomBlock block, MoldBlock moldBlock) {//FIXME BEM LIXO ESSE CODIGO
 //			if(block == null)

@@ -1,0 +1,222 @@
+{
+  "index" : 2,
+  "x" : 10,
+  "y" : 12,
+  "items" : [ {
+    "name" : "big-verdanio",
+    "x" : 16,
+    "y" : 38,
+    "dx" : 40,
+    "dy" : 31
+  }, {
+    "name" : "big-verdanio",
+    "x" : 8,
+    "y" : 70,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 8,
+    "y" : 100,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 8,
+    "y" : 130,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 8,
+    "y" : 160,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 8,
+    "y" : 190,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 8,
+    "y" : 220,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 16,
+    "y" : 248,
+    "dx" : 40,
+    "dy" : 31
+  }, {
+    "name" : "big-verdanio",
+    "x" : 38,
+    "y" : 10,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 38,
+    "y" : 40,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 38,
+    "y" : 250,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 68,
+    "y" : 10,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 68,
+    "y" : 40,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 68,
+    "y" : 250,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 98,
+    "y" : 10,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 98,
+    "y" : 40,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 98,
+    "y" : 250,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 136,
+    "y" : 8,
+    "dx" : 40,
+    "dy" : 31
+  }, {
+    "name" : "big-verdanio",
+    "x" : 136,
+    "y" : 38,
+    "dx" : 40,
+    "dy" : 31
+  }, {
+    "name" : "big-verdanio",
+    "x" : 128,
+    "y" : 70,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 128,
+    "y" : 100,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 128,
+    "y" : 130,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 128,
+    "y" : 160,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 128,
+    "y" : 190,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 128,
+    "y" : 220,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 136,
+    "y" : 248,
+    "dx" : 40,
+    "dy" : 31
+  }, {
+    "name" : "big-verdanio",
+    "x" : 166,
+    "y" : 8,
+    "dx" : 40,
+    "dy" : 31
+  }, {
+    "name" : "big-verdanio",
+    "x" : 166,
+    "y" : 38,
+    "dx" : 40,
+    "dy" : 31
+  }, {
+    "name" : "big-verdanio",
+    "x" : 158,
+    "y" : 70,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 158,
+    "y" : 100,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 158,
+    "y" : 130,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 158,
+    "y" : 160,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 158,
+    "y" : 190,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 158,
+    "y" : 220,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 166,
+    "y" : 248,
+    "dx" : 40,
+    "dy" : 31
+  } ],
+  "areas" : [ ],
+  "elements" : [ ],
+  "tags" : [ ],
+  "width" : 6,
+  "heigth" : 9,
+  "key" : null
+}

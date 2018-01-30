@@ -1,0 +1,132 @@
+{
+  "index" : 1,
+  "x" : 7,
+  "y" : 5,
+  "items" : [ {
+    "name" : "big-verdanio",
+    "x" : 8,
+    "y" : 40,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 8,
+    "y" : 70,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 8,
+    "y" : 100,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 8,
+    "y" : 130,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 8,
+    "y" : 160,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 16,
+    "y" : 188,
+    "dx" : 40,
+    "dy" : 31
+  }, {
+    "name" : "big-verdanio",
+    "x" : 38,
+    "y" : 190,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 68,
+    "y" : 10,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 68,
+    "y" : 190,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 98,
+    "y" : 10,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 98,
+    "y" : 100,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 98,
+    "y" : 130,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 98,
+    "y" : 160,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 136,
+    "y" : 8,
+    "dx" : 40,
+    "dy" : 31
+  }, {
+    "name" : "big-verdanio",
+    "x" : 128,
+    "y" : 40,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 128,
+    "y" : 70,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 128,
+    "y" : 100,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 128,
+    "y" : 130,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 128,
+    "y" : 160,
+    "dx" : 37,
+    "dy" : 14
+  }, {
+    "name" : "big-verdanio",
+    "x" : 136,
+    "y" : 188,
+    "dx" : 40,
+    "dy" : 31
+  } ],
+  "areas" : [ ],
+  "elements" : [ ],
+  "tags" : [ ],
+  "width" : 5,
+  "heigth" : 7,
+  "key" : null
+}

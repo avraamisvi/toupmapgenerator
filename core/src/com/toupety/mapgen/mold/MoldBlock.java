@@ -2,8 +2,10 @@ package com.toupety.mapgen.mold;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
+import com.toupety.mapgen.Configuration.AreaDefinition;
 import com.toupety.mapgen.Configuration.ElementDefinition;
 import com.toupety.mapgen.Configuration.ItemDefinition;
 
@@ -61,5 +63,9 @@ public class MoldBlock {
 		if(items != null) {
 			items.forEach(it);
 		}
+	}
+	
+	public Optional<AreaDefinition> getArea(int x, int y) {
+		return meta.areas.stream().filter(a -> a.x == x && a.y == y).findFirst();
 	}
 }

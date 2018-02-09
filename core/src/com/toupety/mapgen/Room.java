@@ -142,7 +142,7 @@ public class Room {
 			AreaDefinition area = Configuration.areas.areas.get(areapos.name);
 			renderer.begin(ShapeType.Filled);
 			renderer.setColor(area.color[0], area.color[1], area.color[2], 1);
-			renderer.rect(x, y, area.width, area.height);
+			renderer.rect(x, y, area.width * GeneratorConstants.ROOM_BLOCK_SIZE, area.height * GeneratorConstants.ROOM_BLOCK_SIZE);
 			renderer.end();
 		}
 		

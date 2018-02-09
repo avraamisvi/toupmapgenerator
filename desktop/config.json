@@ -45,8 +45,8 @@
     {
       "id": "PHANTOM",
       "from": 0,
-      "limit": 0,
-      "chance": 0
+      "limit": 500,
+      "chance": 0.4
     },       
     {
       "id": "blue-key",
@@ -58,7 +58,7 @@
       "id": "big-verdanio",
       "from": 0,
       "limit": 100,
-      "chance": 1
+      "chance": 0.2
     }
   ]
 }

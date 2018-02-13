@@ -16,11 +16,11 @@
   "areas" : [ {
     "index" : 1,
     "name" : "oil",
-    "width" : 384,
-    "height" : 160,
+    "width" : 8,
+    "height" : 3,
     "color" : [ 0.3, 0.3, 0.3, 0.7 ],
-    "x" : 1282,
-    "y" : 1633
+    "x" : 18,
+    "y" : 16
   } ],
   "tags" : [ ],
   "maxWidth" : 30,

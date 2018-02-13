@@ -69,7 +69,7 @@ public class MoldFactory {
 						empty = mold;
 					}
 					
-					if(meta.name.contains("verdanio")) {
+					if(meta.name.contains("teste1")) {
 						verdanio = mold;
 					}
 					

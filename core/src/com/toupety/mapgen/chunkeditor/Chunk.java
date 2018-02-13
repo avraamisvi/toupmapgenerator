@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Input;
@@ -62,6 +64,8 @@ public class Chunk implements InputProcessor{
 
 	private int mouseGridX;
 	private int mouseGridY;	
+	
+	private String BRUSH_EMPTY = "empty";
 	
 	private Brush brush = Configuration.brushes.get("ground");
 	
@@ -346,7 +350,7 @@ public class Chunk implements InputProcessor{
 		}
 		
 		if(Input.Keys.O == keycode) {
-			load();
+			Executors.newFixedThreadPool(1).execute(() -> load());
 		}
 		
 		if(Input.Keys.UP == keycode) {
@@ -664,7 +668,7 @@ public class Chunk implements InputProcessor{
 		
 		Brush fill = brush;
 		if(mode == Mode.REMOVE) {
-			fill = Configuration.brushes.get("space");
+			fill = Configuration.brushes.get(BRUSH_EMPTY);
 		}
 		
 		Block first = null;
@@ -687,7 +691,7 @@ public class Chunk implements InputProcessor{
 	private void applyNode() {
 		Brush fill = brush;
 		if(mode == Mode.REMOVE) {
-			fill = Configuration.brushes.get("space");
+			fill = Configuration.brushes.get(BRUSH_EMPTY);
 		}
 		
 		for(int x = 0; x < grid.length; x++) {
@@ -703,7 +707,7 @@ public class Chunk implements InputProcessor{
 	private void applyColumn() {
 		Brush fill = brush;
 		if(mode == Mode.REMOVE) {
-			fill = Configuration.brushes.get("space");
+			fill = Configuration.brushes.get(BRUSH_EMPTY);
 		}
 		
 		Block first = null;

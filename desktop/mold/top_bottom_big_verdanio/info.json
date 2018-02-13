@@ -1,5 +1,5 @@
 {
-  "name" : "top_bottom",
+  "name" : "top_bottom_big_verdanio",
   "elements" : [ ],
   "items" : [ {
     "index" : 0,
@@ -13,7 +13,15 @@
     "dx" : 37,
     "dy" : 14
   } ],
-  "areas" : [ ],
+  "areas" : [ {
+    "index" : 1,
+    "name" : "oil",
+    "width" : 7,
+    "height" : 2,
+    "color" : [ 0.3, 0.3, 0.3, 0.7 ],
+    "x" : 19,
+    "y" : 16
+  } ],
   "tags" : null,
   "maxWidth" : 30,
   "maxHeigth" : 30,

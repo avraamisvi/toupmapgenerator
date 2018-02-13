@@ -130,7 +130,7 @@ public class RoomBlocks {
 						System.out.println("has ITEM: " + path.getItem());			
 					}
 				}
-//				mod = MoldFactory.get().getVerdanio();//FIXME REMOVER usado apenas para testes
+				mod = MoldFactory.get().getVerdanio();//FIXME REMOVER usado apenas para testes
 				if(mod != null) {
 					int lx = path.x * Configuration.getLevelGridElementContentSize();
 					int ly = path.y * Configuration.getLevelGridElementContentSize();
@@ -533,11 +533,13 @@ public class RoomBlocks {
 		
 		public void setAreas(MoldBlock moldBlock, RoomBlock roomBlock) {
 			//TODO TA CONSUMINDO UMA BAITA MEMORIA AHHAHAAH
-			moldBlock.getArea(moldBlock.getX(), moldBlock.getY()).ifPresent(area -> {
+			moldBlock.getArea(moldBlock.getMeta().maxWidth - moldBlock.getX(), moldBlock.getY()).ifPresent(area -> {
 				RoomArea bean = new RoomArea();
 				bean.x = roomBlock.x;
 				bean.y = roomBlock.y;
 				bean.name = area.name;
+				bean.width = area.width;
+				bean.height = area.height;
 				RoomBlocks.this.owner.addAreaPosition(bean);				
 			});
 		}		

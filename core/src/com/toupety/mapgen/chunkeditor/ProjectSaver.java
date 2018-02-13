@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.toupety.mapgen.Configuration;
 import com.toupety.mapgen.Configuration.AreaDefinition;
+import com.toupety.mapgen.Configuration.Brush;
 import com.toupety.mapgen.Configuration.ElementDefinition;
 import com.toupety.mapgen.Configuration.ItemDefinition;
 import com.toupety.mapgen.chunkeditor.Chunk.Block;
@@ -72,7 +73,12 @@ public class ProjectSaver {
 
 		for (int j = 0; j < grid.length; j++) {
 			for (int i = grid[0].length - 1; i >= 0; i--) {
-				builder.append(grid[i][j].filled.tile);
+				if(grid[i][j].filled != null) {
+					builder.append(grid[i][j].filled.tile);
+				} else {
+					Brush sp = Configuration.brushes.get("empty");
+					builder.append(sp.tile);
+				}
 			}
 			builder.append("\n");
 		}
